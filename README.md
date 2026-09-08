@@ -1,1 +1,1 @@
-# novel-generator
+# Novel Generator
