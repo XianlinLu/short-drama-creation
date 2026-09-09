@@ -2,17 +2,19 @@
 
 > 面向 **Lumina 画布 Agent** 的原创中文短篇小说生成 Skill：先锁定读者承诺、经典桥段功能、人物欲望、冲突引擎和大纲，再生成完整、强钩子、高张力、低 AI 味的故事。
 >
-> A fiction-writing skill adapted for **Lumina Canvas Agent**. It designs the reader promise, reusable story functions, character desire, conflict engines, and outline before drafting a complete, gripping, original Chinese short story.
+> An original-fiction writing skill built for **Lumina Canvas Agent**. It designs the reader promise, reusable story functions, character desire, conflict engines, and outline before drafting a complete, gripping Chinese short story.
 
 [中文](#中文介绍) · [English](#english-introduction)
 
 ## 中文介绍
 
-`lumina-novel-generator` 严格继承 [qiaomu-novel-generator](https://github.com/joeseesun/qiaomu-novel-generator) 的核心写作体系，并针对 Lumina 画布 Agent 的运行方式完成适配。它不会收到一个模糊题材就马上输出套路正文，而是先完成一套可确认的剧情设计：
+`lumina-novel-generator` 是一个面向 Lumina 画布 Agent 的原创小说策划、生成与改写 Skill。它把模糊灵感转化为有明确读者承诺、人物欲望、冲突升级和结尾回响的完整故事，不会收到一个宽泛题材就直接输出套路正文，而是先完成一套可确认的剧情设计：
 
 ```text
 情绪承诺 → 高压关系 → 冲突场 → 经典桥段功能化 → 剧情引擎 → 升级节奏 → 大纲确认 → 完整正文 → 去 AI 味与质量自检
 ```
+
+**原创是这套 Skill 的核心作用。** 它只提取可泛化的叙事功能，不搬运现成人物、名场面、台词、世界观或连续情节。每次重构都会重新设计角色、关系、场景、利益与代价、核心物件或规则以及结局，让参考信号真正转化成独立的新故事。
 
 它尤其适合：
 
@@ -23,14 +25,14 @@
 - 改写带有总结腔、教学腔和公式化 `不是 X，而是 Y` 的 AI 味文本；
 - 修复为了诗性而让读者误判人物生死、现实规则或故事类型的开篇。
 
-### Lumina 适配内容
+### 面向 Lumina 的运行设计
 
 Lumina Agent 通过 **System Instructions、Task Prompt 和已连接的组件工具**运行。本仓库因此提供两个入口：
 
 - [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md)：已经把运行时必需规则编译成单文件，可直接粘贴到 Lumina Agent 节点的 System Instructions。
 - [`SKILL.md`](./SKILL.md)：完整、可维护的 Skill 入口，配合 `references/`、`examples/` 和 `scripts/` 用于版本维护、审查与本地 Agent Skills 兼容。
 
-适配版还增加了 Lumina 专属约束：
+Skill 内置了 Lumina 画布运行约束：
 
 - Agent 只能调用画布上实际连接的组件，不能假装联网、保存或执行工作流；
 - 只有连接了公开资料搜索组件时，才执行“先搜索再重构”；
@@ -109,11 +111,13 @@ python3 scripts/evaluate_story.py examples/sample-02-sci-fi-memory.md --fail-on-
 
 ## English Introduction
 
-`lumina-novel-generator` faithfully carries over the core writing system from [qiaomu-novel-generator](https://github.com/joeseesun/qiaomu-novel-generator) and adapts it to Lumina's Canvas Agent runtime. Instead of jumping from a vague idea to generic prose, it follows a confirmable story-design pipeline:
+`lumina-novel-generator` is an original-fiction planning, generation, and revision skill built for the Lumina Canvas Agent runtime. It turns a rough idea into a complete story with a clear reader promise, character desire, escalating conflict, and ending resonance. Instead of jumping from a vague premise to generic prose, it follows a confirmable story-design pipeline:
 
 ```text
 emotional promise → high-pressure relationship → conflict arena → functionalized classic beats → plot engines → escalation → outline confirmation → complete story → anti-AI and quality gates
 ```
+
+**Originality is the skill's central purpose.** It extracts only reusable narrative functions and never carries over existing characters, famous scenes, dialogue, fictional worlds, or recognizable plot chains. Every remix redesigns the characters, relationships, setting, stakes, central object or rule, and ending so the result stands as an independent new story.
 
 The skill is designed to:
 
@@ -124,14 +128,14 @@ The skill is designed to:
 - remove formulaic AI phrasing, teaching-tone transitions, decorative dashes, and summary endings;
 - repair poetic openings that accidentally mislead readers about literal events or genre.
 
-### What was adapted for Lumina
+### Lumina-native runtime design
 
 Lumina Agents run from **System Instructions**, a **Task Prompt**, and connected component tools. This repository therefore contains two entrypoints:
 
 - [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md) is the self-contained runtime prompt to paste into a Lumina Agent node.
 - [`SKILL.md`](./SKILL.md) is the maintainable package entrypoint, supported by `references/`, `examples/`, and repository-side validation scripts.
 
-The Lumina version adds explicit runtime safeguards:
+The skill includes explicit Lumina runtime safeguards:
 
 - the Agent may use only components actually connected on the canvas;
 - source research runs only when a public-research component is connected;
@@ -183,8 +187,8 @@ scripts/                       # Repository-side validators
 manifest.json                  # Package resource map and quality gates
 ```
 
-## Attribution and License
+## License
 
-This adaptation is based on [`joeseesun/qiaomu-novel-generator`](https://github.com/joeseesun/qiaomu-novel-generator), created by 向阳乔木 / joeseesun, and is distributed under the MIT License. The original copyright notice is preserved in [`LICENSE`](./LICENSE).
+Distributed under the MIT License. See [`LICENSE`](./LICENSE).
 
-Lumina product behavior referenced by this adaptation includes Canvas Agent System Instructions, Task Prompt `@` references, connected tools/components, multimodal inputs, and iteration-controlled step execution. See the [Lumina Canvas guide](https://seedancelumina.com/guide) for the current interface.
+The runtime design uses Lumina Canvas Agent System Instructions, Task Prompt `@` references, connected tools/components, multimodal inputs, and iteration-controlled step execution. See the [Lumina Canvas guide](https://seedancelumina.com/guide) for the current interface.
