@@ -1,0 +1,7 @@
+interface:
+  display_name: "Lumina 小说生成器"
+  short_description: "面向 Lumina 画布的原创中文小说生成与改写工作流"
+  default_prompt: "Use $lumina-novel-generator to turn this story idea into a complete, gripping Chinese short story."
+
+policy:
+  allow_implicit_invocation: true
