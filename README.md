@@ -1,75 +1,119 @@
-# Lumina Novel Generator
+# Novel Generator
 
-> 面向 **Lumina 画布 Agent** 的原创中文短篇小说生成 Skill：先锁定读者承诺、经典桥段功能、人物欲望、冲突引擎和大纲，再生成完整、强钩子、高张力、低 AI 味的故事。
+> 一个专注于原创中文小说策划、生成与改写的 Agent Skill。它先确定读者承诺、人物欲望、冲突引擎和故事大纲，再写出完整、强钩子、高张力、低 AI 味的小说。
 >
-> An original-fiction writing skill built for **Lumina Canvas Agent**. It designs the reader promise, reusable story functions, character desire, conflict engines, and outline before drafting a complete, gripping Chinese short story.
+> An Agent Skill for planning, drafting, and revising original Chinese fiction. It establishes the reader promise, character desire, conflict engines, and story outline before producing a complete, gripping, low-AI-smell story.
 
 [中文](#中文介绍) · [English](#english-introduction)
 
 ## 中文介绍
 
-`lumina-novel-generator` 是一个面向 Lumina 画布 Agent 的原创小说策划、生成与改写 Skill。它把模糊灵感转化为有明确读者承诺、人物欲望、冲突升级和结尾回响的完整故事，不会收到一个宽泛题材就直接输出套路正文，而是先完成一套可确认的剧情设计：
+`Novel Generator` 把一句灵感、人物设定、故事梗概、类型偏好或已有片段，转化为可以真正吸引读者的原创小说。它不会收到一个宽泛题材就直接输出套路正文，而是先完成一套可确认的剧情设计：
 
 ```text
-情绪承诺 → 高压关系 → 冲突场 → 经典桥段功能化 → 剧情引擎 → 升级节奏 → 大纲确认 → 完整正文 → 去 AI 味与质量自检
+情绪承诺 → 高压关系 → 冲突场 → 叙事功能组合 → 剧情引擎 → 升级节奏 → 大纲确认 → 完整正文 → 语言与质量自检
 ```
 
-**原创是这套 Skill 的核心作用。** 它只提取可泛化的叙事功能，不搬运现成人物、名场面、台词、世界观或连续情节。每次重构都会重新设计角色、关系、场景、利益与代价、核心物件或规则以及结局，让参考信号真正转化成独立的新故事。
+**原创是这套 Skill 的核心作用。** 它只提取可泛化的叙事功能，不搬运现成人物、名场面、台词、世界观或连续情节。每次创作都会重新设计角色、关系、场景、利益与代价、核心物件或规则以及结局，让最终作品成为能够独立成立的新故事。
 
-它尤其适合：
+### 它解决什么问题
 
-- 根据一句主题、人物设定、梗概或已有片段创作完整中文短篇；
-- 先给多个剧情方向，让用户用 `按默认`、`1B 2A 3C` 等方式快速确认；
-- 将电影、电视剧、小说和类型套路拆成可复用的叙事功能，再重构为原创故事；
-- 强化开篇钩子、人物欲望、冲突升级、对白张力、反转和结尾余味；
-- 改写带有总结腔、教学腔和公式化 `不是 X，而是 Y` 的 AI 味文本；
-- 修复为了诗性而让读者误判人物生死、现实规则或故事类型的开篇。
+普通小说生成经常遇到这些问题：
 
-### 面向 Lumina 的运行设计
+- 开头缺少钩子，读者很快失去兴趣；
+- 主角没有明确欲望，只能被剧情推着行动；
+- 冲突只是重复发生，没有真正升级；
+- 参考经典作品时容易变成换皮或情节搬运；
+- 指定作者风格时只学到表面腔调；
+- 语言充满总结腔、教学腔和公式化对比；
+- 结尾解释主题，却没有画面和余味。
 
-Lumina Agent 通过 **System Instructions、Task Prompt 和已连接的组件工具**运行。本仓库因此提供两个入口：
+这套 Skill 会先找到故事最重要的读者快感和人物压力，再决定用什么关系、场景、物件、规则与反转承载它。
 
-- [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md)：已经把运行时必需规则编译成单文件，可直接粘贴到 Lumina Agent 节点的 System Instructions。
-- [`SKILL.md`](./SKILL.md)：完整、可维护的 Skill 入口，配合 `references/` 和 `examples/` 用于版本维护、审查与本地 Agent Skills 兼容。
+### 核心能力
 
-Skill 内置了 Lumina 画布运行约束：
+#### 从一句想法到完整故事
 
-- Agent 只能调用画布上实际连接的组件，不能假装联网、保存或执行工作流；
-- 只有连接了公开资料搜索组件时，才执行“先搜索再重构”；
-- 选项卡和大纲是一次运行的停止点，不会虚构用户确认；
-- 如果画布不保留上次运行状态，下一次 Task Prompt 需要带回用户选择和上一版大纲；
-- 所有仓库文档都采用 Lumina 支持的文本格式，导入包不包含脚本、图片或二进制文件。
+支持从主题、人物设定、梗概、类型、桥段信号或已有片段开始，完成故事方向、结构设计、正文生成和后续改写。
 
-### 在 Lumina 画布中使用
+#### 写前选择与确认
 
-1. 新建一个 Agent 节点。
-2. 将 [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md) 的完整内容粘贴到 **System Instructions**。
-3. 在 **Task Prompt** 中写用户请求；如果请求来自 String 节点，用 Lumina 的 `@` 语法引用该输入。
-4. 将 Agent 的文本输出连接到 Show Text 或下游文本组件。
-5. 可选：连接一个公开资料搜索组件，并在工具描述中明确参数、必填项和返回内容。没有连接时，Skill 会诚实回退到通用叙事分析。
-6. 首次运行若输出选项或大纲，在下一次运行中传回选择，例如：
+当输入不够明确时，先提供紧凑选项。用户可以回复：
 
 ```text
-按建议写。沿用下面的大纲，直接生成 2500–3000 字完整短篇：
-@previous_plan
+按默认
 ```
 
-一个最小 Task Prompt 示例：
+或：
 
 ```text
-@story_request
-
-如果信息不足，先给紧凑选项，不要直接写正文；如果我已经明确说“直接写”，就在内部完成大纲后输出完整故事。
+1B 2A 3C
 ```
 
-### 可以这样提问
+当设定已经可用时，先输出“故事如何吸引人”和大纲，确认后再写正文。用户明确要求直接写时，会在内部完成规划后直接成文。
+
+#### 原创重构
+
+电影、电视剧、小说、游戏或类型套路只会被拆解成高层叙事功能，例如：
+
+- 跌落神坛与公开回归；
+- 被低估后的证据翻盘；
+- 错认身份与迟来承认；
+- 小人物被大型系统挤压；
+- 多方利益冲突与公开问责；
+- 线索返还与前提反转。
+
+重构时会重新设计设定、职业或力量体系、人物关系、核心物件、风险、代价和结局，不复制原作的表达与连续情节。
+
+#### 强化小说吸引力
+
+- 前三段制造危险、羞辱、损失、谜题或不可逆扰动；
+- 给主角一个立刻可见的欲望和一个隐藏伤口；
+- 让冲突至少升级三次，并逐步关闭安全选项；
+- 让对白承担威胁、试探、隐瞒、交换、指控或悲伤；
+- 用具体人物、动作、物件和场景承载信息；
+- 让早期细节在后文改变意义；
+- 解决当前冲突，同时留下结尾回响。
+
+#### 降低 AI 味
+
+生成或改写时会主动检查：
+
+- `不是 X，而是 Y`；
+- `关键在于`、`值得注意的是`；
+- `总之`、`综上所述`；
+- `这不仅是……更是……`；
+- 装饰性破折号；
+- 解释主题的总结式结尾。
+
+这些表达会优先改写为动作、物件、场景、对白和后果。
+
+#### 修复误导性开篇
+
+强钩子不能让读者误判基本事实或故事类型。如果一句话听起来像尸体复活、梦境或超自然现象，而故事本身并非如此，Skill 会在同一句或下一句补上清楚的现实锚点。
+
+### 支持的故事方向
+
+- 爽文、逆袭、打脸与复仇；
+- 武侠、江湖、修仙与奇幻；
+- 悬疑、推理、惊悚与黑色反转；
+- 甜宠、虐恋、追妻与女性成长；
+- 科幻、概念故事与记忆题材；
+- 职场、商业、组织内斗与制度讽刺；
+- 现实情感、生存压力与小人物故事。
+
+### 使用示例
 
 ```text
-写一个不会武功的账房先生误入江湖死局的完整短篇，先给方向。
+写一个不会武功的账房先生误入江湖死局的完整短篇，先给几个方向。
 ```
 
 ```text
-把“跌落神坛后公开翻身”的结构改造成修仙故事，先给经典桥段启发和大纲。
+写一个从行业顶峰跌落、在底层重新理解手艺并公开翻身的原创修仙故事，先给大纲。
+```
+
+```text
+写一个近未来记忆交易故事。主角卖掉了最无用的一天，却发现那一天能救他的女儿。
 ```
 
 ```text
@@ -80,113 +124,113 @@ Skill 内置了 Lumina 画布运行约束：
 这个开篇让我误以为是鬼怪故事。保留危险感，但在前两句说清楚实际发生了什么。
 ```
 
-### 核心质量门槛
+### 安装
 
-- 前三段出现危险、羞辱、损失、谜题或不可逆扰动；
-- 主角有一个立刻可见的欲望和一个隐藏伤口；
-- 冲突至少升级三次，并持续关闭安全选项；
-- 对白包含威胁、试探、隐瞒、交换、指控或悲伤；
-- 具体人物、动作、物件和场景承担信息，不靠设定说明；
-- 早期细节在后文改变意义，结尾回收开篇意象；
-- 经典作品只作为功能信号，不复制人物、名场面、台词、世界观或连续情节链；
-- 不直接模仿在世作者的独特文风，只转译为可泛化技法；
-- 删除公式化对比、总结式结尾、教学腔和装饰性破折号；
-- 开篇的物理事实与类型承诺清晰，不用误导换取钩子。
-
-### 本地安装与导入验证
-
-兼容 Agent Skills 的本地工具可直接安装：
+在支持 Agent Skills 的工具中安装：
 
 ```bash
 npx skills add XianlinLu/novel-generator
 ```
 
-导入 Lumina 前，按照 [`references/repository-validation.md`](./references/repository-validation.md) 检查：
+### 导入格式
 
-- 文件扩展名只能是小写 `.md`、`.txt`、`.json`、`.yaml`、`.yml`；
-- 文件和目录名只能包含英文字母、数字、下划线和连字符，且不超过 64 个字符；
-- `manifest.json` 中声明的资源必须全部存在；
-- 两个完整样例必须通过开篇、场景、对白、反转和反 AI 味检查。
+仓库中的可导入文档遵循以下规则：
+
+- 文件扩展名使用小写 `.md`、`.txt`、`.json`、`.yaml` 或 `.yml`；
+- 文件和目录名只包含英文字母、数字、下划线和连字符；
+- 文件和目录名不超过 64 个字符；
+- 导入内容不包含脚本、图片、二进制文件或缓存文件。
+
+详细检查规则见 [`references/repository-validation.md`](./references/repository-validation.md)。
 
 ## English Introduction
 
-`lumina-novel-generator` is an original-fiction planning, generation, and revision skill built for the Lumina Canvas Agent runtime. It turns a rough idea into a complete story with a clear reader promise, character desire, escalating conflict, and ending resonance. Instead of jumping from a vague premise to generic prose, it follows a confirmable story-design pipeline:
+`Novel Generator` turns a rough idea, character setup, synopsis, genre preference, narrative signal, or existing excerpt into original Chinese fiction designed to hold a reader's attention. It does not jump from a broad topic to generic prose. It follows a confirmable story-design pipeline:
 
 ```text
-emotional promise → high-pressure relationship → conflict arena → functionalized classic beats → plot engines → escalation → outline confirmation → complete story → anti-AI and quality gates
+emotional promise → high-pressure relationship → conflict arena → narrative functions → plot engines → escalation → outline confirmation → complete story → language and quality gates
 ```
 
-**Originality is the skill's central purpose.** It extracts only reusable narrative functions and never carries over existing characters, famous scenes, dialogue, fictional worlds, or recognizable plot chains. Every remix redesigns the characters, relationships, setting, stakes, central object or rule, and ending so the result stands as an independent new story.
+**Originality is the skill's central purpose.** It extracts only reusable narrative functions and never carries over existing characters, famous scenes, dialogue, fictional worlds, or recognizable plot chains. Every story redesigns its characters, relationships, setting, stakes, central object or rule, and ending so the result stands independently.
 
-The skill is designed to:
+### What it does
 
-- create complete Chinese short fiction from a theme, character setup, synopsis, or draft;
-- provide compact options before drafting so the user can answer with `use defaults` or selections such as `1B 2A 3C`;
-- translate films, series, novels, genres, and author signals into reusable narrative functions without copying protected expression;
-- strengthen opening hooks, character desire, escalation, dialogue pressure, reversals, imagery, and ending resonance;
-- remove formulaic AI phrasing, teaching-tone transitions, decorative dashes, and summary endings;
-- repair poetic openings that accidentally mislead readers about literal events or genre.
+- turns a short idea into a complete Chinese story;
+- presents compact choices when the premise needs direction;
+- builds an attraction strategy and outline before drafting;
+- translates familiar narrative signals into reusable functions without copying protected expression;
+- strengthens openings, character desire, escalation, dialogue pressure, imagery, reversals, and ending resonance;
+- revises existing drafts at the story-engine level instead of merely changing adjectives;
+- removes formulaic AI phrasing and misleading poetic openings.
 
-### Lumina-native runtime design
+### Originality by design
 
-Lumina Agents run from **System Instructions**, a **Task Prompt**, and connected component tools. This repository therefore contains two entrypoints:
+References are treated as craft signals rather than copy targets. The skill may reuse broad functions such as downfall and comeback, public proof, mistaken identity, institutional pressure, or clue reversal, but it rebuilds the following elements:
 
-- [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md) is the self-contained runtime prompt to paste into a Lumina Agent node.
-- [`SKILL.md`](./SKILL.md) is the maintainable package entrypoint, supported by `references/` and `examples/`.
+- setting and profession or power system;
+- character identities and pressure relationships;
+- central object, evidence, or governing rule;
+- stakes, costs, and moral choices;
+- escalation path and final resolution.
 
-The skill includes explicit Lumina runtime safeguards:
+It does not reproduce protected passages, signature dialogue, famous scenes, unique characters, iconic objects, or a recognizable sequence of events. Requests involving a living author's distinctive style are translated into general craft features.
 
-- the Agent may use only components actually connected on the canvas;
-- source research runs only when a public-research component is connected;
-- an option card or outline ends the current execution—the Agent never fabricates user approval;
-- when state is not preserved, the next Task Prompt must include both the user's choice and the previous plan;
-- every repository document uses a Lumina-supported text format; the import package contains no scripts, images, or binaries.
+### Quality standards
 
-### Use it in Lumina Canvas
+- an immediate disturbance appears within the first three paragraphs;
+- the protagonist has a visible desire and a private wound;
+- conflict escalates at least three times through choices and consequences;
+- dialogue carries threat, testing, accusation, bargaining, concealment, or grief;
+- concrete objects, actions, people, and places carry information;
+- earlier details return with changed meaning;
+- the current conflict resolves while the ending leaves emotional resonance;
+- formulaic contrast, teaching-tone transitions, decorative dashes, and summary endings are removed;
+- the opening remains literally clear and does not create an unintended genre promise.
 
-1. Create an Agent node.
-2. Paste the complete contents of [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md) into **System Instructions**.
-3. Put the user's request in **Task Prompt**. Use Lumina's `@` syntax when the request comes from a connected String input.
-4. Connect the Agent text output to Show Text or another text-consuming component.
-5. Optionally connect a public-source research component and describe its required parameters and returned evidence. Without one, the Agent falls back transparently to general craft analysis.
-6. If the first run returns choices or an outline, pass the selection and previous plan back in the next run.
-
-Example follow-up Task Prompt:
+### Example requests
 
 ```text
-Use the recommended direction. Keep the plan below and write a complete 2,500–3,000 Chinese-character story now:
-@previous_plan
+Write a complete wuxia suspense story about an untrained accountant trapped in a deadly jianghu misunderstanding. Give me several directions first.
 ```
 
-### Local installation and import validation
+```text
+Write an original cultivation story about a fallen master who relearns the meaning of the craft at the bottom and returns in a public trial. Show me the outline first.
+```
 
-For local tools that support Agent Skills:
+```text
+Write a near-future memory-market story in Chinese. A father sells his most useless day and discovers that it contains the only way to save his daughter.
+```
+
+### Installation
+
+For tools that support Agent Skills:
 
 ```bash
 npx skills add XianlinLu/novel-generator
 ```
 
-Before importing into Lumina, use [`references/repository-validation.md`](./references/repository-validation.md) to verify that:
+### Import format
 
-- extensions are limited to lowercase `.md`, `.txt`, `.json`, `.yaml`, and `.yml`;
-- file and folder names contain only letters, numbers, underscores, and hyphens and stay within 64 characters;
-- every resource declared by `manifest.json` exists;
-- both full samples pass the opening, scene, dialogue, reversal, and anti-AI checks.
+All importable documents in this repository follow these rules:
+
+- lowercase `.md`, `.txt`, `.json`, `.yaml`, or `.yml` extensions only;
+- file and folder names contain only letters, numbers, underscores, and hyphens;
+- every file and folder name stays within 64 characters;
+- the import content contains no scripts, images, binaries, or cache files.
+
+See [`references/repository-validation.md`](./references/repository-validation.md) for the complete checklist.
 
 ## Package Structure
 
 ```text
-LUMINA_SYSTEM_INSTRUCTIONS.md  # Paste into Lumina Agent System Instructions
-SKILL.md                       # Maintainable Agent Skill entrypoint
+SKILL.md                       # Skill entrypoint
 agents/                        # Interface metadata
 references/                    # Story engines, remix, output, and quality rules
-examples/                      # Full sample stories and visible self-evaluations
-manifest.json                  # Package resource map and quality gates
-LICENSE.md                     # License in a Lumina-supported format
+examples/                      # Full sample stories and self-evaluations
+manifest.json                  # Resource map and quality gates
+LICENSE.md                     # License
 ```
 
 ## License
 
 Distributed under the MIT License. See [`LICENSE.md`](./LICENSE.md).
-
-The runtime design uses Lumina Canvas Agent System Instructions, Task Prompt `@` references, connected tools/components, multimodal inputs, and iteration-controlled step execution. See the [Lumina Canvas guide](https://seedancelumina.com/guide) for the current interface.
