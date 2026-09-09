@@ -18,12 +18,9 @@
     "references/quality-checklist.md",
     "references/genre-quality-rubric.md",
     "references/evolution-loop.md",
+    "references/repository-validation.md",
     "examples/sample-01-wuxia-suspense.md",
     "examples/sample-02-sci-fi-memory.md"
-  ],
-  "scripts": [
-    "scripts/validate_skill.py",
-    "scripts/evaluate_story.py"
   ],
   "quality_gates": [
     "intent_hook_selected",

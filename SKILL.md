@@ -20,7 +20,7 @@ This repository is the maintainable source package. Lumina Canvas does not load 
 - The Agent may use only components connected to it. Never claim to have searched, saved, rendered, or called a workflow unless the corresponding component is connected and its run succeeds.
 - No connected research component means the Source Research Hook must state that live research is unavailable and fall back to general craft analysis.
 - A prewrite decision is a stopping point. Return the option card, strategy, or outline and wait for the next run. On the next run, include the user's choice and the previous plan in the task input when conversation state is not preserved.
-- Repository-side Python scripts are development validators, not Lumina runtime tools. Inside Lumina, perform the same checks internally before output.
+- The import package contains only Lumina-supported text documents. Apply structural and story checks internally; use `references/repository-validation.md` when maintaining the repository.
 - Route the Agent text output to a text display or downstream text-consuming component. Do not invent file artifacts unless a connected component can create them.
 
 ## Operating Mode
@@ -69,7 +69,7 @@ Use hooks as fixed checkpoints. They are conceptual hooks, not mandatory runtime
 12. Quality Hook: self-check against `references/quality-checklist.md` and the relevant rubric in `references/genre-quality-rubric.md`. Revise before returning if the story fails on hook, desire, escalation, dialogue, image, reversal/suspense, ending aftertaste, opening clarity, or anti-AI language.
 13. Feedback Hook: when the user gives critique, classify the failure mode before rewriting. Do not only patch the current paragraph.
 14. Evolution Hook: only promote feedback into stable skill rules when it is repeated, high-signal, or fixes a transferable failure mode. See `references/evolution-loop.md`.
-15. In Lumina, run the structural and language checks internally before returning. During repository development, run `python3 scripts/validate_skill.py`; when a draft file exists outside Lumina, optionally run `python3 scripts/evaluate_story.py <draft-file>` for a lightweight metrics report.
+15. In Lumina, run the structural and language checks internally before returning. During repository maintenance, use `references/repository-validation.md` to verify import format, package structure, samples, and story signals.
 
 ## Output Defaults
 
@@ -152,6 +152,5 @@ Use the same skill for:
 - `references/evolution-loop.md`: hook-based feedback, rule promotion, and anti-overfitting process.
 - `examples/sample-01-wuxia-suspense.md`:江湖悬疑完整短篇样例与自评。
 - `examples/sample-02-sci-fi-memory.md`:近未来科幻完整短篇样例与自评。
-- `scripts/validate_skill.py`: local structural validator for required files and sample self-evaluations.
-- `scripts/evaluate_story.py`: optional draft metrics reporter for abstraction, dialogue, scene, and hook signals.
+- `references/repository-validation.md`: Lumina import-format rules plus structural, sample, opening, scene, dialogue, and anti-AI validation checks.
 - `LUMINA_SYSTEM_INSTRUCTIONS.md`: self-contained runtime prompt to paste into Lumina Canvas Agent System Instructions.

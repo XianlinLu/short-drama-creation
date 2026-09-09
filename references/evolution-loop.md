@@ -66,7 +66,7 @@ When the user critiques an output:
 2. Identify whether it is task-local, genre-level, or global craft-level.
 3. Rewrite the story or relevant section against the dominant failure.
 4. If updating the skill, write an abstract rule and place it in the narrowest useful reference file.
-5. Run `scripts/validate_skill.py` after editing the repository skill. This is a development step, not a Lumina runtime action.
+5. Apply `references/repository-validation.md` after editing the repository skill so the package remains importable by Lumina.
 
 ## Evolution Hook Procedure
 

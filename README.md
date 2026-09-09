@@ -30,7 +30,7 @@
 Lumina Agent 通过 **System Instructions、Task Prompt 和已连接的组件工具**运行。本仓库因此提供两个入口：
 
 - [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md)：已经把运行时必需规则编译成单文件，可直接粘贴到 Lumina Agent 节点的 System Instructions。
-- [`SKILL.md`](./SKILL.md)：完整、可维护的 Skill 入口，配合 `references/`、`examples/` 和 `scripts/` 用于版本维护、审查与本地 Agent Skills 兼容。
+- [`SKILL.md`](./SKILL.md)：完整、可维护的 Skill 入口，配合 `references/` 和 `examples/` 用于版本维护、审查与本地 Agent Skills 兼容。
 
 Skill 内置了 Lumina 画布运行约束：
 
@@ -38,7 +38,7 @@ Skill 内置了 Lumina 画布运行约束：
 - 只有连接了公开资料搜索组件时，才执行“先搜索再重构”；
 - 选项卡和大纲是一次运行的停止点，不会虚构用户确认；
 - 如果画布不保留上次运行状态，下一次 Task Prompt 需要带回用户选择和上一版大纲；
-- Python 校验脚本仅用于仓库开发，不会被误当成 Lumina 运行时工具。
+- 所有仓库文档都采用 Lumina 支持的文本格式，导入包不包含脚本、图片或二进制文件。
 
 ### 在 Lumina 画布中使用
 
@@ -93,7 +93,7 @@ Skill 内置了 Lumina 画布运行约束：
 - 删除公式化对比、总结式结尾、教学腔和装饰性破折号；
 - 开篇的物理事实与类型承诺清晰，不用误导换取钩子。
 
-### 本地安装与验证
+### 本地安装与导入验证
 
 兼容 Agent Skills 的本地工具可直接安装：
 
@@ -101,13 +101,12 @@ Skill 内置了 Lumina 画布运行约束：
 npx skills add XianlinLu/novel-generator
 ```
 
-仓库开发校验：
+导入 Lumina 前，按照 [`references/repository-validation.md`](./references/repository-validation.md) 检查：
 
-```bash
-python3 scripts/validate_skill.py
-python3 scripts/evaluate_story.py examples/sample-01-wuxia-suspense.md --fail-on-warning
-python3 scripts/evaluate_story.py examples/sample-02-sci-fi-memory.md --fail-on-warning
-```
+- 文件扩展名只能是小写 `.md`、`.txt`、`.json`、`.yaml`、`.yml`；
+- 文件和目录名只能包含英文字母、数字、下划线和连字符，且不超过 64 个字符；
+- `manifest.json` 中声明的资源必须全部存在；
+- 两个完整样例必须通过开篇、场景、对白、反转和反 AI 味检查。
 
 ## English Introduction
 
@@ -133,7 +132,7 @@ The skill is designed to:
 Lumina Agents run from **System Instructions**, a **Task Prompt**, and connected component tools. This repository therefore contains two entrypoints:
 
 - [`LUMINA_SYSTEM_INSTRUCTIONS.md`](./LUMINA_SYSTEM_INSTRUCTIONS.md) is the self-contained runtime prompt to paste into a Lumina Agent node.
-- [`SKILL.md`](./SKILL.md) is the maintainable package entrypoint, supported by `references/`, `examples/`, and repository-side validation scripts.
+- [`SKILL.md`](./SKILL.md) is the maintainable package entrypoint, supported by `references/` and `examples/`.
 
 The skill includes explicit Lumina runtime safeguards:
 
@@ -141,7 +140,7 @@ The skill includes explicit Lumina runtime safeguards:
 - source research runs only when a public-research component is connected;
 - an option card or outline ends the current execution—the Agent never fabricates user approval;
 - when state is not preserved, the next Task Prompt must include both the user's choice and the previous plan;
-- Python validators are development tools, not runtime capabilities.
+- every repository document uses a Lumina-supported text format; the import package contains no scripts, images, or binaries.
 
 ### Use it in Lumina Canvas
 
@@ -159,7 +158,7 @@ Use the recommended direction. Keep the plan below and write a complete 2,500–
 @previous_plan
 ```
 
-### Local installation and validation
+### Local installation and import validation
 
 For local tools that support Agent Skills:
 
@@ -167,13 +166,12 @@ For local tools that support Agent Skills:
 npx skills add XianlinLu/novel-generator
 ```
 
-For repository development:
+Before importing into Lumina, use [`references/repository-validation.md`](./references/repository-validation.md) to verify that:
 
-```bash
-python3 scripts/validate_skill.py
-python3 scripts/evaluate_story.py examples/sample-01-wuxia-suspense.md --fail-on-warning
-python3 scripts/evaluate_story.py examples/sample-02-sci-fi-memory.md --fail-on-warning
-```
+- extensions are limited to lowercase `.md`, `.txt`, `.json`, `.yaml`, and `.yml`;
+- file and folder names contain only letters, numbers, underscores, and hyphens and stay within 64 characters;
+- every resource declared by `manifest.json` exists;
+- both full samples pass the opening, scene, dialogue, reversal, and anti-AI checks.
 
 ## Package Structure
 
@@ -183,12 +181,12 @@ SKILL.md                       # Maintainable Agent Skill entrypoint
 agents/                        # Interface metadata
 references/                    # Story engines, remix, output, and quality rules
 examples/                      # Full sample stories and visible self-evaluations
-scripts/                       # Repository-side validators
 manifest.json                  # Package resource map and quality gates
+LICENSE.md                     # License in a Lumina-supported format
 ```
 
 ## License
 
-Distributed under the MIT License. See [`LICENSE`](./LICENSE).
+Distributed under the MIT License. See [`LICENSE.md`](./LICENSE.md).
 
 The runtime design uses Lumina Canvas Agent System Instructions, Task Prompt `@` references, connected tools/components, multimodal inputs, and iteration-controlled step execution. See the [Lumina Canvas guide](https://seedancelumina.com/guide) for the current interface.

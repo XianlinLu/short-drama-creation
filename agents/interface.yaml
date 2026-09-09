@@ -14,7 +14,7 @@ runtime:
   constraints:
     - only_connected_components_are_available
     - prewrite_confirmation_requires_a_follow_up_run
-    - repository_scripts_are_not_runtime_tools
+    - import_package_uses_supported_text_formats_only
 
 triggers:
   include:
@@ -131,6 +131,5 @@ resources:
   evolution_loop: references/evolution-loop.md
   sample_wuxia_suspense: examples/sample-01-wuxia-suspense.md
   sample_sci_fi_memory: examples/sample-02-sci-fi-memory.md
-  validator: scripts/validate_skill.py
-  story_evaluator: scripts/evaluate_story.py
+  repository_validation: references/repository-validation.md
   lumina_system_instructions: LUMINA_SYSTEM_INSTRUCTIONS.md
