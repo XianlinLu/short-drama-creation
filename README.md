@@ -1,4 +1,4 @@
-# Novel Generator
+# Short Drama Creation
 
 > 一个能够自动匹配用户语言的原创叙事 Agent Skill。它既能完成小说策划、生成与改写，也能把人物三视图转化为交互式选题、分镜图、分镜视频、原创背景音乐和约一分钟的最终成片。
 >
