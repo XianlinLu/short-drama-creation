@@ -1,7 +1,7 @@
 interface:
-  display_name: "Lumina 小说生成器"
-  short_description: "自动匹配语言的原创小说及角色三视图到交互选题、视频和背景音乐工作流"
-  default_prompt: "Use $lumina-novel-generator to create original fiction or turn my character turnaround into an interactive topic choice, storyboard, short videos, original background music, and an approximately one-minute film while matching my language."
+  display_name: "Short Drama Creation"
+  short_description: "从角色参考或灵感生成原创短剧、分镜、视频和背景音乐"
+  default_prompt: "Use $short-drama-creation to turn my character reference or story idea into an interactive topic choice, original storyboard, short videos, background music, and an approximately one-minute final film."
 
 policy:
   allow_implicit_invocation: true

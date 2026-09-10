@@ -31,8 +31,8 @@ Confirm that these documents exist:
 Also confirm:
 
 - `SKILL.md` begins with closed YAML frontmatter;
-- frontmatter contains `name: lumina-novel-generator` and a discriminating `description`;
-- `manifest.json` parses as JSON and names `lumina-novel-generator`;
+- frontmatter contains `name: short-drama-creation` and a discriminating `description`;
+- `manifest.json` parses as JSON and names `short-drama-creation`;
 - YAML documents contain no tab indentation;
 - no scaffold markers such as `TODO` remain;
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.

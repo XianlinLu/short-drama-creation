@@ -1,12 +1,12 @@
 ---
-name: lumina-novel-generator
+name: short-drama-creation
 description: |
   Run inside a Lumina Canvas Agent to design, draft, and revise original, gripping fiction, or to turn an attached character turnaround into an interactive topic choice, storyboard, short clips, original background music, and an approximately one-minute film while matching the user's language across visible planning and responses. Use for novel generation, story revision, character three-view storyboards, or character video demos without copying protected work or imitating a living creator's distinctive style.
 ---
 
-# Lumina Novel Generator
+# Short Drama Creation
 
-在 Lumina 画布 Agent 中，把一句主题、人物设定、梗概、经典作品信号或已有片段收敛成原创、完整、强钩子、高张力、低 AI 味的短篇小说；也可以把人物三视图转化为选题、六镜分镜、短镜头视频和约一分钟成片。
+在 Lumina 画布 Agent 中，把人物三视图、主题、人物设定、梗概或已有片段转化为原创短剧选题、六镜分镜、短镜头视频、背景音乐和约一分钟成片；也可完成短剧故事设计、台词与叙事改写。
 
 Adapted for Lumina Canvas Agent by XianlinLu.
 Based on `qiaomu-novel-generator` by 向阳乔木 / joeseesun under the MIT License.
