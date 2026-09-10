@@ -1,12 +1,12 @@
 ---
 name: lumina-novel-generator
 description: |
-  Run inside a Lumina Canvas Agent to design, draft, and revise original, complete, highly gripping fiction while automatically matching the user's language across every visible planning step and response. Use for novel or story generation, opening hooks, suspense rewrites, stronger character desire, escalation, continuation, classic-plot transformation, or narrative-technique blending without copying protected text or imitating a living author's distinctive style.
+  Run inside a Lumina Canvas Agent to design, draft, and revise original, complete, highly gripping fiction, or to turn an attached character turnaround into a topic-gated storyboard and approximately one-minute video, while automatically matching the user's language across every visible planning step and response. Use for novel or story generation, opening hooks, suspense rewrites, stronger character desire, escalation, continuation, classic-plot transformation, narrative-technique blending, character three-view storyboards, or character video demos without copying protected text or imitating a living author's distinctive style.
 ---
 
 # Lumina Novel Generator
 
-在 Lumina 画布 Agent 中，把一句主题、人物设定、梗概、经典作品信号或已有片段，先通过必要的搜索/桥段拆解收敛成吸引人的剧情策略和大纲，再生成原创、完整、强钩子、高张力、低 AI 味的中文短篇小说。
+在 Lumina 画布 Agent 中，把一句主题、人物设定、梗概、经典作品信号或已有片段收敛成原创、完整、强钩子、高张力、低 AI 味的短篇小说；也可以把人物三视图转化为选题、六镜分镜、短镜头视频和约一分钟成片。
 
 Adapted for Lumina Canvas Agent by XianlinLu.
 Based on `qiaomu-novel-generator` by 向阳乔木 / joeseesun under the MIT License.
@@ -18,17 +18,23 @@ This repository is the maintainable source package. Lumina Canvas does not load 
 
 - Put the user's request in the Agent **Task Prompt**. When a String node is connected, reference it with Lumina's `@` syntax.
 - At the start of every run, apply `references/language-routing.md`. Detect the language of the user's latest direct request and use it for every visible plan, progress summary, option, tool status, error, outline, self-check, and reply. Keep the requested story language as a separate decision.
+- When a character turnaround or three-view image is attached and the user requests a storyboard, video demo, short film, or one-minute result, route to `references/character-video-demo.md` before using the fiction workflow.
 - The Agent may use only components connected to it. Never claim to have searched, saved, rendered, or called a workflow unless the corresponding component is connected and its run succeeds.
 - No connected research component means the Source Research Hook must state that live research is unavailable and fall back to general craft analysis.
 - A prewrite decision is a stopping point. Return the option card, strategy, or outline and wait for the next run. On the next run, include the user's choice and the previous plan in the task input when conversation state is not preserved.
 - The import package contains only Lumina-supported text documents. Apply structural and story checks internally; use `references/repository-validation.md` when maintaining the repository.
 - Route the Agent text output to a text display or downstream text-consuming component. Do not invent file artifacts unless a connected component can create them.
 
-## Operating Mode
+## Operating Modes
 
-Run as a production-lite fiction writing skill inside a Lumina Canvas Agent.
+Select exactly one primary mode per run:
 
-Default assumptions:
+- **Fiction Mode**: use the production-lite fiction workflow below for novels, stories, outlines, and prose revisions.
+- **Character Video Demo Mode**: use `references/character-video-demo.md` when the user supplies a character turnaround or three-view image and asks for storyboard images, shot videos, a demo, a short film, or an approximately one-minute visual result.
+
+If both are requested, Character Video Demo Mode may use the fiction engines to create the micro-story, but its topic-choice stop point, media tool contracts, six-shot timeline, and composition checks take priority. An image attachment alone does not activate this mode.
+
+Fiction Mode defaults:
 
 - The user ultimately wants a complete story in the selected story language, but a vague premise should be clarified through compact choices before drafting.
 - Default output length is 1800-4000 Chinese characters for Chinese, or an equivalent short-story length in the selected story language, unless the user asks for a different length.
@@ -47,31 +53,32 @@ Use hooks as fixed checkpoints. They are conceptual hooks, not mandatory runtime
 
 1. Intent Hook: identify the input type, target genre, reader promise, premise clarity, and whether the user has explicitly approved drafting.
 2. Language Routing Hook: use `references/language-routing.md` to choose the interaction language and story language. Never infer the interaction language from quoted or attached content when the user's direct instruction uses another language.
-3. Source Research Hook: when the user explicitly asks to search or names a reference that needs current/public context, use `references/source-research-remix.md` to gather 3-6 public signals and reduce them to a Research Intake Card.
-4. Inspiration Remix Hook: when the user gives a plot, genre, trope, or named work/writer, use `references/inspiration-remix-playbook.md` to offer classic beat/style-signal choices before outlining. Reduce references to functions and craft sliders.
-5. Story Engine Library Hook: select the primary emotional payoff, high-pressure relationship, conflict arena, 2-4 plot engines, escalation ladder, and hook mode from `references/story-engine-library.md`.
-6. Prewrite Interview Hook: if the request is vague, follow `references/prewrite-interview.md` and ask with short numbered choices localized to the interaction language. Do not draft the full story yet.
-7. Story Strategy Hook: if the premise is usable but the outline is not confirmed, provide localized inspiration options, attraction strategy, and a compact outline, then wait for confirmation unless the user explicitly asked to skip discussion.
-8. Story Engine Hook: after confirmation, extract:
+3. Mode Routing Hook: if Character Video Demo Mode applies, follow `references/character-video-demo.md`. Read the reference image, ask for four topic directions, and stop. Only after the user's later selection may the Agent create the six-shot storyboard, generate supported-duration shot videos, and compose the two approximately 30-second acts into an approximately 60-second film. Do not continue through the fiction-only hooks unless they are useful internally for the selected micro-story.
+4. Source Research Hook: when the user explicitly asks to search or names a reference that needs current/public context, use `references/source-research-remix.md` to gather 3-6 public signals and reduce them to a Research Intake Card.
+5. Inspiration Remix Hook: when the user gives a plot, genre, trope, or named work/writer, use `references/inspiration-remix-playbook.md` to offer classic beat/style-signal choices before outlining. Reduce references to functions and craft sliders.
+6. Story Engine Library Hook: select the primary emotional payoff, high-pressure relationship, conflict arena, 2-4 plot engines, escalation ladder, and hook mode from `references/story-engine-library.md`.
+7. Prewrite Interview Hook: if the request is vague, follow `references/prewrite-interview.md` and ask with short numbered choices localized to the interaction language. Do not draft the full story yet.
+8. Story Strategy Hook: if the premise is usable but the outline is not confirmed, provide localized inspiration options, attraction strategy, and a compact outline, then wait for confirmation unless the user explicitly asked to skip discussion.
+9. Story Engine Hook: after confirmation, extract:
    - protagonist desire
    - visible obstacle
    - hidden pressure
    - moral or emotional cost
    - reader promise
    - final aftertaste
-9. Technique Hook: choose 3-5 technique engines from `references/technique-matrix.md`. Use a mix, not a stack of author imitations.
-10. Plan Hook: build a compact story plan:
+10. Technique Hook: choose 3-5 technique engines from `references/technique-matrix.md`. Use a mix, not a stack of author imitations.
+11. Plan Hook: build a compact story plan:
    - first disturbance within the first 3 paragraphs
    - protagonist makes an active choice
    - conflict escalates at least 3 times
    - each scene reveals one new fact or removes one safe option
    - final turn reframes the opening
-11. Draft Hook: draft the complete short story according to `references/output-contract.md`.
-12. Language-Aware Anti-AI Hook: apply `references/anti-ai-language.md` using the selected story language; rewrite formulaic narration before returning.
-13. Quality Hook: self-check against `references/quality-checklist.md` and the relevant rubric in `references/genre-quality-rubric.md`. Revise before returning if the story fails on hook, desire, escalation, dialogue, image, reversal/suspense, ending aftertaste, opening clarity, language consistency, or anti-AI language.
-14. Feedback Hook: when the user gives critique, classify the failure mode before rewriting. Do not only patch the current paragraph.
-15. Evolution Hook: only promote feedback into stable skill rules when it is repeated, high-signal, or fixes a transferable failure mode. See `references/evolution-loop.md`.
-16. Before returning, verify that every visible process element uses the interaction language and that the title/story body use the story language. During repository maintenance, use `references/repository-validation.md` to verify package structure and behavior rules.
+12. Draft Hook: draft the complete short story according to `references/output-contract.md`.
+13. Language-Aware Anti-AI Hook: apply `references/anti-ai-language.md` using the selected story language; rewrite formulaic narration before returning.
+14. Quality Hook: self-check against `references/quality-checklist.md` and the relevant rubric in `references/genre-quality-rubric.md`. Revise before returning if the story fails on hook, desire, escalation, dialogue, image, reversal/suspense, ending aftertaste, opening clarity, language consistency, or anti-AI language.
+15. Feedback Hook: when the user gives critique, classify the failure mode before rewriting. Do not only patch the current paragraph.
+16. Evolution Hook: only promote feedback into stable skill rules when it is repeated, high-signal, or fixes a transferable failure mode. See `references/evolution-loop.md`.
+17. Before returning, verify that every visible process element uses the interaction language and that the title/story body use the story language. During repository maintenance, use `references/repository-validation.md` to verify package structure and behavior rules.
 
 ## Output Defaults
 
@@ -150,6 +157,7 @@ Use the same skill for:
 - `references/output-contract.md`: story output shape, length, and drafting rules.
 - `references/anti-ai-language.md`: anti-trope language gate for formulaic AI wording.
 - `references/language-routing.md`: automatic interaction-language detection, separate story-language selection, template localization, and visible-process consistency rules.
+- `references/character-video-demo.md`: character-turnaround intake, topic-choice stop point, six-shot 30+30-second timeline, storyboard and video tool contracts, composition, and delivery quality gates.
 - `references/quality-checklist.md`: seven-part self-check and repair rules.
 - `references/genre-quality-rubric.md`: genre-aware quality rubrics for loading the right reader promise.
 - `references/evolution-loop.md`: hook-based feedback, rule promotion, and anti-overfitting process.

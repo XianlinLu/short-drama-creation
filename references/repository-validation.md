@@ -24,6 +24,7 @@ Confirm that these documents exist:
 - `agents/interface.yaml`
 - `agents/openai.yaml`
 - `references/language-routing.md`
+- `references/character-video-demo.md`
 - every document listed under `resources` in `manifest.json`
 
 Also confirm:
@@ -34,7 +35,9 @@ Also confirm:
 - YAML documents contain no tab indentation;
 - no scaffold markers such as `TODO` remain;
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.
+- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory topic-choice stop, connected media capability checks, the default six-shot timeline, character continuity rules, ordered composition, and final duration verification.
 - metadata declares automatic language handling rather than a fixed output language;
+- metadata version and resource maps agree across `manifest.json` and `agents/interface.yaml`;
 
 ## Sample Evidence
 
@@ -60,6 +63,33 @@ For a draft or sample, inspect these observable signals. They are diagnostics, n
 7. The story resolves the present conflict and returns an earlier image with changed meaning.
 8. Every visible planning step, status, option, error, outline, and conversational sentence uses the detected interaction language.
 9. The title and story body use the selected story language, which may differ when explicitly requested.
+
+## Character Video Demo Smoke Test
+
+Use a disposable character turnaround and mock or low-cost connected components where possible.
+
+First run:
+
+1. Attach the turnaround and request a one-minute character video.
+2. Confirm that the Agent returns exactly four distinct topic directions in the interaction language.
+3. Confirm that it recommends one direction, explains the six-image/six-video/approximately-60-second consequence of selection, and stops without generating media.
+
+Second run:
+
+1. Return the selected option, topic card, and reference image when state is not preserved.
+2. Confirm that the planned timeline defaults to six 10-second shots only when the connected video component accepts 10 seconds.
+3. Confirm that every storyboard call receives the original turnaround and stable Character Lock.
+4. Confirm that each video call receives the matching actual storyboard output.
+5. Confirm that failed tools are reported with actual errors and are never represented as successful outputs.
+6. Confirm that clips are composed strictly in Shot 01–06 order.
+7. Confirm that Act A and Act B each total approximately 30 seconds and that the final output is approximately 58–62 seconds.
+8. Confirm that every visible plan, status, error, and delivery note uses the detected interaction language, even when a media component requires a fixed prompt language.
+
+Missing-tool test:
+
+1. Disconnect the composition capability.
+2. Confirm that the Agent returns an ordered clip manifest when all shot clips exist.
+3. Confirm that it explicitly says no final film was created.
 
 ## Anti-AI Pattern Scan
 
@@ -91,4 +121,4 @@ If the story is not intentionally supernatural, rewrite with a literal anchor su
 
 ## Passing Standard
 
-The package passes when every imported document satisfies the Lumina filename and extension rules, all declared resources exist, the runtime instructions are self-contained, automatic language routing is declared and consistently applied, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.
+The package passes when every imported document satisfies the Lumina filename and extension rules, all declared resources exist, the runtime instructions are self-contained, automatic language routing is declared and consistently applied, the visual demo respects its topic gate and connected-tool contracts, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.

@@ -1,6 +1,6 @@
 {
   "name": "lumina-novel-generator",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "mode": "lumina-canvas",
   "language": "auto",
   "language_policy": {
@@ -30,6 +30,7 @@
     "references/output-contract.md",
     "references/anti-ai-language.md",
     "references/language-routing.md",
+    "references/character-video-demo.md",
     "references/quality-checklist.md",
     "references/genre-quality-rubric.md",
     "references/evolution-loop.md",
@@ -69,6 +70,20 @@
     "copyright_boundary",
     "lumina_connected_tool_boundary_respected",
     "feedback_classified_before_rewrite",
-    "stable_rule_promotion_avoids_overfitting"
+    "stable_rule_promotion_avoids_overfitting",
+    "character_video_mode_requires_three_view_and_visual_intent",
+    "four_topic_directions_returned_before_media_generation",
+    "topic_choice_stop_point_respected",
+    "original_micro_story_created_after_selection",
+    "connected_duration_limits_inspected",
+    "no_single_thirty_second_generation_assumed",
+    "default_six_ten_second_shot_timeline_when_supported",
+    "original_character_reference_used_for_every_storyboard",
+    "storyboard_and_video_outputs_are_actual_tool_results",
+    "adjacent_shot_continuity_checked",
+    "act_a_and_act_b_each_approximately_thirty_seconds",
+    "final_film_approximately_fifty_eight_to_sixty_two_seconds",
+    "composition_uses_ordered_successful_clips_only",
+    "missing_media_capability_reported_without_fabrication"
   ]
 }

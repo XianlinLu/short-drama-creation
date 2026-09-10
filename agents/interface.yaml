@@ -1,8 +1,8 @@
 name: lumina-novel-generator
-version: 1.1.0
+version: 1.2.0
 mode: lumina-canvas
 language: auto
-summary: 自动匹配用户语言的原创小说设计、生成与改写工作流。
+summary: 自动匹配用户语言的原创小说工作流，以及角色三视图到约一分钟成片的视觉 Demo 工作流。
 
 runtime:
   platform: Lumina Canvas Agent
@@ -16,12 +16,20 @@ runtime:
     detection_excludes: quoted, attached, retrieved, pasted, code, metadata, and tool-output content
   optional_tools:
     - connected public-source research component
+    - connected character-reference or multimodal input
+    - connected reference-aware image generation component
+    - connected image-to-video or first-last-frame video component
+    - connected ordered video composition or concatenation component
+    - connected last-frame, audio, subtitle, preview, or save component
   constraints:
     - only_connected_components_are_available
     - prewrite_confirmation_requires_a_follow_up_run
     - import_package_uses_supported_text_formats_only
     - visible_process_uses_detected_interaction_language
     - story_language_is_selected_separately
+    - character_video_demo_requires_reference_image_and_visual_request
+    - character_video_demo_stops_for_topic_choice_before_generation
+    - media_generation_uses_actual_connected_component_contracts
 
 triggers:
   include:
@@ -72,6 +80,21 @@ triggers:
     - 書き直し
     - 冒頭のフック
     - サスペンス
+    - 人物三视图
+    - 角色三视图
+    - 三视图分镜
+    - 分镜场景图
+    - 分镜视频
+    - 一分钟短片
+    - 角色视频 demo
+    - character turnaround
+    - character three-view
+    - storyboard images
+    - storyboard video
+    - one-minute character film
+    - キャラクター三面図
+    - 絵コンテ
+    - 一分動画
   exclude:
     - 纯短剧剧本
     - 电影剧本格式
@@ -98,6 +121,11 @@ inputs:
     - conflict_arena
     - interaction_language
     - story_language
+    - character_turnaround_image
+    - selected_topic_direction
+    - target_aspect_ratio
+    - target_duration_seconds
+    - audio_mode
 
 outputs:
   default:
@@ -115,6 +143,17 @@ outputs:
       - technique_mix
       - story_body
       - seven_part_self_evaluation
+  character_video_demo:
+    type: topic_gated_storyboard_video_and_final_film
+    sections:
+      - four_topic_directions
+      - selected_topic_and_timeline
+      - six_shot_storyboard
+      - six_short_videos
+      - thirty_second_act_a
+      - thirty_second_act_b
+      - approximately_sixty_second_final_film
+      - delivery_and_deviation_summary
 
 quality_gates:
   - intent_hook_selected
@@ -145,6 +184,20 @@ quality_gates:
   - transferable_rules_not_one_off_content
   - no_author_style_imitation
   - no_copyrighted_scene_copy
+  - character_video_mode_requires_three_view_and_visual_intent
+  - four_topic_directions_returned_before_media_generation
+  - topic_choice_stop_point_respected
+  - original_micro_story_created_after_selection
+  - connected_duration_limits_inspected
+  - no_single_thirty_second_generation_assumed
+  - default_six_ten_second_shot_timeline_when_supported
+  - original_character_reference_used_for_every_storyboard
+  - storyboard_and_video_outputs_are_actual_tool_results
+  - adjacent_shot_continuity_checked
+  - act_a_and_act_b_each_approximately_thirty_seconds
+  - final_film_approximately_fifty_eight_to_sixty_two_seconds
+  - composition_uses_ordered_successful_clips_only
+  - missing_media_capability_reported_without_fabrication
 
 resources:
   skill: SKILL.md
@@ -156,6 +209,7 @@ resources:
   output_contract: references/output-contract.md
   anti_ai_language: references/anti-ai-language.md
   language_routing: references/language-routing.md
+  character_video_demo: references/character-video-demo.md
   quality_checklist: references/quality-checklist.md
   genre_quality_rubric: references/genre-quality-rubric.md
   evolution_loop: references/evolution-loop.md

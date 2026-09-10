@@ -1,8 +1,8 @@
 # Novel Generator
 
-> 一个能够自动匹配用户语言的原创小说策划、生成与改写 Agent Skill。它先确定读者承诺、人物欲望、冲突引擎和故事大纲，再写出完整、强钩子、高张力、低 AI 味的小说。
+> 一个能够自动匹配用户语言的原创叙事 Agent Skill。它既能完成小说策划、生成与改写，也能把人物三视图转化为选题、分镜图、分镜视频和约一分钟的最终成片。
 >
-> An Agent Skill that automatically matches the user's language while planning, drafting, and revising original fiction. It establishes the reader promise, character desire, conflict engines, and story outline before producing a complete, gripping, low-AI-smell story.
+> An original-narrative Agent Skill that automatically matches the user's language. It can plan, draft, and revise fiction, or turn a character turnaround into a topic, storyboard images, shot videos, and an approximately one-minute final film.
 
 [中文](#中文介绍) · [English](#english-introduction)
 
@@ -46,6 +46,48 @@
 - 固定模板会动态本地化，不会在英文或日文回答中残留中文标题。
 
 模型的私有推理不会展示；画面上实际可见的思考摘要或分步进度会严格使用识别到的用户语言。详细规则见 [`references/language-routing.md`](./references/language-routing.md)。
+
+#### 人物三视图到一分钟成片 Demo
+
+当用户上传人物角色三视图并提出分镜、视频 Demo 或一分钟短片需求时，Skill 会切换到独立的视觉生产模式。它不会立刻消耗生成资源，而是先读取角色的稳定外观锚点，再给出四个原创选题方向并等待用户选择。
+
+用户选定方向后，默认流程是：
+
+```text
+人物三视图 → 4 个选题方向 → 用户选择 → 角色一致性锁定 → 6 张分镜图 → 6 段约 10 秒视频 → 前 30 秒 + 后 30 秒 → 约 60 秒成片
+```
+
+默认的六镜时间线：
+
+| 镜头 | 时间 | 叙事作用 |
+| --- | --- | --- |
+| 01 | 00:00–00:10 | 视觉钩子与场景规则 |
+| 02 | 00:10–00:20 | 角色目标与第一阻碍 |
+| 03 | 00:20–00:30 | 冲突升级与上半段转折 |
+| 04 | 00:30–00:40 | 发现或反转 |
+| 05 | 00:40–00:50 | 有代价的选择与高潮动作 |
+| 06 | 00:50–01:00 | 回报与首尾呼应 |
+
+这不是把 30 秒当作一次视频生成。Skill 会先读取已连接视频组件的真实时长限制；支持 10 秒时采用 `6 × 10 秒`，不支持时则改用组件能够接受的镜头时长，让上下两段都尽量接近 30 秒，并把最终成片控制在约 58–62 秒。
+
+完整 Demo 需要连接以下能力：
+
+- 人物参考图或多模态输入；
+- 支持参考图的图片生成；
+- 图生视频或首尾帧视频生成；
+- 按顺序拼接多个视频的合成组件。
+
+第二轮至少包含六次图片生成、六次视频生成和一次以上合成调用，因此应给 Agent 留出足够的执行步数。若运行环境提供最大迭代次数设置，建议从 `24` 或更高开始；当上下两段与最终成片需要分三次合成时可继续上调。
+
+末帧返回、音频、配音、音乐、字幕、预览和保存属于可选能力。缺少某个必需组件时，Skill 会停在可完成的最后一步，交付已有结果并明确说明缺少什么，不会假装最终视频已经生成。
+
+可直接用于演示的首轮请求：
+
+```text
+请读取我上传的人物三视图，先给我 4 个适合这个角色的一分钟原创短片选题。现在只提案，不要生成图片或视频；我选定后再开始完整制作。
+```
+
+用户第二轮只需回复选题编号。选择即启动六张分镜图、六段短视频和最终拼接流程；如果当前 Agent 不保存上下文，应把选题卡与人物三视图一并传回。详细执行规则见 [`references/character-video-demo.md`](./references/character-video-demo.md)。
 
 #### 写前选择与确认
 
@@ -185,6 +227,37 @@ emotional promise → high-pressure relationship → conflict arena → narrativ
 - Fixed templates are localized dynamically instead of leaking Chinese headings into other-language output.
 
 Private chain-of-thought is never exposed. Any concise reasoning summary or step-by-step progress that is actually visible uses the detected interaction language. See [`references/language-routing.md`](./references/language-routing.md) for the complete routing rules.
+
+### Character turnaround to one-minute film demo
+
+When the user supplies a character turnaround and requests storyboards, a video demo, or a one-minute short film, the skill enters a dedicated visual-production mode. It first extracts stable visible character anchors, proposes four original topic directions, recommends one, and waits. No image or video generation begins before the user chooses.
+
+After selection, the default pipeline is:
+
+```text
+character turnaround → four topic directions → user choice → character lock → six storyboard images → six approximately 10-second videos → 30-second act A + 30-second act B → approximately 60-second final film
+```
+
+The six shots cover the hook, goal, escalation, reversal, climax choice, and closing echo. The skill does not assume that one video call can produce 30 seconds. It reads the connected component's real duration limits, uses `6 × 10 seconds` when supported, and otherwise rebuilds the timing from supported shot lengths. The target final duration is approximately 58–62 seconds.
+
+The complete demo requires connected capabilities for:
+
+- character-reference or multimodal image input;
+- reference-aware image generation;
+- image-to-video or first/last-frame video generation;
+- ordered multi-clip video composition.
+
+The second run needs at least six image calls, six video calls, and one or more composition calls. Give the Agent enough execution steps to finish. If the runtime exposes a maximum-iterations setting, `24` or higher is a practical starting point; increase it when Act A, Act B, and the final film require three separate composition calls.
+
+Last-frame return, audio, speech, music, subtitles, preview, and save capabilities are optional. If a required capability is missing, the skill stops at the last completed stage, returns real outputs, and identifies the missing capability instead of claiming a nonexistent final film.
+
+First-run demo prompt:
+
+```text
+Read my uploaded character turnaround and propose four original one-minute short-film directions for this character. Only show the options now; do not generate images or video until I choose.
+```
+
+On the next run, the user can reply with the option number to start the six-image, six-video, and final-composition sequence. If the Agent does not preserve state, return the topic card and reference image with that choice. See [`references/character-video-demo.md`](./references/character-video-demo.md) for the complete runtime contract.
 
 ### Originality by design
 
