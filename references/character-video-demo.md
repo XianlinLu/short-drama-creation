@@ -1,49 +1,47 @@
-# Character Turnaround To One-Minute Video Demo
+# Character Turnaround To Extended Short-Drama Video
 
-Use this mode only when the user supplies a character turnaround or three-view reference image and asks for a storyboard, video demo, short film, or approximately one-minute character video. Ordinary fiction requests remain in Fiction Mode.
+Use this mode only when the user supplies a character turnaround or three-view reference image and asks for a storyboard, video demo, short film, or duration-controlled character video. Ordinary fiction requests remain in Fiction Mode.
 
 ## Core Promise
 
-The Agent turns one approved character reference into an original visual story through a gated workflow:
+The Agent creates one continuous video lineage instead of generating independent clips and concatenating them:
 
 ```text
-character reference → interactive topic choice → continuity bible → six-shot storyboard → six short videos → original background music → 30-second act A + 30-second act B → final film with music
+character reference → interactive topic choice → target-duration lock → continuity bible → seed storyboard → short seed video → extend the latest video repeatedly → duration-verified final video
 ```
 
-The default timeline is six 10-second shots. Shots 01–03 form Act A at approximately 30 seconds; shots 04–06 form Act B at approximately 30 seconds. The target final duration is 58–62 seconds after in-duration transitions and trims.
-
-Never assume that a video component can generate a 30-second clip in one call. Inspect its declared duration or frame limits. If 10 seconds is unsupported, select supported shot lengths that make each act as close to 30 seconds as possible, state the resulting timeline before generation, and keep the final film close to one minute.
+The user's explicit target duration is authoritative. Each extension must use the previous successful video as its source and return a longer continuous video that already contains the earlier material. Never create several standalone clips and splice, concatenate, or reorder them to claim the final result.
 
 ## Required Connected Capabilities
 
 Map connected tools by capability and declared parameters, not by invented names.
 
-Required for the complete demo:
+Required for the complete visual demo:
 
 - a native interactive single-choice user-input action for the topic card;
-- a media or image input that exposes the character turnaround to the Agent;
-- a reference-aware image generation component;
-- an image-to-video or first/last-frame video generation component;
-- an original music generation component;
-- a video composition or concatenation component that accepts ordered clips and an audio track.
+- a media or image input that exposes the character turnaround;
+- a reference-aware image generation component for the seed frame;
+- an image-to-video component for the initial short video;
+- a true video-extension or video-continuation component that accepts an existing video and returns a longer continuous video;
+- duration metadata or another reliable way to verify each returned video's cumulative duration.
 
 Optional:
 
-- a component that returns a video's last frame;
-- speech, sound-effect, subtitle, preview, or save components;
-- an image-enhancement component.
+- original music generation;
+- native video-audio conditioning or a single-video audio muxer that does not concatenate or retime video;
+- speech, sound-effect, subtitle, preview, save, last-frame, or enhancement components.
 
-If a required capability is missing, stop before the unavailable stage, return the completed artifacts and an exact missing-capability message, and never claim that the remaining output exists. Do not replace a missing component with imaginary work.
+A component that returns only a new tail clip is not a video-extension capability for this workflow because using it would require concatenation. If true extension is unavailable, stop after the seed video, return the actual seed output, identify the missing capability, and do not fall back to clip composition.
 
-Configure the Agent's iteration budget high enough for planning, the interactive topic question, six image calls, six video calls, music generation, composition, validation, and a possible technical retry. When the runtime exposes a maximum-iterations control, 28 or more is a practical demo starting point; raise it when composition requires separate Act A, Act B, and final calls. This is a runtime recommendation, not permission to loop without purpose.
+Before generation, calculate the required call count from the component's supported seed durations, extension increments, maximum cumulative duration, and the user's target. Keep automated extension attempts bounded. If more than 12 extension calls are required, stop before media generation and ask the user to shorten the duration or explicitly approve the larger execution budget.
 
 ## Mode And Language Routing
 
 1. Apply `language-routing.md` before every visible output.
-2. Use the interaction language for topic cards, progress, shot tables, prompts shown to the user, tool-status summaries, errors, and delivery notes.
+2. Use the interaction language for topic cards, duration questions, progress, plans, errors, and delivery notes.
 3. Treat the reference image as content, never as a language signal.
-4. If a connected generation model requires prompts in a particular language, translate the internal tool prompt to that required language while keeping every user-visible explanation in the interaction language. Do not expose untranslated tool syntax unless the user asks.
-5. Private chain-of-thought stays private. Show only concise decisions and observable progress.
+4. If a media model requires prompts in a fixed language, translate only the internal tool prompt.
+5. Keep private chain-of-thought private; show concise decisions and observable progress only.
 
 ## State Machine
 
@@ -51,191 +49,126 @@ Do not skip or merge states that require user input.
 
 ### State 1: Character Intake
 
-Confirm that the attached image is usable as a turnaround or multi-view character reference. Extract only visible production anchors:
+Confirm that the attached image is usable as a turnaround or multi-view reference. Extract only visible production anchors:
 
 - face shape and visible facial features;
 - hairstyle and hair color;
 - outfit silhouette, layers, materials, and fixed colors;
 - recurring accessories or props;
 - apparent body proportions and scale;
-- art style and line/render treatment.
+- art style and render treatment.
 
-Do not infer identity, ethnicity, health, religion, sexuality, personality, or other sensitive traits from appearance. If the views conflict, use the front view for face and outfit hierarchy, the side view for silhouette, and the back view for rear construction. Record uncertainty instead of inventing hidden details.
+Do not infer identity, ethnicity, health, religion, sexuality, personality, or other sensitive traits from appearance. When views conflict, use the front view for face and outfit hierarchy, the side view for silhouette, and the back view for rear construction. Record uncertainty rather than inventing hidden details.
 
-Create a compact internal Character Lock containing only stable visual anchors. Feed the original reference image and the same Character Lock into every storyboard-image call.
+Create a compact internal Character Lock. Reuse the original reference and this same lock for the seed storyboard and every extension call that accepts image references or prompt context.
 
 ### State 2: Topic Direction — Mandatory Stop
 
-Ask the user to choose one topic direction before generating images, video, or music. Use the runtime's native interactive-question or user-input action so the choice appears as a single-select UI card. Do not render the choices only as Markdown when the native action is available.
+Before any image, video, or music generation, ask the user to choose one topic direction with the runtime's native single-choice action. Use exactly one localized question with stable id `topic_direction`, a short header, four mutually exclusive original options, a recommended first option, concise descriptions, and the runtime's free-form Other path.
 
-The interaction request must contain exactly one question:
+Each option encodes a title, genre and emotional promise, setting, target-duration conflict, visual hook, and ending flavor. The card must explain that selection starts one short seed video followed by continuous extension to the requested duration. Do not promise six clips, two 30-second acts, or video concatenation.
 
-- localized question title, such as `你想为这个角色生成哪类一分钟故事视频？`;
-- short localized field header, such as `故事主题`;
-- stable id: `topic_direction`;
-- four mutually exclusive options when the action supports four;
-- a short option label plus a one-sentence description for each option;
-- the recommended option first and visibly marked as recommended;
-- free-form `Other` input supplied by the runtime, or an explicit localized custom option only when the runtime does not add one automatically.
+Do not add a second UI question in the same call. End the run after showing the topic card. If the runtime lacks native interactive input, return equivalent localized numbered options and label the fallback honestly.
 
-Each option must encode:
+If conversation state is not preserved, ask the user to return the selection, topic card, target duration, and original character reference on the next run.
 
-- title;
-- genre and emotional promise;
-- setting;
-- one-minute conflict;
-- visual hook;
-- ending flavor.
+### State 3: Target Duration Lock
 
-Do not add a second question for style, aspect ratio, music, or duration. Infer safe defaults and let the user customize them through `Other`. End the current run immediately after invoking the interactive card. Do not generate images, videos, music, or pretend the user selected an option.
+Read duration only from the user's direct request or later selection message. Accept clear formats such as `45 seconds`, `60秒`, `1分30秒`, or `00:45`. Normalize the value internally to positive seconds while preserving the user's displayed format.
 
-If the runtime has no native interactive-question action, fall back to a localized numbered text list with the same four options and explicitly state that the interactive selector is unavailable. Never claim that a UI card was shown when it was not.
+If no duration is present, ask one concise localized duration question and stop before media generation. Do not silently default to one minute.
 
-The question or supporting description must explain that choosing a direction starts the default production of six storyboard images, six approximately 10-second videos, one original background-music track, and one approximately 60-second final film. A submitted selection or reply such as `2` or `use option B` counts as authorization for that defined production run, subject to any platform approval or credit confirmation.
+Inspect the connected components before planning:
 
-If conversation state is not preserved, ask the user to return the selected option together with the topic card and character reference on the next run.
+- supported initial video durations;
+- supported extension increments or target-duration parameters;
+- whether an extension output is cumulative or tail-only;
+- maximum cumulative duration;
+- aspect ratio, resolution, frame-rate, and audio limits;
+- returned duration metadata and tolerance.
 
-### State 3: Story And Timeline Lock
+Choose the shortest supported seed duration that is narratively usable and leaves an exactly reachable remainder. Build a sequential extension schedule whose final cumulative duration equals the requested duration within the component's declared frame or duration tolerance.
 
-After the user chooses a topic, build an original two-act micro-story:
+If the target is shorter than the minimum seed duration, exceeds maximum cumulative duration, or cannot be reached from supported increments, stop before media generation. Show the nearest supported durations and ask the user to choose; never silently round, overshoot, trim, slow, loop, or splice.
 
-- Act A, approximately 0–30 seconds: immediate visual disturbance, character goal, and escalation;
-- Act B, approximately 30–60 seconds: reversal, costly action, payoff, and a closing image that echoes the opening.
+### State 4: Story And Continuation Map
 
-Default to exactly six shots at 10 seconds each:
+Design one original visual micro-story scaled to the locked duration. Use proportional beats rather than a fixed six-shot timeline:
 
-- Shot 01, 00:00–00:10 — visual hook and location rule;
-- Shot 02, 00:10–00:20 — goal and first obstacle;
-- Shot 03, 00:20–00:30 — escalation and act-turn image;
-- Shot 04, 00:30–00:40 — reversal or discovery;
-- Shot 05, 00:40–00:50 — costly choice and climax action;
-- Shot 06, 00:50–01:00 — payoff and closing echo.
+- 0–15%: immediate visual hook and setting rule;
+- 15–40%: character goal, obstacle, and escalation;
+- 40–65%: discovery or reversal;
+- 65–85%: costly choice and climax action;
+- 85–100%: payoff and closing echo.
 
-Keep one principal character, one clear goal, no more than two meaningful locations, and one reusable visual motif. Avoid dialogue-dependent exposition. Do not introduce a new costume unless the story explicitly requires it and continuity can be preserved.
+Keep one principal character, one clear goal, no more than two meaningful locations, one recurring visual motif, and one stable costume unless change is essential. Avoid dialogue-dependent exposition.
 
-### State 4: Storyboard Contract
-
-Before calling media tools, prepare one row per shot with these fields:
+Create a continuation map with one row for the seed and one for each planned extension:
 
 ```text
-Shot ID | Act | Timecode | Duration | Story beat | Framing | Camera | Character action | Start pose | End pose | Setting | Lighting | Character Lock | Image prompt | Motion prompt | Negative constraints | Transition
+Stage ID | Input duration | Added duration | Cumulative duration | Story beat | Camera | Action | Start state | End state | Setting | Lighting | Character Lock | Continuation prompt | Negative constraints
 ```
 
-Every shot must have one legible action and one intended end state. The end state of Shot N must support the start state of Shot N+1.
+Every stage must begin from the previous returned video's real end state. Use the same aspect ratio, resolution, frame rate, character lock, visual style, and audio policy throughout.
 
-Global defaults unless the user specifies otherwise:
+### State 5: Seed Storyboard And Optional Audio
 
-- aspect ratio: 16:9;
-- resolution: the highest common resolution supported by every downstream video and composition component;
-- frame rate: one value supported across all generated clips;
-- visual style: inherited from the reference image;
-- transitions: hard cuts by default; use short dissolves only when they fit inside the allocated shot durations;
-- audio: original instrumental background music on by default; dialogue, narration, and sound effects remain off unless requested.
+Generate one seed storyboard image, not six unrelated scene images. Pass the original turnaround and Character Lock. Request one frame, one camera, and one moment. Preserve the character's face, hair, costume, proportions, fixed accessories, style, and color hierarchy. Prohibit extra limbs, duplicate subjects, watermarks, interface elements, labels, turnaround panels, and unwanted text.
 
-### State 5: Storyboard Image Generation
+If dialogue or narration is requested, finish TTS before video generation. Apply the TTS Risk-Audit Recovery rule in `SKILL.md`: isolate the rejected chunk, rewrite only that spoken text, preserve successful chunks and media, and confirm the replacement audio before continuing.
 
-Generate the six storyboard images in chronological order.
+For background music, automatically create one original instrumental brief matching the target duration and story energy curve. Prefer either:
 
-For every image call:
+1. native soundtrack or audio conditioning supported by the seed/extension component; or
+2. a single-video audio mux after visual extension, only when it adds audio to the one final extended video without concatenating, trimming, retiming, or replacing its visuals.
 
-- include the original turnaround as the primary character reference;
-- include the stable Character Lock;
-- include only the current shot's composition, action, environment, lighting, and end-state needs;
-- request one frame, one camera, and one moment rather than a collage;
-- preserve face, hair, costume, proportions, accessories, art style, and color hierarchy;
-- prohibit extra limbs, duplicate characters, watermark, UI, labels, turnaround panels, and unwanted text.
+If neither route exists, generate the music as a separate synchronized deliverable and label the video `music-not-embedded`. Do not call multi-clip composition merely to add music. Never copy a melody, imitate a named song, or imitate a living composer's distinctive style.
 
-When the component supports multiple references, the previous approved storyboard or returned last frame may be added as a continuity reference, but it never replaces the original turnaround.
+### State 6: Short Seed Video
 
-After each successful call, record the actual output handle. Never create a fake handle or describe an unreturned image as generated.
+Generate one short initial video from the actual seed storyboard. Request exactly the planned supported seed duration. Focus the prompt on the opening action, camera motion, environment, and an end state that can continue naturally.
 
-### State 6: Shot Video Generation
+Record the actual returned handle and cumulative duration. Do not proceed if the returned duration is missing or outside declared tolerance. A technical retry is allowed once only when a safe parameter correction is obvious; otherwise stop with the actual error and completed outputs.
 
-If dialogue or narration was requested, finish TTS before entering this state. Apply the TTS Risk-Audit Recovery rule in `SKILL.md`: identify the rejected chunk, revise only that chunk's spoken text, preserve successful chunks and all upstream media, and confirm successful replacement audio before continuing. Never restart unaffected image, audio, or video steps.
+### State 7: Sequential Video Extension
 
-Generate one short video per storyboard image in chronological order. Use image-to-video when available; use first/last-frame generation when it gives better continuity and both frames exist.
+Extend strictly in sequence. For extension `N`:
 
-For every video call:
+1. pass the actual full video returned by extension `N-1`, or the seed video for the first extension;
+2. request only the planned supported added duration or cumulative target;
+3. provide the next continuation-map beat and the previous real end-state anchors;
+4. reuse Character Lock, original reference, style, aspect ratio, resolution, frame rate, and audio policy when accepted;
+5. wait for success and verify the returned cumulative duration before starting the next extension;
+6. replace the working video handle with this newly returned longer video.
 
-- pass the actual storyboard image returned for that Shot ID;
-- request the planned duration only if it is supported by the component;
-- keep the prompt focused on character action, camera movement, environmental motion, and ending pose;
-- avoid re-describing or redesigning stable character features;
-- use the same aspect ratio, resolution, and frame rate across shots;
-- request a returned last frame when supported and reuse it for continuity;
-- keep per-shot generated audio off unless the user explicitly requests it, so the final background-music mix remains controllable.
+Never run extensions in parallel. Never feed the original seed to every extension. Never accept a tail-only result as the new final video. Never concatenate tail clips, generate independent replacement scenes, loop frames, change playback speed, or use a composition component to reach the requested duration.
 
-Technical failure policy:
+If an extension fails, retry that extension once only when a safe parameter correction is clear. Preserve the latest successful cumulative video. After a second failure, stop and report the failed stage, last verified duration, target duration, actual error, and next action. Do not restart the seed or earlier successful extensions.
 
-- retry once only when the component returns a technical failure and a safe parameter adjustment is obvious;
-- never silently replace a failed shot with a different story beat;
-- after a second failure, stop and report the exact Shot ID, error, completed assets, and next required action.
+### State 8: Duration And Delivery Gate
 
-### State 7: Background Music Generation
+Claim completion only after verifying:
 
-After the story timeline is locked and before final composition, create an original instrumental background-music plan and call the connected music-generation component automatically.
+- the final handle descends from the seed through one continuous extension chain;
+- every extension consumed the immediately previous successful full video;
+- no standalone clips were concatenated or reordered;
+- returned metadata matches the user's target duration within declared tolerance;
+- face, hair, costume, proportions, accessories, visual style, and story continuity remain recognizable;
+- aspect ratio, resolution, frame rate, and audio policy stayed consistent;
+- background music or requested speech is embedded only through a supported non-concatenating route, or is clearly delivered separately;
+- the final output is an actual returned artifact and no media state is invented.
 
-The music brief must specify:
-
-- the selected topic's emotion, genre, setting, and visual motif;
-- total target duration matching the final timeline;
-- tempo range, instrumentation, energy curve, and transition points;
-- Act A build from 00:00–00:30 and Act B turn/payoff from 00:30–01:00;
-- a clean opening, an intentional midpoint change, and a natural ending or short fade;
-- no vocals by default, no copyrighted melody, no named-song imitation, and no living-composer style imitation.
-
-Prefer one continuous 58–62-second track. If the music component cannot generate that duration, create two approximately 30-second cues with compatible tempo, key, instrumentation, ambience, and a planned join. Do not create six unrelated tracks and do not loop a short cue without designing a seamless repeat.
-
-Record only actual returned audio handles. If music generation is unavailable or fails after one safe technical retry, continue producing the visual edit only when possible, label it `visual-only`, provide the music brief, and state that the full music-backed deliverable is incomplete.
-
-### State 8: Composition
-
-Compose only from actual successful clip outputs, in this exact order:
-
-```text
-Act A: Shot 01 → Shot 02 → Shot 03
-Act B: Shot 04 → Shot 05 → Shot 06
-Final: Act A → Act B
-```
-
-The composition component may receive all six clips directly or receive the two 30-second act outputs, depending on its declared input contract. Add the actual generated background-music track or the two ordered act cues. Keep transitions inside the 60-second timeline. Normalize canvas size, resolution, frame rate, orientation, and audio policy. Prevent clipping, keep music at a moderate level, and duck it beneath dialogue or narration only when those were explicitly requested. Never stretch a short clip to hide a missing shot.
-
-If no composition component is connected, return an ordered edit manifest with clip handles and timecodes, label the result as ready for composition, and state clearly that no final film was created.
-
-### State 9: Delivery And Quality Control
-
-Before claiming completion, verify observable outputs:
-
-- exactly six planned shots have successful storyboard images;
-- exactly six planned shots have successful video clips, unless an explicitly revised timeline was approved;
-- character face, hair, costume, proportions, accessories, and visual style remain recognizable;
-- screen direction, action, prop state, time of day, and location continuity do not contradict adjacent shots;
-- Act A and Act B each total approximately 30 seconds;
-- final duration is approximately 58–62 seconds;
-- aspect ratio, resolution, frame rate, and audio policy are consistent;
-- the background music is original, matches the story's energy curve, covers the intended timeline, and is actually present in the final mix;
-- the composition output is an actual returned artifact;
-- no tool result, save state, or media output is invented.
-
-Return a concise localized delivery summary with:
-
-- selected topic;
-- final structure and duration;
-- six storyboard image outputs;
-- six shot-video outputs;
-- background-music output;
-- Act A, Act B, and final-film outputs when actually returned;
-- any deviations, failed stages, or manual follow-up.
+Return a concise localized summary containing the selected topic, requested and verified duration, seed storyboard, seed video, extension chain with cumulative durations, final video handle, audio status, and any deviation or required follow-up.
 
 ## Interactive Topic UI Contract
 
-Use the native interactive single-choice action with this semantic shape. Adapt field names only to the runtime's real schema:
+Use the native interactive single-choice action with this semantic shape, adapting field names only to the runtime's real schema:
 
 ```text
 questions:
   - id: topic_direction
     header: [localized short field label]
-    question: [localized one-minute-story question]
+    question: [localized story-direction question]
     options:
       - label: [recommended concise topic label]
         description: [genre, conflict, visual hook, and ending in one sentence]
@@ -247,12 +180,12 @@ questions:
         description: [one sentence]
 ```
 
-Keep labels scannable and descriptions short enough to remain on one or two UI lines. The native submit action, single-choice controls, and free-form Other field should be left to the runtime rather than recreated with text characters.
+Keep labels scannable and descriptions short. Leave native radio controls, submit action, and free-form Other input to the runtime.
 
 ## Originality And Safety
 
-- Generate a new topic, plot, setting, staging, and shot sequence for this character.
-- Treat named films, games, anime, artists, or directors as high-level craft signals, never as copy targets.
+- Generate a new topic, plot, setting, staging, and visual progression.
+- Treat named films, games, anime, artists, or directors as high-level craft signals, never copy targets.
 - Do not reproduce protected characters, logos, signature props, iconic shots, or recognizable scene sequences.
 - Do not directly imitate a living artist's distinctive style; translate the request into general visual features.
 - Follow the repository's fiction safety boundaries for people and harmful content.

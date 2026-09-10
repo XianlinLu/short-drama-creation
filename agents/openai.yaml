@@ -1,7 +1,7 @@
 interface:
   display_name: "Short Drama Creation"
-  short_description: "从角色参考或灵感生成原创短剧、分镜、视频和背景音乐"
-  default_prompt: "Use $short-drama-creation to turn my character reference or story idea into an interactive topic choice, original storyboard, short videos, background music, and an approximately one-minute final film."
+  short_description: "生成种子视频并连续延长到用户指定时长"
+  default_prompt: "Use $short-drama-creation to turn my character reference into an original short-drama seed video, then continuously extend that same video to the duration specified in my prompt."
 
 policy:
   allow_implicit_invocation: true

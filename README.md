@@ -1,32 +1,33 @@
 # Short Drama Creation
 
-> 将人物三视图或故事灵感转化为原创短剧、交互式选题、分镜图、视频片段、背景音乐和约一分钟成片，并自动匹配用户语言。
+> 将人物三视图或故事灵感转化为原创短剧：先生成一段短小的种子视频，再连续延长到用户提示词中指定的时长，同时自动匹配用户语言。
 >
-> Turns a character reference or story idea into an original short drama with interactive topic selection, storyboards, video clips, background music, and an approximately one-minute final film while matching the user's language.
+> Turns a character reference or story idea into an original short drama by generating one short seed video and continuously extending it to the duration specified in the user's prompt, while matching the user's language.
 
 [中文](#中文介绍) · [English](#english-introduction)
 
 ## 中文介绍
 
-`Short Drama Creation` 是一套面向原创短剧生产的 Agent Skill。用户可以上传人物角色三视图，也可以直接输入故事灵感。Skill 会先通过单选交互卡确认选题，再完成短剧结构、人物一致性控制、分镜场景、镜头视频、原创配乐和最终合成。
+`Short Drama Creation` 是一套面向原创短剧生产的 Agent Skill。用户可以上传人物角色三视图，也可以直接输入故事灵感。Skill 会先通过单选交互卡确认选题和提示词中的目标时长，再生成一张种子分镜与一段短小的初始视频，随后始终以上一次成功返回的完整视频为输入，连续延长到规定时长。
 
 ```text
 人物三视图或故事灵感
 → 单选选题卡
-→ 原创短剧结构
+→ 读取用户指定时长
+→ 原创短剧与连续延长计划
 → 角色一致性锁定
-→ 6 张分镜图
-→ 6 段短镜头视频
+→ 1 张种子分镜图
+→ 1 段短小的种子视频
+→ 以上一次完整视频为输入逐次延长
+→ 达到用户规定时长的最终视频
 → 原创背景音乐与可选配音
-→ 前 30 秒 + 后 30 秒
-→ 约 60 秒最终成片
 ```
 
 ### 核心能力
 
 #### 原生交互式选题
 
-首轮不会直接生成媒体，而是调用 Agent 的原生单选提问能力，显示一个问题、简短标题、四个互斥选题、选项说明、推荐项和自定义输入。用户提交方向后，才开始分镜、视频、音乐及合成。
+首轮不会直接生成媒体，而是调用 Agent 的原生单选提问能力，显示一个问题、简短标题、四个互斥选题、选项说明、推荐项和自定义输入。用户提交方向且提示词包含目标时长后，才开始种子分镜、种子视频和连续延长。
 
 如果运行环境不提供原生交互提问能力，Skill 会明确说明限制并退回编号选项，不会假装已经显示交互卡。
 
@@ -36,28 +37,19 @@
 
 #### 人物一致性
 
-Skill 从人物三视图中提取稳定的视觉锚点，包括脸型、五官、发型、服装结构、固定配饰、身体比例和画面风格。每次分镜生成都重新使用原始参考图和同一份角色锁定信息，避免角色在镜头间变脸、换装或比例漂移。
+Skill 从人物三视图中提取稳定的视觉锚点，包括脸型、五官、发型、服装结构、固定配饰、身体比例和画面风格。种子分镜和每一次视频延长都会复用同一份角色锁定信息，避免角色在延长过程中变脸、换装或比例漂移。
 
-#### 30 秒 + 30 秒结构
+#### 种子视频连续延长
 
-默认采用六个约 10 秒镜头：
+用户在提示词中写明目标时长，例如 `45 秒`、`1 分钟`、`1 分 30 秒` 或 `00:45`。Skill 会读取视频组件支持的种子时长、延长步长和最大累计时长，然后选择最短且可稳定延长的初始片段。
 
-| 镜头 | 时间 | 作用 |
-| --- | --- | --- |
-| 01 | 00:00–00:10 | 视觉钩子与场景规则 |
-| 02 | 00:10–00:20 | 人物目标与第一阻碍 |
-| 03 | 00:20–00:30 | 冲突升级与上半段转折 |
-| 04 | 00:30–00:40 | 发现或反转 |
-| 05 | 00:40–00:50 | 有代价的选择与高潮 |
-| 06 | 00:50–01:00 | 回报与首尾呼应 |
-
-Skill 会先读取视频组件的真实时长限制。支持 10 秒时采用 `6 × 10 秒`；不支持时改用组件允许的镜头长度，让上下两段分别接近 30 秒，并把最终成片控制在约 58–62 秒。
+每次延长都把上一次成功返回的完整视频传给下一次延长调用，并检查新的累计时长。整个流程不会生成多个独立片段后再拼接，也不会通过循环画面、变速、静帧填充或静默取整伪造时长。如果组件无法精确达到目标，Skill 会在生成前给出最接近的可支持时长供用户选择。
 
 #### 自动生成原创背景音乐
 
-默认生成一条与故事情绪、类型、场景和节奏匹配的原创纯音乐，并在 30 秒处配合剧情转折。音乐组件不支持约一分钟时，会生成两条速度、调性、配器和氛围兼容的约 30 秒音乐，再按上下半段合成。
+默认生成一条与目标时长、故事情绪、类型、场景和节奏匹配的原创纯音乐。优先通过视频生成或延长组件的原生音频能力加入；也可以在不拼接、不裁切、不变速视频的前提下，仅把音轨加入这一条完整延长视频。
 
-音乐不会复制已有旋律，也不会模仿在世创作者的独特风格。缺少音乐或混音能力时，结果会明确标记为视觉版，不会声称已经完成带配乐成片。
+音乐不会复制已有旋律，也不会模仿在世创作者的独特风格。没有可用的非拼接音频写入方式时，Skill 会把同步配乐单独交付，并明确标注音乐尚未嵌入视频。
 
 #### TTS 分块恢复
 
@@ -78,22 +70,22 @@ Skill 会先读取视频组件的真实时长限制。支持 10 秒时采用 `6 
 ### 使用方法
 
 1. 导入最新 Skill ZIP。
-2. 连接人物图片输入、参考图图片生成、图生视频、原创音乐生成及支持音轨的视频合成能力。
+2. 连接人物图片输入、参考图图片生成、图生视频，以及能够接收已有完整视频并返回更长完整视频的视频延长能力。
 3. 如需对白或旁白，再连接 TTS 能力。
-4. 上传人物三视图，或输入一个短剧故事灵感。
+4. 上传人物三视图，并在提示词中写明目标时长。
 5. 提交单选卡中的选题方向。
-6. 等待分镜、视频、音乐和最终成片依次完成。
+6. 等待种子分镜、种子视频、连续延长、时长校验和音乐依次完成。
 
-第二轮至少需要六次图片生成、六次视频生成、一次音乐生成和一次以上合成调用。若运行环境提供最大迭代次数设置，建议从 `28` 或更高开始。
+Skill 会在生成前计算延长次数。默认自动流程最多执行 12 次延长；需要更多次数时，会先要求用户缩短时长或明确批准更大的执行预算。
 
 ### 示例请求
 
 ```text
-请读取我上传的人物三视图，用单选交互卡给我 4 个适合这个角色的一分钟原创短剧选题。现在不要生成媒体；我提交方向后，再生成分镜、视频、原创背景音乐和最终成片。
+请读取我上传的人物三视图，用单选交互卡给我 4 个原创短剧选题。目标时长 60 秒。现在不要生成媒体；我提交方向后，先生成一段短小的种子视频，再把这条视频连续延长到 60 秒，并生成原创背景音乐。
 ```
 
 ```text
-把这个故事灵感改成一分钟悬疑短剧：上半段建立误会，下半段反转真相。先让我选择视觉方向。
+把这个故事灵感改成 45 秒悬疑短剧。先让我选择视觉方向，再生成种子视频并连续延长到 45 秒；不要拼接独立片段。
 ```
 
 ### 安装
@@ -112,25 +104,26 @@ npx skills add XianlinLu/short-drama-creation
 
 ## English Introduction
 
-`Short Drama Creation` is an Agent Skill for producing original short-form narrative videos. Start with a character turnaround or a story idea. The skill asks the user to choose a direction through an interactive single-select card, then develops the short-drama structure, character continuity, storyboard scenes, video shots, original music, optional speech, and final composition.
+`Short Drama Creation` is an Agent Skill for producing original short-form narrative videos. Start with a character turnaround or story idea and write the target duration in the prompt. The skill confirms a direction through an interactive single-select card, generates one seed storyboard and one short seed video, then repeatedly extends the latest complete video until the requested duration is verified.
 
 ```text
 character reference or story idea
 → interactive topic card
-→ original short-drama structure
+→ user-specified duration
+→ original story and continuation map
 → character continuity lock
-→ six storyboard images
-→ six short video shots
+→ one seed storyboard
+→ one short seed video
+→ sequential extension of the latest complete video
+→ duration-verified final video
 → original background music and optional speech
-→ 30-second act A + 30-second act B
-→ approximately 60-second final film
 ```
 
 ### Core capabilities
 
 #### Interactive topic selection
 
-The first run uses the Agent's native single-choice input to display one question, a short header, four mutually exclusive topics, concise descriptions, a recommended option, and custom input. No media is generated before the user submits a direction.
+The first run uses the Agent's native single-choice input to display one question, a short header, four mutually exclusive topics, concise descriptions, a recommended option, and custom input. No media is generated before the user submits a direction and supplies a target duration.
 
 If native interactive input is unavailable, the skill labels the limitation and returns equivalent numbered options instead of pretending that a UI card appeared.
 
@@ -140,17 +133,19 @@ Every production rebuilds the character goal, conflict, setting, visual motif, e
 
 #### Character continuity
 
-The skill extracts stable visual anchors from the character turnaround: facial structure, visible features, hair, costume construction, fixed accessories, proportions, and rendering style. The original reference and the same continuity lock are reused for every storyboard call.
+The skill extracts stable visual anchors from the character turnaround: facial structure, visible features, hair, costume construction, fixed accessories, proportions, and rendering style. The same reference and continuity lock are reused for the seed storyboard and every compatible video-extension call.
 
-#### 30 + 30-second structure
+#### Seed-and-extend video workflow
 
-The default timeline uses six approximately 10-second shots covering the hook, goal, escalation, reversal, climax choice, and closing echo. The skill reads the real duration limits of the connected video component. If 10 seconds is unsupported, it rebuilds the timeline from accepted durations while keeping each act near 30 seconds and the final result near 58–62 seconds.
+The user specifies a duration such as `45 seconds`, `1 minute`, `1 minute 30 seconds`, or `00:45`. The skill inspects supported seed lengths, extension increments, maximum cumulative duration, and duration metadata. It then creates the shortest suitable seed video and extends the latest successful complete video in sequence.
+
+Independent clips are never concatenated. The workflow also avoids loops, speed changes, frozen-frame padding, silent rounding, and trimming. If the requested duration is unreachable, the skill asks the user to choose from the nearest supported durations before generation.
 
 #### Automatic original background music
 
-The default production includes an original instrumental track matched to the story's emotion, genre, setting, and energy curve, with a planned turn around 00:30. When one minute is unsupported, the skill generates two compatible approximately 30-second cues and joins them with the two-act structure.
+The default production includes one original instrumental plan matched to the requested duration and story energy curve. Audio is embedded through native video audio support or a single-video audio mux that does not concatenate, trim, or retime the extended video.
 
-It never copies an existing melody or imitates a living creator's distinctive style. If music generation or audio mixing is unavailable, the result is labeled visual-only rather than presented as a complete music-backed film.
+It never copies an existing melody or imitates a living creator's distinctive style. If no non-concatenating audio path exists, synchronized music is delivered separately and clearly labeled as not embedded.
 
 #### Targeted TTS recovery
 
@@ -165,18 +160,18 @@ All visible topic cards, progress, errors, storyboards, and delivery notes follo
 ### How to use
 
 1. Import the latest Skill ZIP.
-2. Connect character-image input, reference-aware image generation, image-to-video, original music generation, and video composition with audio input.
+2. Connect character-image input, reference-aware image generation, image-to-video, and true video extension that accepts a complete video and returns a longer complete video.
 3. Connect TTS only when dialogue or narration is needed.
-4. Upload a character turnaround or enter a short-drama idea.
+4. Upload a character turnaround and include the target duration in the prompt.
 5. Submit one direction in the interactive topic card.
-6. Let the Agent generate storyboards, videos, music, and the final film in sequence.
+6. Let the Agent generate the seed storyboard, seed video, sequential extensions, duration verification, and music.
 
-The production run needs at least six image calls, six video calls, one music call, and one or more composition calls. If a maximum-iterations setting exists, `28` or higher is a practical starting point.
+The skill calculates the required extension count before generation. The default automated flow is capped at 12 extensions; longer jobs require the user to shorten the duration or explicitly approve a larger execution budget.
 
 ### Example request
 
 ```text
-Read my uploaded character turnaround and show four original one-minute short-drama directions in a native single-choice card. Generate no media yet. After I submit a direction, create the storyboards, videos, original background music, and final film.
+Read my uploaded character turnaround and show four original short-drama directions in a native single-choice card. Target duration: 60 seconds. Generate no media yet. After I submit a direction, create one short seed video, continuously extend that same video to 60 seconds without concatenating independent clips, and generate original background music.
 ```
 
 ### Installation
