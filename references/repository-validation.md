@@ -7,6 +7,7 @@ Use this checklist before importing the skill into Lumina or publishing a revise
 Every uploaded document must pass all of these rules:
 
 - Supported extensions only: `.md`, `.txt`, `.json`, `.yaml`, `.yml`.
+- Each individual document contains no more than 20,000 characters.
 - Extensions are lowercase.
 - File and folder names contain only `A-Z`, `a-z`, `0-9`, `_`, and `-`.
 - The base name of each file or folder is no more than 64 characters.
@@ -38,6 +39,7 @@ Also confirm:
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory topic-choice stop, connected media capability checks, the default six-shot timeline, character continuity rules, ordered composition, and final duration verification.
 - metadata declares automatic language handling rather than a fixed output language;
 - metadata version and resource maps agree across `manifest.json` and `agents/interface.yaml`;
+- every imported document passes the 20,000-character limit, with margin left for future maintenance;
 
 ## Sample Evidence
 
@@ -121,4 +123,4 @@ If the story is not intentionally supernatural, rewrite with a literal anchor su
 
 ## Passing Standard
 
-The package passes when every imported document satisfies the Lumina filename and extension rules, all declared resources exist, the runtime instructions are self-contained, automatic language routing is declared and consistently applied, the visual demo respects its topic gate and connected-tool contracts, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.
+The package passes when every imported document satisfies the Lumina filename, extension, and 20,000-character rules, all declared resources exist, the runtime instructions retain the essential runtime contract, automatic language routing is declared and consistently applied, the visual demo respects its topic gate and connected-tool contracts, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.

@@ -1,6 +1,6 @@
 {
   "name": "lumina-novel-generator",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "mode": "lumina-canvas",
   "language": "auto",
   "language_policy": {
@@ -84,6 +84,7 @@
     "act_a_and_act_b_each_approximately_thirty_seconds",
     "final_film_approximately_fifty_eight_to_sixty_two_seconds",
     "composition_uses_ordered_successful_clips_only",
-    "missing_media_capability_reported_without_fabrication"
+    "missing_media_capability_reported_without_fabrication",
+    "every_imported_document_is_at_most_20000_characters"
   ]
 }

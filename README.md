@@ -190,6 +190,7 @@ npx skills add XianlinLu/novel-generator
 仓库中的可导入文档遵循以下规则：
 
 - 文件扩展名使用小写 `.md`、`.txt`、`.json`、`.yaml` 或 `.yml`；
+- 每个文档不超过 20,000 个字符；
 - 文件和目录名只包含英文字母、数字、下划线和连字符；
 - 文件和目录名不超过 64 个字符；
 - 导入内容不包含脚本、图片、二进制文件或缓存文件。
@@ -311,6 +312,7 @@ npx skills add XianlinLu/novel-generator
 All importable documents in this repository follow these rules:
 
 - lowercase `.md`, `.txt`, `.json`, `.yaml`, or `.yml` extensions only;
+- no individual document exceeds 20,000 characters;
 - file and folder names contain only letters, numbers, underscores, and hyphens;
 - every file and folder name stays within 64 characters;
 - the import content contains no scripts, images, binaries, or cache files.

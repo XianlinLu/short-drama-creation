@@ -1,5 +1,5 @@
 name: lumina-novel-generator
-version: 1.2.0
+version: 1.2.1
 mode: lumina-canvas
 language: auto
 summary: 自动匹配用户语言的原创小说工作流，以及角色三视图到约一分钟成片的视觉 Demo 工作流。
@@ -25,6 +25,7 @@ runtime:
     - only_connected_components_are_available
     - prewrite_confirmation_requires_a_follow_up_run
     - import_package_uses_supported_text_formats_only
+    - every_imported_document_is_at_most_20000_characters
     - visible_process_uses_detected_interaction_language
     - story_language_is_selected_separately
     - character_video_demo_requires_reference_image_and_visual_request

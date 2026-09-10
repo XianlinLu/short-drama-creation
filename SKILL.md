@@ -22,7 +22,7 @@ This repository is the maintainable source package. Lumina Canvas does not load 
 - The Agent may use only components connected to it. Never claim to have searched, saved, rendered, or called a workflow unless the corresponding component is connected and its run succeeds.
 - No connected research component means the Source Research Hook must state that live research is unavailable and fall back to general craft analysis.
 - A prewrite decision is a stopping point. Return the option card, strategy, or outline and wait for the next run. On the next run, include the user's choice and the previous plan in the task input when conversation state is not preserved.
-- The import package contains only Lumina-supported text documents. Apply structural and story checks internally; use `references/repository-validation.md` when maintaining the repository.
+- The import package contains only Lumina-supported text documents, and every document must remain at or below 20,000 characters. Apply structural and story checks internally; use `references/repository-validation.md` when maintaining the repository.
 - Route the Agent text output to a text display or downstream text-consuming component. Do not invent file artifacts unless a connected component can create them.
 
 ## Operating Modes
