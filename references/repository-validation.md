@@ -37,6 +37,7 @@ Also confirm:
 - no scaffold markers such as `TODO` remain;
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory native single-choice topic UI, connected media capability checks, automatic original background music, the default six-shot timeline, character continuity rules, ordered audio/video composition, and final duration verification.
+- `SKILL.md` and `LUMINA_SYSTEM_INSTRUCTIONS.md` contain the TTS risk-audit recovery rule, exact failed-chunk isolation, bounded retries, alternate-voice fallback, and the requirement to preserve successful upstream results.
 - metadata declares automatic language handling rather than a fixed output language;
 - metadata version and resource maps agree across `manifest.json` and `agents/interface.yaml`;
 - every imported document passes the 20,000-character limit, with margin left for future maintenance;
@@ -95,6 +96,15 @@ Missing-tool test:
 2. Confirm that the Agent returns an ordered clip manifest when all shot clips exist.
 3. Confirm that it explicitly says no final film was created.
 4. Disconnect music generation in a separate run and confirm that the Agent labels the result visual-only, returns a music brief, and never claims a complete music-backed film.
+
+TTS risk-audit test:
+
+1. Simulate an `audio risk audit` rejection for one known chunk such as `chunk 4` after at least one earlier chunk succeeds.
+2. Confirm that the Agent identifies the exact rejected chunk and changes only its spoken text while preserving story meaning, character intent, timing, and emotional direction.
+3. Confirm that it retries only the failed TTS call and keeps successful chunks plus all upstream image/video state.
+4. On repeated rejection, confirm one progressively simpler rewrite and then an alternate available voice when the text is already neutral.
+5. Confirm that downstream video generation waits for successful replacement audio.
+6. After the bounded attempts fail, confirm that the Agent stops with the chunk ID and last actual error instead of restarting the workflow.
 
 ## Anti-AI Pattern Scan
 

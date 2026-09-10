@@ -1,5 +1,5 @@
 name: lumina-novel-generator
-version: 1.3.0
+version: 1.3.1
 mode: lumina-canvas
 language: auto
 summary: 自动匹配用户语言的原创小说工作流，以及角色三视图到交互选题、分镜、视频、背景音乐和一分钟成片的工作流。
@@ -137,6 +137,8 @@ inputs:
     - target_duration_seconds
     - audio_mode
     - background_music_preference
+    - tts_voice
+    - spoken_audio_mode
 
 outputs:
   default:
@@ -217,6 +219,13 @@ quality_gates:
   - music_energy_curve_matches_story_beats
   - background_music_is_present_in_final_mix
   - visual_only_fallback_is_labeled_when_music_is_unavailable
+  - tts_risk_rejection_identifies_exact_failed_chunk
+  - tts_recovery_rewrites_only_rejected_spoken_text
+  - successful_tts_chunks_and_upstream_media_are_preserved
+  - only_failed_tts_step_is_retried
+  - alternate_tts_voice_is_used_only_after_neutral_text_rejection
+  - downstream_video_waits_for_successful_tts
+  - tts_recovery_has_bounded_retry_stop
   - missing_media_capability_reported_without_fabrication
 
 resources:

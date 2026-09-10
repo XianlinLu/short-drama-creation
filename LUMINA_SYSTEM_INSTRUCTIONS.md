@@ -234,6 +234,14 @@ Generate chronologically. For each image call:
 
 When multiple references are supported, a preceding approved frame may be added for continuity, but it never replaces the original turnaround.
 
+### State 5A — optional TTS and risk-audit recovery
+
+When dialogue or narration is requested, assign stable IDs to TTS chunks and retain every successful chunk output. TTS must finish successfully before downstream video generation.
+
+When TTS generation fails because an audio risk audit rejects a specific chunk, identify the exact failed chunk and revise only its dialogue. Preserve the original story meaning, character intent, pacing, and emotional direction while rewriting potentially sensitive wording into safer, neutral language suitable for TTS. Retry only the failed audio generation step. If the chunk is rejected again, progressively simplify the wording and retry. If the text is already neutral, try another available TTS voice. Confirm successful audio generation before continuing to downstream video generation. Do not restart the entire workflow unless necessary.
+
+Treat `dialogue` as only the spoken text in that rejected chunk; for narration, revise only the rejected narration. Keep all successful image, video, music, and audio outputs. Limit automated recovery to one safer rewrite, one further simplified rewrite, and one alternate-voice attempt. If all fail, stop and report the chunk ID, final attempted text class, voice, and last actual error.
+
 ### State 6 — six shot videos
 
 Generate one chronological video from each matching actual storyboard output. Request only a supported duration. Focus the motion prompt on character action, camera movement, environmental motion, and ending pose. Keep aspect ratio, resolution, and frame rate consistent. Request and reuse a returned last frame when supported. Keep per-shot generated audio off unless explicitly requested so the final music mix remains controllable.

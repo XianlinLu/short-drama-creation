@@ -82,6 +82,8 @@
 
 背景音乐默认自动生成：优先生成一条约 58–62 秒的原创纯音乐，并在 30 秒处配合剧情转折；组件不支持该时长时，改为生成两条风格、速度和调性兼容的约 30 秒音乐。配音、对白、音效、字幕、预览和保存属于可选能力。缺少音乐或混音能力时会交付视觉版并明确标记，不会假装完整音乐成片已经生成。
 
+当配音因音频风险审核拒绝某个分块时，只定位并安全改写该分块的台词，保留故事含义、人物意图、节奏及已经成功的音频和媒体结果。系统只重试失败的 TTS 步骤；文字已经中性时再更换可用音色，确认音频成功后才继续视频生成。
+
 可直接用于演示的首轮请求：
 
 ```text
@@ -253,6 +255,8 @@ The complete demo requires connected capabilities for:
 The second run needs at least six image calls, six video calls, one music call, and one or more composition calls. Give the Agent enough execution steps to finish. If the runtime exposes a maximum-iterations setting, `28` or higher is a practical starting point; increase it when Act A, Act B, and the final film require separate composition calls.
 
 Background music is generated automatically by default. The skill prefers one original 58–62-second instrumental track with an energy turn near 00:30; when unsupported, it creates two compatible approximately 30-second cues. Speech, dialogue, sound effects, subtitles, preview, and save are optional. Without music or audio-mixing capability, it labels the delivery visual-only instead of claiming a complete music-backed film.
+
+If an audio risk audit rejects one TTS chunk, the skill rewrites and retries only that chunk while preserving meaning, intent, pacing, successful audio, and upstream media. It progressively neutralizes the wording, tries another available voice only when the text is already neutral, and waits for successful audio before continuing to video.
 
 First-run demo prompt:
 

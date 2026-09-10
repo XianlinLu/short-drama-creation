@@ -26,6 +26,12 @@ This repository is the maintainable source package. Lumina Canvas does not load 
 - The import package contains only Lumina-supported text documents, and every document must remain at or below 20,000 characters. Apply structural and story checks internally; use `references/repository-validation.md` when maintaining the repository.
 - Route the Agent text output to a text display or downstream text-consuming component. Do not invent file artifacts unless a connected component can create them.
 
+## TTS Risk-Audit Recovery
+
+When TTS generation fails because an audio risk audit rejects a specific chunk, identify the exact failed chunk and revise only its dialogue. Preserve the original story meaning, character intent, pacing, and emotional direction while rewriting potentially sensitive wording into safer, neutral language suitable for TTS. Retry only the failed audio generation step. If the chunk is rejected again, progressively simplify the wording and retry. If the text is already neutral, try another available TTS voice. Confirm successful audio generation before continuing to downstream video generation. Do not restart the entire workflow unless necessary.
+
+Treat `dialogue` as only the spoken text inside the rejected chunk; for narration, revise only that chunk's narration. Keep stable chunk IDs and preserve every successful audio result. Automated recovery is limited to one safer rewrite, one further simplified rewrite, and one alternate-voice attempt; if all fail, stop and report the chunk ID and last real error.
+
 ## Operating Modes
 
 Select exactly one primary mode per run:

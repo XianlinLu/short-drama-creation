@@ -151,6 +151,8 @@ After each successful call, record the actual output handle. Never create a fake
 
 ### State 6: Shot Video Generation
 
+If dialogue or narration was requested, finish TTS before entering this state. Apply the TTS Risk-Audit Recovery rule in `SKILL.md`: identify the rejected chunk, revise only that chunk's spoken text, preserve successful chunks and all upstream media, and confirm successful replacement audio before continuing. Never restart unaffected image, audio, or video steps.
+
 Generate one short video per storyboard image in chronological order. Use image-to-video when available; use first/last-frame generation when it gives better continuity and both frames exist.
 
 For every video call:
