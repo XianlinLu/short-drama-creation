@@ -1,6 +1,6 @@
 # Short Drama Creation
 
-> 将人物三视图或故事灵感转化为原创短剧：先生成一段短小的种子视频，再连续延长到用户提示词中指定的时长，同时自动匹配用户语言。
+> 将人物三视图或故事灵感转化为原创短剧：先生成一段短小的视频，再连续延长到用户提示词中指定的时长，同时自动匹配用户语言。
 >
 > Turns a character reference or story idea into an original short drama by generating one short seed video and continuously extending it to the duration specified in the user's prompt, while matching the user's language.
 
