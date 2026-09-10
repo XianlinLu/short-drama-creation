@@ -1,7 +1,7 @@
 ---
 name: lumina-novel-generator
 description: |
-  Run inside a Lumina Canvas Agent to design, draft, and revise original, complete, highly gripping fiction, or to turn an attached character turnaround into a topic-gated storyboard and approximately one-minute video, while automatically matching the user's language across every visible planning step and response. Use for novel or story generation, opening hooks, suspense rewrites, stronger character desire, escalation, continuation, classic-plot transformation, narrative-technique blending, character three-view storyboards, or character video demos without copying protected text or imitating a living author's distinctive style.
+  Run inside a Lumina Canvas Agent to design, draft, and revise original, gripping fiction, or to turn an attached character turnaround into an interactive topic choice, storyboard, short clips, original background music, and an approximately one-minute film while matching the user's language across visible planning and responses. Use for novel generation, story revision, character three-view storyboards, or character video demos without copying protected work or imitating a living creator's distinctive style.
 ---
 
 # Lumina Novel Generator
@@ -19,6 +19,7 @@ This repository is the maintainable source package. Lumina Canvas does not load 
 - Put the user's request in the Agent **Task Prompt**. When a String node is connected, reference it with Lumina's `@` syntax.
 - At the start of every run, apply `references/language-routing.md`. Detect the language of the user's latest direct request and use it for every visible plan, progress summary, option, tool status, error, outline, self-check, and reply. Keep the requested story language as a separate decision.
 - When a character turnaround or three-view image is attached and the user requests a storyboard, video demo, short film, or one-minute result, route to `references/character-video-demo.md` before using the fiction workflow.
+- In Character Video Demo Mode, use the runtime's native single-choice user-input action for the topic selection instead of a plain text list whenever that action is available. After selection, automatically generate original instrumental background music when a music component and audio-aware composition component are connected.
 - The Agent may use only components connected to it. Never claim to have searched, saved, rendered, or called a workflow unless the corresponding component is connected and its run succeeds.
 - No connected research component means the Source Research Hook must state that live research is unavailable and fall back to general craft analysis.
 - A prewrite decision is a stopping point. Return the option card, strategy, or outline and wait for the next run. On the next run, include the user's choice and the previous plan in the task input when conversation state is not preserved.
@@ -30,7 +31,7 @@ This repository is the maintainable source package. Lumina Canvas does not load 
 Select exactly one primary mode per run:
 
 - **Fiction Mode**: use the production-lite fiction workflow below for novels, stories, outlines, and prose revisions.
-- **Character Video Demo Mode**: use `references/character-video-demo.md` when the user supplies a character turnaround or three-view image and asks for storyboard images, shot videos, a demo, a short film, or an approximately one-minute visual result.
+- **Character Video Demo Mode**: use `references/character-video-demo.md` when the user supplies a character turnaround or three-view image and asks for storyboard images, shot videos, a demo, a short film, or an approximately one-minute music-backed visual result.
 
 If both are requested, Character Video Demo Mode may use the fiction engines to create the micro-story, but its topic-choice stop point, media tool contracts, six-shot timeline, and composition checks take priority. An image attachment alone does not activate this mode.
 
@@ -53,7 +54,7 @@ Use hooks as fixed checkpoints. They are conceptual hooks, not mandatory runtime
 
 1. Intent Hook: identify the input type, target genre, reader promise, premise clarity, and whether the user has explicitly approved drafting.
 2. Language Routing Hook: use `references/language-routing.md` to choose the interaction language and story language. Never infer the interaction language from quoted or attached content when the user's direct instruction uses another language.
-3. Mode Routing Hook: if Character Video Demo Mode applies, follow `references/character-video-demo.md`. Read the reference image, ask for four topic directions, and stop. Only after the user's later selection may the Agent create the six-shot storyboard, generate supported-duration shot videos, and compose the two approximately 30-second acts into an approximately 60-second film. Do not continue through the fiction-only hooks unless they are useful internally for the selected micro-story.
+3. Mode Routing Hook: if Character Video Demo Mode applies, follow `references/character-video-demo.md`. Read the reference image, invoke one native single-choice UI card with four topic directions, and stop. Only after the user's later selection may the Agent create the six-shot storyboard, generate supported-duration shot videos, generate original background music, and compose two approximately 30-second acts into an approximately 60-second music-backed film. Do not continue through fiction-only hooks unless useful internally for the micro-story.
 4. Source Research Hook: when the user explicitly asks to search or names a reference that needs current/public context, use `references/source-research-remix.md` to gather 3-6 public signals and reduce them to a Research Intake Card.
 5. Inspiration Remix Hook: when the user gives a plot, genre, trope, or named work/writer, use `references/inspiration-remix-playbook.md` to offer classic beat/style-signal choices before outlining. Reduce references to functions and craft sliders.
 6. Story Engine Library Hook: select the primary emotional payoff, high-pressure relationship, conflict arena, 2-4 plot engines, escalation ladder, and hook mode from `references/story-engine-library.md`.
@@ -157,7 +158,7 @@ Use the same skill for:
 - `references/output-contract.md`: story output shape, length, and drafting rules.
 - `references/anti-ai-language.md`: anti-trope language gate for formulaic AI wording.
 - `references/language-routing.md`: automatic interaction-language detection, separate story-language selection, template localization, and visible-process consistency rules.
-- `references/character-video-demo.md`: character-turnaround intake, topic-choice stop point, six-shot 30+30-second timeline, storyboard and video tool contracts, composition, and delivery quality gates.
+- `references/character-video-demo.md`: character-turnaround intake, native topic-choice UI, six-shot 30+30-second timeline, storyboard/video/music tool contracts, composition, and delivery quality gates.
 - `references/quality-checklist.md`: seven-part self-check and repair rules.
 - `references/genre-quality-rubric.md`: genre-aware quality rubrics for loading the right reader promise.
 - `references/evolution-loop.md`: hook-based feedback, rule promotion, and anti-overfitting process.

@@ -7,7 +7,7 @@ Use this mode only when the user supplies a character turnaround or three-view r
 The Agent turns one approved character reference into an original visual story through a gated workflow:
 
 ```text
-character reference → topic choice → continuity bible → six-shot storyboard → six short videos → 30-second act A + 30-second act B → final film
+character reference → interactive topic choice → continuity bible → six-shot storyboard → six short videos → original background music → 30-second act A + 30-second act B → final film with music
 ```
 
 The default timeline is six 10-second shots. Shots 01–03 form Act A at approximately 30 seconds; shots 04–06 form Act B at approximately 30 seconds. The target final duration is 58–62 seconds after in-duration transitions and trims.
@@ -20,20 +20,22 @@ Map connected tools by capability and declared parameters, not by invented names
 
 Required for the complete demo:
 
+- a native interactive single-choice user-input action for the topic card;
 - a media or image input that exposes the character turnaround to the Agent;
 - a reference-aware image generation component;
 - an image-to-video or first/last-frame video generation component;
-- a video composition or concatenation component that accepts ordered clips.
+- an original music generation component;
+- a video composition or concatenation component that accepts ordered clips and an audio track.
 
 Optional:
 
 - a component that returns a video's last frame;
-- audio, speech, music, subtitle, preview, or save components;
+- speech, sound-effect, subtitle, preview, or save components;
 - an image-enhancement component.
 
 If a required capability is missing, stop before the unavailable stage, return the completed artifacts and an exact missing-capability message, and never claim that the remaining output exists. Do not replace a missing component with imaginary work.
 
-Configure the Agent's iteration budget high enough for planning, six image calls, six video calls, composition, validation, and a possible technical retry. When the runtime exposes a maximum-iterations control, 24 or more is a practical demo starting point; raise it when composition requires separate Act A, Act B, and final calls. This is a runtime recommendation, not permission to loop without purpose.
+Configure the Agent's iteration budget high enough for planning, the interactive topic question, six image calls, six video calls, music generation, composition, validation, and a possible technical retry. When the runtime exposes a maximum-iterations control, 28 or more is a practical demo starting point; raise it when composition requires separate Act A, Act B, and final calls. This is a runtime recommendation, not permission to loop without purpose.
 
 ## Mode And Language Routing
 
@@ -64,7 +66,19 @@ Create a compact internal Character Lock containing only stable visual anchors. 
 
 ### State 2: Topic Direction — Mandatory Stop
 
-Ask the user to choose one topic direction before generating images or video. Return four concise, genuinely different topic cards. Each card contains:
+Ask the user to choose one topic direction before generating images, video, or music. Use the runtime's native interactive-question or user-input action so the choice appears as a single-select UI card. Do not render the choices only as Markdown when the native action is available.
+
+The interaction request must contain exactly one question:
+
+- localized question title, such as `你想为这个角色生成哪类一分钟故事视频？`;
+- short localized field header, such as `故事主题`;
+- stable id: `topic_direction`;
+- four mutually exclusive options when the action supports four;
+- a short option label plus a one-sentence description for each option;
+- the recommended option first and visibly marked as recommended;
+- free-form `Other` input supplied by the runtime, or an explicit localized custom option only when the runtime does not add one automatically.
+
+Each option must encode:
 
 - title;
 - genre and emotional promise;
@@ -73,9 +87,11 @@ Ask the user to choose one topic direction before generating images or video. Re
 - visual hook;
 - ending flavor.
 
-Recommend one option. End the current run after the choice card. Do not generate images, videos, or pretend the user selected an option.
+Do not add a second question for style, aspect ratio, music, or duration. Infer safe defaults and let the user customize them through `Other`. End the current run immediately after invoking the interactive card. Do not generate images, videos, music, or pretend the user selected an option.
 
-The final sentence must explain that choosing a direction starts the default production of six storyboard images, six approximately 10-second videos, and one approximately 60-second final film. A reply such as `2` or `use option B` counts as authorization for that defined production run, subject to any platform approval or credit confirmation.
+If the runtime has no native interactive-question action, fall back to a localized numbered text list with the same four options and explicitly state that the interactive selector is unavailable. Never claim that a UI card was shown when it was not.
+
+The question or supporting description must explain that choosing a direction starts the default production of six storyboard images, six approximately 10-second videos, one original background-music track, and one approximately 60-second final film. A submitted selection or reply such as `2` or `use option B` counts as authorization for that defined production run, subject to any platform approval or credit confirmation.
 
 If conversation state is not preserved, ask the user to return the selected option together with the topic card and character reference on the next run.
 
@@ -114,7 +130,7 @@ Global defaults unless the user specifies otherwise:
 - frame rate: one value supported across all generated clips;
 - visual style: inherited from the reference image;
 - transitions: hard cuts by default; use short dissolves only when they fit inside the allocated shot durations;
-- audio: off unless an audio-capable component is connected or the user requests audio.
+- audio: original instrumental background music on by default; dialogue, narration, and sound effects remain off unless requested.
 
 ### State 5: Storyboard Image Generation
 
@@ -145,7 +161,7 @@ For every video call:
 - avoid re-describing or redesigning stable character features;
 - use the same aspect ratio, resolution, and frame rate across shots;
 - request a returned last frame when supported and reuse it for continuity;
-- do not create speech, music, or sound unless requested and supported.
+- keep per-shot generated audio off unless the user explicitly requests it, so the final background-music mix remains controllable.
 
 Technical failure policy:
 
@@ -153,7 +169,24 @@ Technical failure policy:
 - never silently replace a failed shot with a different story beat;
 - after a second failure, stop and report the exact Shot ID, error, completed assets, and next required action.
 
-### State 7: Composition
+### State 7: Background Music Generation
+
+After the story timeline is locked and before final composition, create an original instrumental background-music plan and call the connected music-generation component automatically.
+
+The music brief must specify:
+
+- the selected topic's emotion, genre, setting, and visual motif;
+- total target duration matching the final timeline;
+- tempo range, instrumentation, energy curve, and transition points;
+- Act A build from 00:00–00:30 and Act B turn/payoff from 00:30–01:00;
+- a clean opening, an intentional midpoint change, and a natural ending or short fade;
+- no vocals by default, no copyrighted melody, no named-song imitation, and no living-composer style imitation.
+
+Prefer one continuous 58–62-second track. If the music component cannot generate that duration, create two approximately 30-second cues with compatible tempo, key, instrumentation, ambience, and a planned join. Do not create six unrelated tracks and do not loop a short cue without designing a seamless repeat.
+
+Record only actual returned audio handles. If music generation is unavailable or fails after one safe technical retry, continue producing the visual edit only when possible, label it `visual-only`, provide the music brief, and state that the full music-backed deliverable is incomplete.
+
+### State 8: Composition
 
 Compose only from actual successful clip outputs, in this exact order:
 
@@ -163,11 +196,11 @@ Act B: Shot 04 → Shot 05 → Shot 06
 Final: Act A → Act B
 ```
 
-The composition component may receive all six clips directly or receive the two 30-second act outputs, depending on its declared input contract. Keep transitions inside the 60-second timeline. Normalize canvas size, resolution, frame rate, orientation, and audio policy. Never stretch a short clip to hide a missing shot.
+The composition component may receive all six clips directly or receive the two 30-second act outputs, depending on its declared input contract. Add the actual generated background-music track or the two ordered act cues. Keep transitions inside the 60-second timeline. Normalize canvas size, resolution, frame rate, orientation, and audio policy. Prevent clipping, keep music at a moderate level, and duck it beneath dialogue or narration only when those were explicitly requested. Never stretch a short clip to hide a missing shot.
 
 If no composition component is connected, return an ordered edit manifest with clip handles and timecodes, label the result as ready for composition, and state clearly that no final film was created.
 
-### State 8: Delivery And Quality Control
+### State 9: Delivery And Quality Control
 
 Before claiming completion, verify observable outputs:
 
@@ -178,6 +211,7 @@ Before claiming completion, verify observable outputs:
 - Act A and Act B each total approximately 30 seconds;
 - final duration is approximately 58–62 seconds;
 - aspect ratio, resolution, frame rate, and audio policy are consistent;
+- the background music is original, matches the story's energy curve, covers the intended timeline, and is actually present in the final mix;
 - the composition output is an actual returned artifact;
 - no tool result, save state, or media output is invented.
 
@@ -187,30 +221,31 @@ Return a concise localized delivery summary with:
 - final structure and duration;
 - six storyboard image outputs;
 - six shot-video outputs;
+- background-music output;
 - Act A, Act B, and final-film outputs when actually returned;
 - any deviations, failed stages, or manual follow-up.
 
-## Topic Card Template
+## Interactive Topic UI Contract
 
-Localize all visible wording to the interaction language:
+Use the native interactive single-choice action with this semantic shape. Adapt field names only to the runtime's real schema:
 
 ```text
-I have read the character reference. Choose one one-minute story direction:
-
-1. [Title] — [genre / emotional promise]
-   Setting: [place]
-   Conflict: [one-minute conflict]
-   Visual hook: [image]
-   Ending: [flavor]
-
-2. ...
-3. ...
-4. ...
-
-Recommended: [number + one-sentence reason]
-
-Reply with a number. Your choice starts production of six storyboard images, six approximately 10-second videos, and one approximately 60-second final film.
+questions:
+  - id: topic_direction
+    header: [localized short field label]
+    question: [localized one-minute-story question]
+    options:
+      - label: [recommended concise topic label]
+        description: [genre, conflict, visual hook, and ending in one sentence]
+      - label: [topic label]
+        description: [one sentence]
+      - label: [topic label]
+        description: [one sentence]
+      - label: [topic label]
+        description: [one sentence]
 ```
+
+Keep labels scannable and descriptions short enough to remain on one or two UI lines. The native submit action, single-choice controls, and free-form Other field should be left to the runtime rather than recreated with text characters.
 
 ## Originality And Safety
 

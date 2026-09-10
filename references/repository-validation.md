@@ -36,7 +36,7 @@ Also confirm:
 - YAML documents contain no tab indentation;
 - no scaffold markers such as `TODO` remain;
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.
-- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory topic-choice stop, connected media capability checks, the default six-shot timeline, character continuity rules, ordered composition, and final duration verification.
+- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory native single-choice topic UI, connected media capability checks, automatic original background music, the default six-shot timeline, character continuity rules, ordered audio/video composition, and final duration verification.
 - metadata declares automatic language handling rather than a fixed output language;
 - metadata version and resource maps agree across `manifest.json` and `agents/interface.yaml`;
 - every imported document passes the 20,000-character limit, with margin left for future maintenance;
@@ -73,8 +73,9 @@ Use a disposable character turnaround and mock or low-cost connected components 
 First run:
 
 1. Attach the turnaround and request a one-minute character video.
-2. Confirm that the Agent returns exactly four distinct topic directions in the interaction language.
-3. Confirm that it recommends one direction, explains the six-image/six-video/approximately-60-second consequence of selection, and stops without generating media.
+2. Confirm that the Agent invokes exactly one native single-choice question with a localized title/header, four distinct topic options, concise descriptions, a recommended first option, and a free-form custom path.
+3. Confirm that it explains the six-image/six-video/background-music/approximately-60-second consequence of selection and stops without generating media.
+4. If the native interaction action is intentionally unavailable for this test, confirm that the Agent labels the fallback and returns the equivalent localized numbered choices without pretending a UI card appeared.
 
 Second run:
 
@@ -82,16 +83,18 @@ Second run:
 2. Confirm that the planned timeline defaults to six 10-second shots only when the connected video component accepts 10 seconds.
 3. Confirm that every storyboard call receives the original turnaround and stable Character Lock.
 4. Confirm that each video call receives the matching actual storyboard output.
-5. Confirm that failed tools are reported with actual errors and are never represented as successful outputs.
-6. Confirm that clips are composed strictly in Shot 01–06 order.
-7. Confirm that Act A and Act B each total approximately 30 seconds and that the final output is approximately 58–62 seconds.
-8. Confirm that every visible plan, status, error, and delivery note uses the detected interaction language, even when a media component requires a fixed prompt language.
+5. Confirm that one original instrumental background track of approximately 58–62 seconds is generated, or that two compatible approximately 30-second cues are generated when required by the component.
+6. Confirm that failed tools are reported with actual errors and are never represented as successful outputs.
+7. Confirm that clips are composed strictly in Shot 01–06 order and that the actual generated music is present in the final mix.
+8. Confirm that Act A and Act B each total approximately 30 seconds and that the final output is approximately 58–62 seconds.
+9. Confirm that every visible plan, status, error, and delivery note uses the detected interaction language, even when a media component requires a fixed prompt language.
 
 Missing-tool test:
 
 1. Disconnect the composition capability.
 2. Confirm that the Agent returns an ordered clip manifest when all shot clips exist.
 3. Confirm that it explicitly says no final film was created.
+4. Disconnect music generation in a separate run and confirm that the Agent labels the result visual-only, returns a music brief, and never claims a complete music-backed film.
 
 ## Anti-AI Pattern Scan
 

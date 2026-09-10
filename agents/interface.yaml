@@ -1,8 +1,8 @@
 name: lumina-novel-generator
-version: 1.2.1
+version: 1.3.0
 mode: lumina-canvas
 language: auto
-summary: 自动匹配用户语言的原创小说工作流，以及角色三视图到约一分钟成片的视觉 Demo 工作流。
+summary: 自动匹配用户语言的原创小说工作流，以及角色三视图到交互选题、分镜、视频、背景音乐和一分钟成片的工作流。
 
 runtime:
   platform: Lumina Canvas Agent
@@ -15,12 +15,14 @@ runtime:
     visible_process: interaction language
     detection_excludes: quoted, attached, retrieved, pasted, code, metadata, and tool-output content
   optional_tools:
+    - native interactive single-choice user-input action
     - connected public-source research component
     - connected character-reference or multimodal input
     - connected reference-aware image generation component
     - connected image-to-video or first-last-frame video component
-    - connected ordered video composition or concatenation component
-    - connected last-frame, audio, subtitle, preview, or save component
+    - connected original music generation component
+    - connected ordered video composition or concatenation component with audio input
+    - connected last-frame, speech, sound-effect, subtitle, preview, or save component
   constraints:
     - only_connected_components_are_available
     - prewrite_confirmation_requires_a_follow_up_run
@@ -30,6 +32,8 @@ runtime:
     - story_language_is_selected_separately
     - character_video_demo_requires_reference_image_and_visual_request
     - character_video_demo_stops_for_topic_choice_before_generation
+    - topic_choice_uses_native_single_select_ui_when_available
+    - background_music_is_generated_automatically_when_connected
     - media_generation_uses_actual_connected_component_contracts
 
 triggers:
@@ -88,14 +92,19 @@ triggers:
     - 分镜视频
     - 一分钟短片
     - 角色视频 demo
+    - 背景音乐
+    - 自动配乐
     - character turnaround
     - character three-view
     - storyboard images
     - storyboard video
     - one-minute character film
+    - background music
+    - automatic soundtrack
     - キャラクター三面図
     - 絵コンテ
     - 一分動画
+    - BGM
   exclude:
     - 纯短剧剧本
     - 电影剧本格式
@@ -127,6 +136,7 @@ inputs:
     - target_aspect_ratio
     - target_duration_seconds
     - audio_mode
+    - background_music_preference
 
 outputs:
   default:
@@ -151,6 +161,7 @@ outputs:
       - selected_topic_and_timeline
       - six_shot_storyboard
       - six_short_videos
+      - original_background_music
       - thirty_second_act_a
       - thirty_second_act_b
       - approximately_sixty_second_final_film
@@ -188,6 +199,9 @@ quality_gates:
   - character_video_mode_requires_three_view_and_visual_intent
   - four_topic_directions_returned_before_media_generation
   - topic_choice_stop_point_respected
+  - topic_choice_uses_one_native_single_select_question
+  - topic_ui_uses_localized_header_labels_and_descriptions
+  - topic_ui_includes_recommended_and_custom_paths
   - original_micro_story_created_after_selection
   - connected_duration_limits_inspected
   - no_single_thirty_second_generation_assumed
@@ -198,6 +212,11 @@ quality_gates:
   - act_a_and_act_b_each_approximately_thirty_seconds
   - final_film_approximately_fifty_eight_to_sixty_two_seconds
   - composition_uses_ordered_successful_clips_only
+  - original_instrumental_background_music_generated_by_default
+  - music_duration_matches_final_timeline
+  - music_energy_curve_matches_story_beats
+  - background_music_is_present_in_final_mix
+  - visual_only_fallback_is_labeled_when_music_is_unavailable
   - missing_media_capability_reported_without_fabrication
 
 resources:

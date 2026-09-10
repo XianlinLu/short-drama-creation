@@ -1,8 +1,8 @@
 # Novel Generator
 
-> 一个能够自动匹配用户语言的原创叙事 Agent Skill。它既能完成小说策划、生成与改写，也能把人物三视图转化为选题、分镜图、分镜视频和约一分钟的最终成片。
+> 一个能够自动匹配用户语言的原创叙事 Agent Skill。它既能完成小说策划、生成与改写，也能把人物三视图转化为交互式选题、分镜图、分镜视频、原创背景音乐和约一分钟的最终成片。
 >
-> An original-narrative Agent Skill that automatically matches the user's language. It can plan, draft, and revise fiction, or turn a character turnaround into a topic, storyboard images, shot videos, and an approximately one-minute final film.
+> An original-narrative Agent Skill that automatically matches the user's language. It can plan, draft, and revise fiction, or turn a character turnaround into an interactive topic choice, storyboard images, shot videos, original background music, and an approximately one-minute final film.
 
 [中文](#中文介绍) · [English](#english-introduction)
 
@@ -49,12 +49,12 @@
 
 #### 人物三视图到一分钟成片 Demo
 
-当用户上传人物角色三视图并提出分镜、视频 Demo 或一分钟短片需求时，Skill 会切换到独立的视觉生产模式。它不会立刻消耗生成资源，而是先读取角色的稳定外观锚点，再给出四个原创选题方向并等待用户选择。
+当用户上传人物角色三视图并提出分镜、视频 Demo 或一分钟短片需求时，Skill 会切换到独立的视觉生产模式。它不会立刻消耗生成资源，而是先读取角色的稳定外观锚点，再调用 Agent 的原生单选提问能力，以交互卡形式呈现四个原创选题方向。卡片包含短标题、选项名称、简短说明、推荐项和自定义输入；用户提交后才进入生成阶段。
 
 用户选定方向后，默认流程是：
 
 ```text
-人物三视图 → 4 个选题方向 → 用户选择 → 角色一致性锁定 → 6 张分镜图 → 6 段约 10 秒视频 → 前 30 秒 + 后 30 秒 → 约 60 秒成片
+人物三视图 → 单选选题卡 → 用户选择 → 角色一致性锁定 → 6 张分镜图 → 6 段约 10 秒视频 → 原创背景音乐 → 前 30 秒 + 后 30 秒 → 约 60 秒成片
 ```
 
 默认的六镜时间线：
@@ -75,16 +75,17 @@
 - 人物参考图或多模态输入；
 - 支持参考图的图片生成；
 - 图生视频或首尾帧视频生成；
-- 按顺序拼接多个视频的合成组件。
+- 原创音乐生成；
+- 支持视频顺序拼接和音轨混合的合成组件。
 
-第二轮至少包含六次图片生成、六次视频生成和一次以上合成调用，因此应给 Agent 留出足够的执行步数。若运行环境提供最大迭代次数设置，建议从 `24` 或更高开始；当上下两段与最终成片需要分三次合成时可继续上调。
+第二轮至少包含六次图片生成、六次视频生成、一次音乐生成和一次以上合成调用，因此应给 Agent 留出足够的执行步数。若运行环境提供最大迭代次数设置，建议从 `28` 或更高开始；当上下两段与最终成片需要分三次合成时可继续上调。
 
-末帧返回、音频、配音、音乐、字幕、预览和保存属于可选能力。缺少某个必需组件时，Skill 会停在可完成的最后一步，交付已有结果并明确说明缺少什么，不会假装最终视频已经生成。
+背景音乐默认自动生成：优先生成一条约 58–62 秒的原创纯音乐，并在 30 秒处配合剧情转折；组件不支持该时长时，改为生成两条风格、速度和调性兼容的约 30 秒音乐。配音、对白、音效、字幕、预览和保存属于可选能力。缺少音乐或混音能力时会交付视觉版并明确标记，不会假装完整音乐成片已经生成。
 
 可直接用于演示的首轮请求：
 
 ```text
-请读取我上传的人物三视图，先给我 4 个适合这个角色的一分钟原创短片选题。现在只提案，不要生成图片或视频；我选定后再开始完整制作。
+请读取我上传的人物三视图，用单选交互卡给我 4 个适合这个角色的一分钟原创短片选题。现在不要生成媒体；我提交选择后，再生成分镜、视频、原创背景音乐和最终成片。
 ```
 
 用户第二轮只需回复选题编号。选择即启动六张分镜图、六段短视频和最终拼接流程；如果当前 Agent 不保存上下文，应把选题卡与人物三视图一并传回。详细执行规则见 [`references/character-video-demo.md`](./references/character-video-demo.md)。
@@ -231,12 +232,12 @@ Private chain-of-thought is never exposed. Any concise reasoning summary or step
 
 ### Character turnaround to one-minute film demo
 
-When the user supplies a character turnaround and requests storyboards, a video demo, or a one-minute short film, the skill enters a dedicated visual-production mode. It first extracts stable visible character anchors, proposes four original topic directions, recommends one, and waits. No image or video generation begins before the user chooses.
+When the user supplies a character turnaround and requests storyboards, a video demo, or a one-minute short film, the skill enters a dedicated visual-production mode. It extracts stable visible character anchors, then uses the Agent's native single-choice input to show four original directions as an interactive card with concise labels, descriptions, a recommended option, and custom input. Media generation starts only after submission.
 
 After selection, the default pipeline is:
 
 ```text
-character turnaround → four topic directions → user choice → character lock → six storyboard images → six approximately 10-second videos → 30-second act A + 30-second act B → approximately 60-second final film
+character turnaround → interactive topic card → user choice → character lock → six storyboard images → six approximately 10-second videos → original background music → 30-second act A + 30-second act B → approximately 60-second final film
 ```
 
 The six shots cover the hook, goal, escalation, reversal, climax choice, and closing echo. The skill does not assume that one video call can produce 30 seconds. It reads the connected component's real duration limits, uses `6 × 10 seconds` when supported, and otherwise rebuilds the timing from supported shot lengths. The target final duration is approximately 58–62 seconds.
@@ -246,16 +247,17 @@ The complete demo requires connected capabilities for:
 - character-reference or multimodal image input;
 - reference-aware image generation;
 - image-to-video or first/last-frame video generation;
-- ordered multi-clip video composition.
+- original music generation;
+- ordered multi-clip video composition with audio mixing.
 
-The second run needs at least six image calls, six video calls, and one or more composition calls. Give the Agent enough execution steps to finish. If the runtime exposes a maximum-iterations setting, `24` or higher is a practical starting point; increase it when Act A, Act B, and the final film require three separate composition calls.
+The second run needs at least six image calls, six video calls, one music call, and one or more composition calls. Give the Agent enough execution steps to finish. If the runtime exposes a maximum-iterations setting, `28` or higher is a practical starting point; increase it when Act A, Act B, and the final film require separate composition calls.
 
-Last-frame return, audio, speech, music, subtitles, preview, and save capabilities are optional. If a required capability is missing, the skill stops at the last completed stage, returns real outputs, and identifies the missing capability instead of claiming a nonexistent final film.
+Background music is generated automatically by default. The skill prefers one original 58–62-second instrumental track with an energy turn near 00:30; when unsupported, it creates two compatible approximately 30-second cues. Speech, dialogue, sound effects, subtitles, preview, and save are optional. Without music or audio-mixing capability, it labels the delivery visual-only instead of claiming a complete music-backed film.
 
 First-run demo prompt:
 
 ```text
-Read my uploaded character turnaround and propose four original one-minute short-film directions for this character. Only show the options now; do not generate images or video until I choose.
+Read my uploaded character turnaround and show four original one-minute short-film directions in a native single-choice card. Generate no media yet. After I submit a direction, create the storyboards, videos, original background music, and final film.
 ```
 
 On the next run, the user can reply with the option number to start the six-image, six-video, and final-composition sequence. If the Agent does not preserve state, return the topic card and reference image with that choice. See [`references/character-video-demo.md`](./references/character-video-demo.md) for the complete runtime contract.

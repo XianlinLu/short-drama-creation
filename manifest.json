@@ -1,6 +1,6 @@
 {
   "name": "lumina-novel-generator",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "mode": "lumina-canvas",
   "language": "auto",
   "language_policy": {
@@ -74,6 +74,9 @@
     "character_video_mode_requires_three_view_and_visual_intent",
     "four_topic_directions_returned_before_media_generation",
     "topic_choice_stop_point_respected",
+    "topic_choice_uses_one_native_single_select_question",
+    "topic_ui_uses_localized_header_labels_and_descriptions",
+    "topic_ui_includes_recommended_and_custom_paths",
     "original_micro_story_created_after_selection",
     "connected_duration_limits_inspected",
     "no_single_thirty_second_generation_assumed",
@@ -84,6 +87,11 @@
     "act_a_and_act_b_each_approximately_thirty_seconds",
     "final_film_approximately_fifty_eight_to_sixty_two_seconds",
     "composition_uses_ordered_successful_clips_only",
+    "original_instrumental_background_music_generated_by_default",
+    "music_duration_matches_final_timeline",
+    "music_energy_curve_matches_story_beats",
+    "background_music_is_present_in_final_mix",
+    "visual_only_fallback_is_labeled_when_music_is_unavailable",
     "missing_media_capability_reported_without_fabrication",
     "every_imported_document_is_at_most_20000_characters"
   ]
