@@ -163,6 +163,19 @@ Stage ID | Input duration | Added duration | Cumulative duration | Story beat | 
 
 Every stage begins at the previous actual video's end state. Keep aspect ratio, resolution, frame rate, style, Character Lock, and audio policy consistent.
 
+### Prompt-local timeline
+
+Separate two clocks:
+
+- **Global cumulative time** belongs only in the internal continuation map, structured duration parameters, progress reports, and final verification.
+- **Prompt-local time** describes only what the current video call generates or adds. It always begins at `00:00` and ends at that call's seed or added duration.
+
+Every video prompt must be independent and locally timed. Never include a full-film absolute range such as `00:30–00:40` in a 10-second video prompt. Write `00:00–00:10` instead. A cumulative target such as 40 seconds may be sent through the component's structured duration field when required, but it must not be copied into the natural-language action prompt.
+
+Prompt independence applies to wording and local timing only. Each extension still uses the immediately previous complete video as its media input.
+
+If a prompt contains sub-beats, reset them too. For a 10-second call, use local ranges such as `00:00–00:03`, `00:03–00:07`, and `00:07–00:10`.
+
 ### State 5 — seed storyboard and optional audio
 
 Generate one seed storyboard image, not several independent scene images. Pass the original turnaround and Character Lock. Request one frame, one camera, and one moment. Preserve face, hair, costume, proportions, accessories, style, and color hierarchy. Prohibit extra limbs, duplicate subjects, watermarks, UI, labels, turnaround panels, and unwanted text.
@@ -180,6 +193,8 @@ If neither route exists, generate synchronized music separately and label the vi
 
 Generate one short initial video from the actual seed storyboard at the planned supported duration. Focus on opening action, camera motion, environment, and an end state that can continue naturally.
 
+Write the seed prompt from local `00:00` to the seed duration. Do not use the final target duration as an action timecode.
+
 Record the actual handle and cumulative duration. Do not proceed if duration metadata is missing or outside declared tolerance. Retry once only when a safe technical correction is obvious; otherwise stop with the actual error and completed output.
 
 ### State 7 — sequential video extension
@@ -188,12 +203,14 @@ For extension `N`:
 
 1. pass the actual full video returned by extension `N-1`, or the seed for the first extension;
 2. request only the planned supported added duration or cumulative target;
-3. send the next continuation beat and previous real end-state anchors;
+3. send the next continuation beat and previous real end-state anchors in a self-contained prompt timed from local `00:00` to this call's added duration;
 4. reuse Character Lock, reference, style, aspect ratio, resolution, frame rate, and audio policy when accepted;
 5. wait for success and verify cumulative duration;
 6. replace the working handle with the returned longer full video.
 
 Never run extensions in parallel. Never feed the seed to every extension. Never accept a tail-only result as final. Never concatenate independent clips, loop frames, change playback speed, or use composition to manufacture duration.
+
+Before each video call, scan the natural-language prompt for timestamps. If any starting timestamp is not `00:00`, rewrite the prompt to local time and keep cumulative values only in structured metadata. The prompt-local end time must equal this call's requested duration.
 
 Retry one failed extension once only when a safe correction is clear. Preserve the latest successful cumulative video. After a second failure, stop and report the failed stage, last verified duration, target duration, actual error, and next action. Do not restart earlier stages.
 
@@ -203,6 +220,8 @@ Claim completion only after verifying:
 
 - the final handle descends from the seed through one continuous extension chain;
 - each extension consumed the immediately previous successful full video;
+- every video prompt starts at local `00:00` and ends at that call's own duration;
+- no full-film absolute time range appears inside a video action prompt;
 - no independent clips were concatenated or reordered;
 - returned metadata matches the user's duration within declared tolerance;
 - character appearance, visual style, action, props, location, and story remain continuous;

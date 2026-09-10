@@ -45,6 +45,10 @@ Skill 从人物三视图中提取稳定的视觉锚点，包括脸型、五官�
 
 每次延长都把上一次成功返回的完整视频传给下一次延长调用，并检查新的累计时长。整个流程不会生成多个独立片段后再拼接，也不会通过循环画面、变速、静帧填充或静默取整伪造时长。如果组件无法精确达到目标，Skill 会在生成前给出最接近的可支持时长供用户选择。
 
+#### 每个视频提示词从 0 开始
+
+全片累计时间与视频提示词时间严格分离。累计时间只用于内部计划和时长校验；每个种子或延长节点的提示词都是独立的局部时间轴，必须从 `00:00` 开始，并在本次生成时长结束。例如对应全片第 30–40 秒的 10 秒延长提示词仍写作 `00:00–00:10`，不会写成 `00:30–00:40`。这里的“独立”指提示词和局部时间独立；延长节点仍然以上一次返回的完整视频作为媒体输入。
+
 #### 自动生成原创背景音乐
 
 默认生成一条与目标时长、故事情绪、类型、场景和节奏匹配的原创纯音乐。优先通过视频生成或延长组件的原生音频能力加入；也可以在不拼接、不裁切、不变速视频的前提下，仅把音轨加入这一条完整延长视频。
@@ -140,6 +144,10 @@ The skill extracts stable visual anchors from the character turnaround: facial s
 The user specifies a duration such as `45 seconds`, `1 minute`, `1 minute 30 seconds`, or `00:45`. The skill inspects supported seed lengths, extension increments, maximum cumulative duration, and duration metadata. It then creates the shortest suitable seed video and extends the latest successful complete video in sequence.
 
 Independent clips are never concatenated. The workflow also avoids loops, speed changes, frozen-frame padding, silent rounding, and trimming. If the requested duration is unreachable, the skill asks the user to choose from the nearest supported durations before generation.
+
+#### Every video prompt starts at zero
+
+Full-film cumulative time is kept separate from prompt-local time. Cumulative values are used only for planning and duration verification. Every seed or extension prompt has an independent local timeline beginning at `00:00` and ending at that call's own duration. A 10-second extension corresponding globally to 30–40 seconds therefore uses `00:00–00:10`, never `00:30–00:40`. “Independent” applies to prompt wording and local timing; an extension still receives the previously returned complete video as its media input.
 
 #### Automatic original background music
 

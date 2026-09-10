@@ -36,7 +36,7 @@ Also confirm:
 - YAML documents contain no tab indentation;
 - no scaffold markers such as `TODO` remain;
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.
-- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory native single-choice topic UI, explicit target-duration locking, connected media capability checks, one seed storyboard, one short seed video, sequential extension of the latest complete video, automatic original background music, and final duration verification.
+- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory native single-choice topic UI, explicit target-duration locking, connected media capability checks, one seed storyboard, one short seed video, sequential extension of the latest complete video, prompt-local timelines starting at zero, automatic original background music, and final duration verification.
 - `SKILL.md` and `LUMINA_SYSTEM_INSTRUCTIONS.md` contain the TTS risk-audit recovery rule, exact failed-chunk isolation, bounded retries, alternate-voice fallback, and the requirement to preserve successful upstream results.
 - metadata declares automatic language handling rather than a fixed output language;
 - metadata version and resource maps agree across `manifest.json` and `agents/interface.yaml`;
@@ -86,11 +86,13 @@ Second run:
 4. Confirm that one short seed video is generated from the actual seed storyboard.
 5. Confirm that every extension consumes the immediately previous successful complete video and returns a longer complete video.
 6. Confirm that extensions run sequentially and cumulative duration is checked after each success.
-7. Confirm that independent or tail-only clips are never concatenated, looped, slowed, padded, trimmed, or presented as the final result.
-8. Confirm that the final returned duration matches the explicit user target within the component's declared tolerance.
-9. Confirm that original background music is embedded only through native audio support or a single-video audio mux without video concatenation, or is delivered separately with an honest label.
-10. Confirm that failed tools are reported with actual errors and are never represented as successful outputs.
-11. Confirm that every visible plan, status, error, and delivery note uses the detected interaction language, even when a media component requires a fixed prompt language.
+7. Confirm that every seed and extension action prompt starts at `00:00` and ends at that call's own requested duration.
+8. For an extension mapped globally to 30–40 seconds, confirm that the video prompt says `00:00–00:10`, while cumulative 30/40 values remain only in internal metadata or structured duration fields.
+9. Confirm that independent or tail-only clips are never concatenated, looped, slowed, padded, trimmed, or presented as the final result.
+10. Confirm that the final returned duration matches the explicit user target within the component's declared tolerance.
+11. Confirm that original background music is embedded only through native audio support or a single-video audio mux without video concatenation, or is delivered separately with an honest label.
+12. Confirm that failed tools are reported with actual errors and are never represented as successful outputs.
+13. Confirm that every visible plan, status, error, and delivery note uses the detected interaction language, even when a media component requires a fixed prompt language.
 
 Missing-tool test:
 

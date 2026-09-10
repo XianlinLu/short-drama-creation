@@ -111,6 +111,28 @@ Stage ID | Input duration | Added duration | Cumulative duration | Story beat | 
 
 Every stage must begin from the previous returned video's real end state. Use the same aspect ratio, resolution, frame rate, character lock, visual style, and audio policy throughout.
 
+### Prompt-Local Timeline Rule
+
+Keep two time systems separate:
+
+- **Global cumulative time** tracks where a beat belongs in the full story and verifies progress toward the user's requested duration. It may appear in the internal continuation map, structured duration parameters, and user-visible progress summary.
+- **Prompt-local time** controls only the video generated or added by the current call. It always starts at `00:00` and ends at that call's seed duration or added duration.
+
+Every seed or extension prompt must be self-contained and locally timed. Do not include the full-film absolute time range, cumulative start time, stage number as a time cue, or another video's timeline inside the natural-language video prompt.
+
+Prompt independence concerns wording and local timing only. It does not break the extension source chain: each extension still receives the immediately previous complete video as its media input.
+
+For a 10-second call:
+
+```text
+Wrong: 00:30–00:40 — the bronze bell swings as the warning appears.
+Right: 00:00–00:10 — the bronze bell swings as the warning appears.
+```
+
+For an extension corresponding globally to 30–40 seconds, keep `global_start=30`, `global_end=40`, or `cumulative_target=40` only in internal metadata or the component's structured fields. The continuation prompt itself uses `00:00–00:10`. If the component accepts a cumulative target-duration parameter, pass it in that parameter without copying it into the action prompt.
+
+Within one prompt, any sub-beats also use local time. A 10-second prompt may use `00:00–00:03`, `00:03–00:07`, and `00:07–00:10`; it must never inherit offsets from the full-film timeline.
+
 ### State 5: Seed Storyboard And Optional Audio
 
 Generate one seed storyboard image, not six unrelated scene images. Pass the original turnaround and Character Lock. Request one frame, one camera, and one moment. Preserve the character's face, hair, costume, proportions, fixed accessories, style, and color hierarchy. Prohibit extra limbs, duplicate subjects, watermarks, interface elements, labels, turnaround panels, and unwanted text.
@@ -128,6 +150,8 @@ If neither route exists, generate the music as a separate synchronized deliverab
 
 Generate one short initial video from the actual seed storyboard. Request exactly the planned supported seed duration. Focus the prompt on the opening action, camera motion, environment, and an end state that can continue naturally.
 
+Write the seed prompt on a local `00:00 → seed duration` timeline. Do not include the full target duration as an action timecode.
+
 Record the actual returned handle and cumulative duration. Do not proceed if the returned duration is missing or outside declared tolerance. A technical retry is allowed once only when a safe parameter correction is obvious; otherwise stop with the actual error and completed outputs.
 
 ### State 7: Sequential Video Extension
@@ -136,12 +160,14 @@ Extend strictly in sequence. For extension `N`:
 
 1. pass the actual full video returned by extension `N-1`, or the seed video for the first extension;
 2. request only the planned supported added duration or cumulative target;
-3. provide the next continuation-map beat and the previous real end-state anchors;
+3. provide the next continuation-map beat and previous real end-state anchors in an independent prompt whose timeline starts at `00:00` and ends at the added duration;
 4. reuse Character Lock, original reference, style, aspect ratio, resolution, frame rate, and audio policy when accepted;
 5. wait for success and verify the returned cumulative duration before starting the next extension;
 6. replace the working video handle with this newly returned longer video.
 
 Never run extensions in parallel. Never feed the original seed to every extension. Never accept a tail-only result as the new final video. Never concatenate tail clips, generate independent replacement scenes, loop frames, change playback speed, or use a composition component to reach the requested duration.
+
+Before submitting each video call, scan its natural-language prompt for any timestamp whose start is not `00:00`. Rewrite the prompt to local time while leaving cumulative values in structured metadata. A prompt-local end time must equal the duration requested for that call, not the final video's cumulative duration.
 
 If an extension fails, retry that extension once only when a safe parameter correction is clear. Preserve the latest successful cumulative video. After a second failure, stop and report the failed stage, last verified duration, target duration, actual error, and next action. Do not restart the seed or earlier successful extensions.
 
@@ -151,6 +177,8 @@ Claim completion only after verifying:
 
 - the final handle descends from the seed through one continuous extension chain;
 - every extension consumed the immediately previous successful full video;
+- every seed and extension prompt starts its timeline at `00:00` and ends at that call's own duration;
+- no full-film absolute timecode appears inside a video action prompt;
 - no standalone clips were concatenated or reordered;
 - returned metadata matches the user's target duration within declared tolerance;
 - face, hair, costume, proportions, accessories, visual style, and story continuity remain recognizable;

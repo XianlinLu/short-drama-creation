@@ -1,5 +1,5 @@
 name: short-drama-creation
-version: 2.1.0
+version: 2.1.1
 mode: lumina-canvas
 language: auto
 summary: 自动匹配用户语言，先生成短小种子视频，再连续延长到用户指定时长。
@@ -38,6 +38,8 @@ runtime:
     - background_music_is_generated_automatically_when_connected
     - target_duration_comes_from_the_users_direct_prompt
     - final_video_uses_one_continuous_extension_chain
+    - every_video_prompt_starts_at_local_zero
+    - cumulative_timecodes_stay_out_of_video_prompts
     - independent_video_clips_are_never_concatenated
     - media_generation_uses_actual_connected_component_contracts
 
@@ -221,6 +223,10 @@ quality_gates:
   - one_short_seed_video_generated
   - each_extension_uses_previous_complete_video
   - extensions_run_sequentially
+  - each_video_prompt_uses_an_independent_local_timeline
+  - each_video_prompt_starts_at_zero
+  - prompt_local_end_matches_current_call_duration
+  - global_timecodes_stay_out_of_video_action_prompts
   - tail_only_outputs_are_not_treated_as_extensions
   - independent_clips_are_not_concatenated
   - no_loop_speed_change_padding_or_silent_rounding
