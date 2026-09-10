@@ -23,6 +23,7 @@ Confirm that these documents exist:
 - `manifest.json`
 - `agents/interface.yaml`
 - `agents/openai.yaml`
+- `references/language-routing.md`
 - every document listed under `resources` in `manifest.json`
 
 Also confirm:
@@ -32,7 +33,8 @@ Also confirm:
 - `manifest.json` parses as JSON and names `lumina-novel-generator`;
 - YAML documents contain no tab indentation;
 - no scaffold markers such as `TODO` remain;
-- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, prewrite stopping rule, connected-component boundary, anti-AI gate, and copyright boundary.
+- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.
+- metadata declares automatic language handling rather than a fixed output language;
 
 ## Sample Evidence
 
@@ -56,6 +58,8 @@ For a draft or sample, inspect these observable signals. They are diagnostics, n
 5. The opening does not describe an alive person as a walking dead body unless the story intentionally establishes a supernatural rule.
 6. Decorative em dashes do not become a repeated rhythm crutch.
 7. The story resolves the present conflict and returns an earlier image with changed meaning.
+8. Every visible planning step, status, option, error, outline, and conversational sentence uses the detected interaction language.
+9. The title and story body use the selected story language, which may differ when explicitly requested.
 
 ## Anti-AI Pattern Scan
 
@@ -87,4 +91,4 @@ If the story is not intentionally supernatural, rewrite with a literal anchor su
 
 ## Passing Standard
 
-The package passes when every imported document satisfies the Lumina filename and extension rules, all declared resources exist, the runtime instructions are self-contained, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.
+The package passes when every imported document satisfies the Lumina filename and extension rules, all declared resources exist, the runtime instructions are self-contained, automatic language routing is declared and consistently applied, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.

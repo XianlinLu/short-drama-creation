@@ -2,6 +2,8 @@
 
 Use this file before drafting the final story.
 
+Apply `references/language-routing.md` before choosing any visible output shape. Localize section headings and conversational text to the interaction language; use the story language for the title and story body.
+
 ## Prewrite Before Draft
 
 For a new story request, do not default to immediate full prose unless the user explicitly asks to skip discussion.
@@ -29,6 +31,8 @@ If the user gives any plot idea, named work, or author signal, also select from 
 - at least three elements to change so the result is a new story.
 
 ## Default Story Shape
+
+The Chinese labels below are semantic examples. Translate and naturalize them for the selected languages.
 
 ```text
 《标题》
@@ -63,7 +67,7 @@ For samples, reviews, or reusable workflow artifacts, use:
 ## Complete Short Story Requirements
 
 - Give the story a real ending. Do not stop at a trailer, synopsis, or chapter-one fragment unless the user asks for a serial opening.
-- Default length: 1800-4000 Chinese characters.
+- Default length: 1800-4000 Chinese characters for Chinese, or an equivalent short-story length in the selected story language.
 - Put an irreversible disturbance within the first 3 paragraphs.
 - Keep the first 3 paragraphs physically legible. The reader may wonder `who`, `why`, or `what danger`, but should not be confused about whether a person is alive, dead, dreaming, supernatural, or metaphorical unless that is the intended genre rule.
 - Give the protagonist one visible desire and one hidden wound.
@@ -84,7 +88,7 @@ For samples, reviews, or reusable workflow artifacts, use:
 - If using a source fragment, keep facts and promises but rewrite scene logic when needed.
 - If the user asks for a famous plot reference, extract only the underlying structure and create new names, setting, stakes, rules, and resolution.
 - If the user asks for a living author's style, translate it into craft features and do not directly imitate the distinctive voice.
-- Apply `references/anti-ai-language.md` before returning. In story narration, target zero `不是X，而是Y` style sentences.
+- Apply the language-aware rules in `references/anti-ai-language.md` before returning. For Chinese narration, target zero `不是X，而是Y` style sentences; for other languages, remove equivalent formulaic contrast and explanatory scaffolding.
 
 ## Revision Rules
 

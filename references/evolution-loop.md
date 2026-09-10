@@ -40,6 +40,7 @@ Classify feedback before rewriting.
 | conflict does not escalate | flat obstacle chain | close a safe option, add time pressure, raise cost, or expose a secret |
 | ending has no aftertaste | missing image return | make the final image repay an earlier detail with changed meaning |
 | genre feels wrong | reader promise mismatch | load the genre-specific rubric before rewriting |
+| reply language does not follow the user, or visible steps mix languages | language routing failure | detect from the latest direct request, separate interaction language from story language, and localize every visible template |
 
 ## Rule Promotion
 

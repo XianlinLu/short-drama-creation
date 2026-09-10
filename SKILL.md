@@ -1,7 +1,7 @@
 ---
 name: lumina-novel-generator
 description: |
-  Run inside a Lumina Canvas Agent to design, draft, and revise original, complete, highly gripping Chinese short fiction from a theme, character setup, synopsis, trope, classic-plot inspiration, or draft excerpt. Use for 小说, 短篇小说, 故事, 网文样章, 开篇钩子, 悬念改写, 人物欲望强化, 情节升级, 续写, 经典桥段重构, or general narrative-technique blending without copying protected text or imitating a living author's distinctive style.
+  Run inside a Lumina Canvas Agent to design, draft, and revise original, complete, highly gripping fiction while automatically matching the user's language across every visible planning step and response. Use for novel or story generation, opening hooks, suspense rewrites, stronger character desire, escalation, continuation, classic-plot transformation, or narrative-technique blending without copying protected text or imitating a living author's distinctive style.
 ---
 
 # Lumina Novel Generator
@@ -17,6 +17,7 @@ Source: https://github.com/joeseesun/qiaomu-novel-generator
 This repository is the maintainable source package. Lumina Canvas does not load these repository files dynamically, so use `LUMINA_SYSTEM_INSTRUCTIONS.md` as the runtime entrypoint: paste its complete contents into the Agent node's **System Instructions** field.
 
 - Put the user's request in the Agent **Task Prompt**. When a String node is connected, reference it with Lumina's `@` syntax.
+- At the start of every run, apply `references/language-routing.md`. Detect the language of the user's latest direct request and use it for every visible plan, progress summary, option, tool status, error, outline, self-check, and reply. Keep the requested story language as a separate decision.
 - The Agent may use only components connected to it. Never claim to have searched, saved, rendered, or called a workflow unless the corresponding component is connected and its run succeeds.
 - No connected research component means the Source Research Hook must state that live research is unavailable and fall back to general craft analysis.
 - A prewrite decision is a stopping point. Return the option card, strategy, or outline and wait for the next run. On the next run, include the user's choice and the previous plan in the task input when conversation state is not preserved.
@@ -29,8 +30,8 @@ Run as a production-lite fiction writing skill inside a Lumina Canvas Agent.
 
 Default assumptions:
 
-- The user ultimately wants a complete Chinese short story, but a vague premise should be clarified through compact choices before drafting.
-- Default output length is 1800-4000 Chinese characters unless the user asks for a different length.
+- The user ultimately wants a complete story in the selected story language, but a vague premise should be clarified through compact choices before drafting.
+- Default output length is 1800-4000 Chinese characters for Chinese, or an equivalent short-story length in the selected story language, unless the user asks for a different length.
 - Default goal is reader compulsion: make the first page impossible to ignore, then keep raising the cost of every choice.
 - Treat named writers, films, TV shows, novels, and famous scenes as craft signals, not copy targets. Convert them into general techniques such as suspense, restraint, moral pressure, voice economy, scene rhythm, reversal, public proof, and emotional payoffs.
 - Do not directly imitate a living author's distinctive style. Do not copy protected passages, famous scenes, character names, signature lines, setting names, or recognizable plot sequences.
@@ -45,37 +46,38 @@ Default assumptions:
 Use hooks as fixed checkpoints. They are conceptual hooks, not mandatory runtime APIs. Their job is to keep the skill evolvable without hard-coding one user's feedback or one story's content into the core rules.
 
 1. Intent Hook: identify the input type, target genre, reader promise, premise clarity, and whether the user has explicitly approved drafting.
-2. Source Research Hook: when the user explicitly asks to search or names a reference that needs current/public context, use `references/source-research-remix.md` to gather 3-6 public signals and reduce them to a Research Intake Card.
-3. Inspiration Remix Hook: when the user gives a plot, genre, trope, or named work/writer, use `references/inspiration-remix-playbook.md` to offer classic beat/style-signal choices before outlining. Reduce references to functions and craft sliders.
-4. Story Engine Library Hook: select the primary emotional payoff, high-pressure relationship, conflict arena, 2-4 plot engines, escalation ladder, and hook mode from `references/story-engine-library.md`.
-5. Prewrite Interview Hook: if the request is vague, follow `references/prewrite-interview.md` and ask with short numbered choices. Do not draft the full story yet.
-6. Story Strategy Hook: if the premise is usable but the outline is not confirmed, provide classic inspiration options, `小说如何吸引人`, and a compact outline, then wait for confirmation unless the user explicitly asked to skip discussion.
-7. Story Engine Hook: after confirmation, extract:
+2. Language Routing Hook: use `references/language-routing.md` to choose the interaction language and story language. Never infer the interaction language from quoted or attached content when the user's direct instruction uses another language.
+3. Source Research Hook: when the user explicitly asks to search or names a reference that needs current/public context, use `references/source-research-remix.md` to gather 3-6 public signals and reduce them to a Research Intake Card.
+4. Inspiration Remix Hook: when the user gives a plot, genre, trope, or named work/writer, use `references/inspiration-remix-playbook.md` to offer classic beat/style-signal choices before outlining. Reduce references to functions and craft sliders.
+5. Story Engine Library Hook: select the primary emotional payoff, high-pressure relationship, conflict arena, 2-4 plot engines, escalation ladder, and hook mode from `references/story-engine-library.md`.
+6. Prewrite Interview Hook: if the request is vague, follow `references/prewrite-interview.md` and ask with short numbered choices localized to the interaction language. Do not draft the full story yet.
+7. Story Strategy Hook: if the premise is usable but the outline is not confirmed, provide localized inspiration options, attraction strategy, and a compact outline, then wait for confirmation unless the user explicitly asked to skip discussion.
+8. Story Engine Hook: after confirmation, extract:
    - protagonist desire
    - visible obstacle
    - hidden pressure
    - moral or emotional cost
    - reader promise
    - final aftertaste
-8. Technique Hook: choose 3-5 technique engines from `references/technique-matrix.md`. Use a mix, not a stack of author imitations.
-9. Plan Hook: build a compact story plan:
+9. Technique Hook: choose 3-5 technique engines from `references/technique-matrix.md`. Use a mix, not a stack of author imitations.
+10. Plan Hook: build a compact story plan:
    - first disturbance within the first 3 paragraphs
    - protagonist makes an active choice
    - conflict escalates at least 3 times
    - each scene reveals one new fact or removes one safe option
    - final turn reframes the opening
-10. Draft Hook: draft the complete short story according to `references/output-contract.md`.
-11. Anti-AI Language Hook: apply `references/anti-ai-language.md`; rewrite formulaic narration before returning.
-12. Quality Hook: self-check against `references/quality-checklist.md` and the relevant rubric in `references/genre-quality-rubric.md`. Revise before returning if the story fails on hook, desire, escalation, dialogue, image, reversal/suspense, ending aftertaste, opening clarity, or anti-AI language.
-13. Feedback Hook: when the user gives critique, classify the failure mode before rewriting. Do not only patch the current paragraph.
-14. Evolution Hook: only promote feedback into stable skill rules when it is repeated, high-signal, or fixes a transferable failure mode. See `references/evolution-loop.md`.
-15. In Lumina, run the structural and language checks internally before returning. During repository maintenance, use `references/repository-validation.md` to verify import format, package structure, samples, and story signals.
+11. Draft Hook: draft the complete short story according to `references/output-contract.md`.
+12. Language-Aware Anti-AI Hook: apply `references/anti-ai-language.md` using the selected story language; rewrite formulaic narration before returning.
+13. Quality Hook: self-check against `references/quality-checklist.md` and the relevant rubric in `references/genre-quality-rubric.md`. Revise before returning if the story fails on hook, desire, escalation, dialogue, image, reversal/suspense, ending aftertaste, opening clarity, language consistency, or anti-AI language.
+14. Feedback Hook: when the user gives critique, classify the failure mode before rewriting. Do not only patch the current paragraph.
+15. Evolution Hook: only promote feedback into stable skill rules when it is repeated, high-signal, or fixes a transferable failure mode. See `references/evolution-loop.md`.
+16. Before returning, verify that every visible process element uses the interaction language and that the title/story body use the story language. During repository maintenance, use `references/repository-validation.md` to verify package structure and behavior rules.
 
 ## Output Defaults
 
-For a vague new-story request, output a compact option card first. The user should be able to reply `按默认` or `1B 2A 3C`. In a one-shot canvas workflow, stop after this card; do not fabricate the user's confirmation.
+For a vague new-story request, output a compact option card first. Localize all headings, labels, options, reply shortcuts, and confirmation text to the interaction language. The user should be able to accept the default or reply with a compact selection such as `1B 2A 3C`. In a one-shot canvas workflow, stop after this card; do not fabricate the user's confirmation.
 
-For a usable premise that has not been confirmed, output:
+For a usable premise that has not been confirmed, output the following semantic structure localized to the interaction language:
 
 ```text
 ## 经典桥段启发
@@ -93,7 +95,7 @@ For a usable premise that has not been confirmed, output:
 确认后我再写正文。下一次运行时，请把你的选择和本大纲一起传回。
 ```
 
-After the user confirms, or if the user explicitly asks to skip discussion and write directly, output:
+After the user confirms, or if the user explicitly asks to skip discussion and write directly, output the localized title/story shape in the story language:
 
 ```text
 《标题》
@@ -147,6 +149,7 @@ Use the same skill for:
 - `references/prewrite-interview.md`: option-based story clarification, strategy sheet, and outline confirmation rules.
 - `references/output-contract.md`: story output shape, length, and drafting rules.
 - `references/anti-ai-language.md`: anti-trope language gate for formulaic AI wording.
+- `references/language-routing.md`: automatic interaction-language detection, separate story-language selection, template localization, and visible-process consistency rules.
 - `references/quality-checklist.md`: seven-part self-check and repair rules.
 - `references/genre-quality-rubric.md`: genre-aware quality rubrics for loading the right reader promise.
 - `references/evolution-loop.md`: hook-based feedback, rule promotion, and anti-overfitting process.

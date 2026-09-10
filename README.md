@@ -1,14 +1,14 @@
 # Novel Generator
 
-> 一个专注于原创中文小说策划、生成与改写的 Agent Skill。它先确定读者承诺、人物欲望、冲突引擎和故事大纲，再写出完整、强钩子、高张力、低 AI 味的小说。
+> 一个能够自动匹配用户语言的原创小说策划、生成与改写 Agent Skill。它先确定读者承诺、人物欲望、冲突引擎和故事大纲，再写出完整、强钩子、高张力、低 AI 味的小说。
 >
-> An Agent Skill for planning, drafting, and revising original Chinese fiction. It establishes the reader promise, character desire, conflict engines, and story outline before producing a complete, gripping, low-AI-smell story.
+> An Agent Skill that automatically matches the user's language while planning, drafting, and revising original fiction. It establishes the reader promise, character desire, conflict engines, and story outline before producing a complete, gripping, low-AI-smell story.
 
 [中文](#中文介绍) · [English](#english-introduction)
 
 ## 中文介绍
 
-`Novel Generator` 把一句灵感、人物设定、故事梗概、类型偏好或已有片段，转化为可以真正吸引读者的原创小说。它不会收到一个宽泛题材就直接输出套路正文，而是先完成一套可确认的剧情设计：
+`Novel Generator` 把一句灵感、人物设定、故事梗概、类型偏好或已有片段，转化为可以真正吸引读者的原创小说。它会自动识别用户最新请求的语言，并让所有可见规划步骤与回答保持同一种语言。它不会收到一个宽泛题材就直接输出套路正文，而是先完成一套可确认的剧情设计：
 
 ```text
 情绪承诺 → 高压关系 → 冲突场 → 叙事功能组合 → 剧情引擎 → 升级节奏 → 大纲确认 → 完整正文 → 语言与质量自检
@@ -35,6 +35,17 @@
 #### 从一句想法到完整故事
 
 支持从主题、人物设定、梗概、类型、桥段信号或已有片段开始，完成故事方向、结构设计、正文生成和后续改写。
+
+#### 自动匹配用户语言
+
+- 用户用英文提问，所有可见规划、选项、大纲、状态、错误、自检和回答都使用英文；
+- 用户用日文提问，所有可见过程和回答都使用日文；
+- 用户使用中文或其他语言时遵循相同规则；
+- 语言识别以用户最新的直接请求为准，不会被附件、引用文本、粘贴稿件或工具结果带偏；
+- 交流语言和小说正文语言可以不同，例如“用英文解释大纲，但用日文写小说”；
+- 固定模板会动态本地化，不会在英文或日文回答中残留中文标题。
+
+模型的私有推理不会展示；画面上实际可见的思考摘要或分步进度会严格使用识别到的用户语言。详细规则见 [`references/language-routing.md`](./references/language-routing.md)。
 
 #### 写前选择与确认
 
@@ -145,7 +156,7 @@ npx skills add XianlinLu/novel-generator
 
 ## English Introduction
 
-`Novel Generator` turns a rough idea, character setup, synopsis, genre preference, narrative signal, or existing excerpt into original Chinese fiction designed to hold a reader's attention. It does not jump from a broad topic to generic prose. It follows a confirmable story-design pipeline:
+`Novel Generator` turns a rough idea, character setup, synopsis, genre preference, narrative signal, or existing excerpt into original fiction designed to hold a reader's attention. It detects the language of the user's latest direct request and keeps every visible planning step and response in that language. It does not jump from a broad topic to generic prose. It follows a confirmable story-design pipeline:
 
 ```text
 emotional promise → high-pressure relationship → conflict arena → narrative functions → plot engines → escalation → outline confirmation → complete story → language and quality gates
@@ -155,13 +166,25 @@ emotional promise → high-pressure relationship → conflict arena → narrativ
 
 ### What it does
 
-- turns a short idea into a complete Chinese story;
+- turns a short idea into a complete story in the selected language;
+- automatically matches the user's language across visible planning, options, outlines, status, errors, self-checks, and replies;
 - presents compact choices when the premise needs direction;
 - builds an attraction strategy and outline before drafting;
 - translates familiar narrative signals into reusable functions without copying protected expression;
 - strengthens openings, character desire, escalation, dialogue pressure, imagery, reversals, and ending resonance;
 - revises existing drafts at the story-engine level instead of merely changing adjectives;
 - removes formulaic AI phrasing and misleading poetic openings.
+
+### Automatic language matching
+
+- English requests produce an English visible workflow and response.
+- Japanese requests produce a Japanese visible workflow and response.
+- Chinese and other languages follow the same rule.
+- Detection uses the latest direct user request, not language found only in attachments, quotations, pasted drafts, or tool output.
+- The interaction language and story language are selected separately, so a user may request an English explanation and a Japanese story.
+- Fixed templates are localized dynamically instead of leaking Chinese headings into other-language output.
+
+Private chain-of-thought is never exposed. Any concise reasoning summary or step-by-step progress that is actually visible uses the detected interaction language. See [`references/language-routing.md`](./references/language-routing.md) for the complete routing rules.
 
 ### Originality by design
 
@@ -185,7 +208,8 @@ It does not reproduce protected passages, signature dialogue, famous scenes, uni
 - earlier details return with changed meaning;
 - the current conflict resolves while the ending leaves emotional resonance;
 - formulaic contrast, teaching-tone transitions, decorative dashes, and summary endings are removed;
-- the opening remains literally clear and does not create an unintended genre promise.
+- the opening remains literally clear and does not create an unintended genre promise;
+- every visible process element uses the detected interaction language, while the title and story body use the selected story language.
 
 ### Example requests
 

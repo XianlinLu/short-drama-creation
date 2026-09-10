@@ -1,20 +1,27 @@
 name: lumina-novel-generator
-version: 1.0.0
+version: 1.1.0
 mode: lumina-canvas
-language: zh-CN
-summary: 面向 Lumina 画布 Agent 的原创中文短篇小说设计、生成与改写工作流。
+language: auto
+summary: 自动匹配用户语言的原创小说设计、生成与改写工作流。
 
 runtime:
   platform: Lumina Canvas Agent
   system_instructions: LUMINA_SYSTEM_INSTRUCTIONS.md
   task_input: Task Prompt or an @-referenced String input
   output: Agent text output
+  language_policy:
+    interaction: auto-detect from latest direct user request
+    story: explicit request, otherwise preserve revised draft, otherwise interaction language
+    visible_process: interaction language
+    detection_excludes: quoted, attached, retrieved, pasted, code, metadata, and tool-output content
   optional_tools:
     - connected public-source research component
   constraints:
     - only_connected_components_are_available
     - prewrite_confirmation_requires_a_follow_up_run
     - import_package_uses_supported_text_formats_only
+    - visible_process_uses_detected_interaction_language
+    - story_language_is_selected_separately
 
 triggers:
   include:
@@ -50,6 +57,21 @@ triggers:
     - 完整短篇
     - 作家组合
     - 叙事技法
+    - novel
+    - fiction
+    - short story
+    - story outline
+    - opening hook
+    - rewrite this story
+    - suspense story
+    - 小説
+    - 短編小説
+    - 物語
+    - ストーリー
+    - プロット
+    - 書き直し
+    - 冒頭のフック
+    - サスペンス
   exclude:
     - 纯短剧剧本
     - 电影剧本格式
@@ -74,6 +96,8 @@ inputs:
     - emotional_payoff
     - story_engines
     - conflict_arena
+    - interaction_language
+    - story_language
 
 outputs:
   default:
@@ -94,6 +118,11 @@ outputs:
 
 quality_gates:
   - intent_hook_selected
+  - interaction_language_detected_from_latest_direct_request
+  - quoted_and_attached_content_ignored_for_language_detection
+  - visible_process_language_consistent
+  - story_language_selected_separately
+  - fixed_templates_localized
   - inspiration_remix_options_offered
   - classic_beats_translated_not_copied
   - emotional_payoff_selected
@@ -126,6 +155,7 @@ resources:
   prewrite_interview: references/prewrite-interview.md
   output_contract: references/output-contract.md
   anti_ai_language: references/anti-ai-language.md
+  language_routing: references/language-routing.md
   quality_checklist: references/quality-checklist.md
   genre_quality_rubric: references/genre-quality-rubric.md
   evolution_loop: references/evolution-loop.md

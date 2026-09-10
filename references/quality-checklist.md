@@ -2,6 +2,8 @@
 
 Use this checklist internally before returning a story. For samples or requested reviews, show the seven-item self-evaluation.
 
+Apply `references/language-routing.md` before this checklist. Localize any visible self-evaluation to the interaction language.
+
 ## Seven Checks
 
 1. 开篇钩子
@@ -53,6 +55,12 @@ Use this checklist internally before returning a story. For samples or requested
    - Can a first-time reader explain the basic physical event without needing a later explanation?
    - Does poetic compression sharpen the scene rather than hide who did what?
 
+12. 语言一致性
+   - Does every visible planning step, option, tool status, error, outline, and conversational sentence use the detected interaction language?
+   - Does the title and story body use the selected story language?
+   - Have fixed template labels been localized instead of leaking Chinese into English or Japanese output?
+   - Was the language detected from the latest direct user request rather than quoted, attached, retrieved, or pasted content?
+
 ## Repair Triggers
 
 - If the story opens with history or worldbuilding, cut to the first wound.
@@ -65,6 +73,7 @@ Use this checklist internally before returning a story. For samples or requested
 - If the ending explains the theme, delete the explanation and let an image carry it.
 - If the prose uses formulaic contrast, rewrite the sentence as concrete action, image, or character pressure.
 - If the first line is clever but unclear, keep the pressure and remove the riddle.
+- If visible process language is mixed, localize all headings, labels, shortcuts, errors, and summaries before returning.
 
 ## Passing Standard
 

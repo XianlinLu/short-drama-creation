@@ -4,6 +4,8 @@ Use this before returning story prose or a visible story plan.
 
 The aim is not to make language plain. The aim is to remove formulaic AI signals so the story sounds written by a human with taste, pressure, and scene sense.
 
+Apply `references/language-routing.md` first. The universal goal applies to every story language. The Chinese patterns below are language-specific diagnostics, not a reason to force Chinese into another-language response.
+
 ## Hard Smell: Not-X-But-Y
 
 Avoid these patterns in narration:
@@ -81,3 +83,31 @@ Before returning a story, scan for:
 
 If any hit appears in story narration, rewrite it unless there is a deliberate character-voice reason.
 For impossible-action hits in the opening, keep them only when the genre is intentionally supernatural or the next sentence gives a concrete literal anchor.
+
+## English Diagnostics
+
+Inspect English narration for:
+
+- repetitive `not X, but Y` constructions;
+- `it is important to note`, `the key is`, `ultimately`, and `in conclusion` used as essay scaffolding;
+- empty `not only ... but also ...` emphasis;
+- repeated abstract transitions where an event should move the scene;
+- a final paragraph that explains the story's meaning after the emotional turn.
+
+Replace them with concrete action, image, dialogue, pressure, or consequence. Preserve a phrase when it belongs naturally to a character voice or is necessary factual explanation.
+
+## Japanese Diagnostics
+
+Inspect Japanese narration for:
+
+- repetitive `Xではなく、Yだ／である` constructions;
+- `重要なのは`, `注目すべきは`, `要するに`, and `結論として` used as explanatory scaffolding;
+- empty or repetitive `だけでなく、〜も` emphasis;
+- abstract transition sentences where a physical event should advance the scene;
+- a final paragraph that explains the theme after the closing image has landed.
+
+Rewrite toward concrete action, image, dialogue, pressure, or consequence. Preserve natural character dialogue and necessary factual explanation.
+
+## Other Languages
+
+Identify equivalent formulaic contrast, tutorial-like transitions, empty intensifiers, and summary slogans in the selected story language. Apply the same reader-effect standard rather than mechanically translating the Chinese pattern list.

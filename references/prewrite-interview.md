@@ -2,6 +2,8 @@
 
 Use this before drafting a new story.
 
+Apply `references/language-routing.md` first. Every visible heading, option, explanation, reply shortcut, confirmation request, and follow-up instruction must use the detected interaction language. The Chinese templates below define semantic structure only; translate and naturalize them instead of copying their surface wording into another-language response.
+
 The goal is to make the user feel the story is being designed with them, not dumped at them. A good novel request should pass through story strategy and outline confirmation before the full draft, unless the user explicitly says to skip discussion and write directly.
 
 When the user gives a plot idea, do not only ask generic options. First offer classic beat inspirations from `references/inspiration-remix-playbook.md`, then let the user choose or combine.
@@ -84,7 +86,7 @@ Output shape:
 
 ## When To Draft
 
-Draft the full story only when:
+Draft the full story only when the user confirms in any language. The Chinese phrases below are examples, not the only valid confirmations:
 
 - the user confirms the outline with `按这个写`, `开始写`, `就这样`, `按默认`, or equivalent;
 - the user explicitly says `别问，直接写`, `不用讨论`, or `按默认直接写`;

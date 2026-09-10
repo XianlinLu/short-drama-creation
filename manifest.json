@@ -1,8 +1,22 @@
 {
   "name": "lumina-novel-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "mode": "lumina-canvas",
-  "language": "zh-CN",
+  "language": "auto",
+  "language_policy": {
+    "interaction": "latest_direct_user_request",
+    "story": "explicit_then_draft_then_interaction",
+    "visible_process": "interaction_language",
+    "ignore_for_detection": [
+      "quoted_content",
+      "attachments",
+      "retrieved_sources",
+      "pasted_drafts",
+      "code",
+      "metadata",
+      "tool_output"
+    ]
+  },
   "entry": "SKILL.md",
   "runtime_entry": "LUMINA_SYSTEM_INSTRUCTIONS.md",
   "interface": "agents/interface.yaml",
@@ -15,6 +29,7 @@
     "references/prewrite-interview.md",
     "references/output-contract.md",
     "references/anti-ai-language.md",
+    "references/language-routing.md",
     "references/quality-checklist.md",
     "references/genre-quality-rubric.md",
     "references/evolution-loop.md",
@@ -24,6 +39,11 @@
   ],
   "quality_gates": [
     "intent_hook_selected",
+    "interaction_language_detected_from_latest_direct_request",
+    "quoted_and_attached_content_ignored_for_language_detection",
+    "visible_process_language_consistent",
+    "story_language_selected_separately",
+    "fixed_templates_localized",
     "source_research_when_requested_and_connected",
     "research_signals_translated_to_functions",
     "inspiration_remix_options_offered",
