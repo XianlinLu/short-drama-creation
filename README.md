@@ -27,9 +27,9 @@
 
 #### 原生交互式选题
 
-首轮不会直接生成媒体，而是调用 Agent 的原生单选提问能力，显示一个问题、简短标题、四个互斥选题、选项说明、推荐项和自定义输入。用户提交方向且提示词包含目标时长后，才开始种子分镜、种子视频和连续延长。
+无论输入是人物图、故事灵感、小说梗概、已有草稿、参考作品还是搜索结果，只要流程进入“让用户选择创作方向”的阶段，Skill 就必须调用 Agent 的原生单选提问能力，显示一个问题、简短标题、四个互斥选题、选项说明、推荐项、Other 输入和提交按钮。用户提交后才能继续。
 
-如果运行环境不提供原生交互提问能力，Skill 会明确说明限制并退回编号选项，不会假装已经显示交互卡。
+选题不会用 Markdown、表格、JSON、普通文本或编号列表代替。如果运行环境没有原生单选能力，Skill 会停在选题阶段并报告缺少能力，不会降级成文本选项，也不会擅自替用户选择。
 
 #### 原创短剧设计
 
@@ -127,9 +127,9 @@ character reference or story idea
 
 #### Interactive topic selection
 
-The first run uses the Agent's native single-choice input to display one question, a short header, four mutually exclusive topics, concise descriptions, a recommended option, and custom input. No media is generated before the user submits a direction and supplies a target duration.
+Regardless of whether the input is a character image, idea, synopsis, draft, reference work, or search result, reaching a creative-direction choice always invokes the Agent's native single-choice UI. It displays one question, a short header, four mutually exclusive topics, concise descriptions, a recommended first option, Other input, and the native submit control.
 
-If native interactive input is unavailable, the skill labels the limitation and returns equivalent numbered options instead of pretending that a UI card appeared.
+Markdown, tables, JSON, prose, and numbered lists cannot replace the topic UI. If native single-choice input is unavailable, the skill stops at that stage and reports the missing capability instead of falling back to text or selecting for the user.
 
 #### Original short-drama design
 

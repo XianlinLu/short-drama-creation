@@ -6,8 +6,8 @@ The default move is discussion plus selection:
 
 1. Translate the user's idea into story functions.
 2. If the user asks to search or the reference needs current/public context, run `source-research-remix.md` first.
-3. Offer several famous reference beats as inspiration options.
-4. Let the user choose or combine.
+3. Build exactly four original direction bundles from the useful reference beats.
+4. Present those bundles through the mandatory native single-choice gate in `topic-direction-ui.md`.
 5. Build a new outline with new characters, setting, stakes, objects, rules, and ending.
 6. Translate any author/style request into craft features, not direct imitation.
 
@@ -35,7 +35,7 @@ Safe response for a living-author style request:
 
 ## Classic Beat Cards
 
-Offer 3-6 cards per user premise. Do not dump the whole library.
+Select only the signals needed to build four distinct direction options per user premise. Do not dump the whole library.
 
 ### Downfall And Comeback
 
@@ -135,23 +135,18 @@ For living authors or distinctive contemporary voices, use the translated craft 
 
 ## Discussion Output
 
-When the user gives a plot idea, output:
+When the user gives a plot idea and multiple inspiration directions would help, call the native single-choice action defined in `topic-direction-ui.md`. Use:
 
 ```text
-我先给你几组经典桥段启发，咱们选完再组合成新故事。
-
-1. A [经典信号]：[可复用功能]，适合做[效果]
-2. B [经典信号]：[可复用功能]，适合做[效果]
-3. C [经典信号]：[可复用功能]，适合做[效果]
-4. D [经典信号]：[可复用功能]，适合做[效果]
-
-我建议组合：[A + C + 一个反向处理]。
-理由：[一句话]
-
-你可以回复：按建议 / 1B 2D / 更狠 / 更悬疑 / 更现实。
+header: 故事主题
+question: 你想采用哪个原创故事方向？
+option 1: [recommended combination] — [reusable functions and fresh transformation]
+option 2: [combination] — [one concise distinction]
+option 3: [combination] — [one concise distinction]
+option 4: [combination] — [one concise distinction]
 ```
 
-Then build the attraction strategy and outline only after the user chooses or accepts the recommendation.
+Invoke the action and stop. Do not print a duplicate list, numbered fallback, or compact reply code. If the native action is unavailable, stop with the actual missing-capability error. Build the attraction strategy and outline only after the user submits a selection.
 
 ## Remix Checklist
 

@@ -47,7 +47,7 @@ After choosing `interaction_language`, use it consistently for all visible proce
 
 - progress or reasoning summaries shown by the canvas;
 - plan and strategy headings;
-- numbered options and reply shortcuts;
+- native topic-card headers, questions, option labels, descriptions, recommended markers, and Other guidance;
 - clarification questions and confirmation requests;
 - connected-tool descriptions, search queries, status messages, evidence summaries, failures, and fallbacks when those fields are visible;
 - outline labels, revision notes, quality reports, and self-evaluations;

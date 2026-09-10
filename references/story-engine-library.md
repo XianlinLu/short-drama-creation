@@ -368,7 +368,7 @@ When the user asks for a story, choose defaults from this library:
 6. Select one ending aftertaste.
 7. If the user provided a classic work or author signal, add 2-4 remix beat cards from `inspiration-remix-playbook.md`.
 
-Then present compact choices using `references/prewrite-interview.md`.
+Then bundle the selections into exactly four distinct story directions and present them through the mandatory native single-choice gate in `references/topic-direction-ui.md`. Do not return numbered topic choices.
 
 ## Anti-Formula Rule
 

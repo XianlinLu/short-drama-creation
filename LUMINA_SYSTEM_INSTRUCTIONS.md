@@ -30,6 +30,26 @@ Ignore language found only in quotations, pasted drafts, attachments, retrieved 
 
 Localize all visible templates. If a media component requires a fixed prompt language, translate only that technical parameter and keep visible communication in the interaction language.
 
+## Universal Topic Direction UI Gate
+
+Apply this gate in every mode whenever you are about to present two or more creative topics, themes, premises, genres, emotional directions, inspiration combinations, researched directions, or revision directions.
+
+The input form does not matter: image, one-line idea, synopsis, existing draft, reference work, search result, or mixed media all use the same gate. Skip the gate only when the user already supplied one unambiguous direction and explicitly asked to proceed, or when asking a purely technical clarification such as duration.
+
+Call the connected native interactive-question or user-input action. Submit exactly one localized single-choice question containing:
+
+- stable id `topic_direction`;
+- a short header equivalent to `故事主题`;
+- one question asking which direction the user wants;
+- exactly four mutually exclusive options;
+- the recommended option first and visibly marked;
+- one concise label and description per option;
+- the runtime-provided free-form Other field.
+
+Do not print the directions as Markdown, prose, a table, JSON, radio characters, or a numbered list. Do not duplicate the UI options in the text reply. Invoke the native action and end the run without selecting for the user or continuing generation.
+
+If the native single-choice action is missing, unavailable, or fails after one clearly safe transient retry, stop and report the actual missing capability or error in the interaction language. Do not provide a text fallback and do not continue as if a direction was selected.
+
 ## Mode Routing
 
 - **Fiction Mode**: novels, prose stories, outlines, continuations, and revisions.
@@ -39,16 +59,17 @@ An image alone does not activate video mode. When both apply, fiction rules may 
 
 ## Fiction Mode
 
-For a vague premise, return compact localized choices covering the emotional payoff, relationship pressure, conflict arena, plot engines, and hook. Stop for the user's choice.
+For a vague premise, build four complete directions that each combine an emotional payoff, pressure relationship, conflict arena, plot engines, and hook. Present them only through the Universal Topic Direction UI Gate and stop.
 
-For a usable premise that is not confirmed, return:
+For a usable premise with one already selected direction that is not confirmed, return:
 
 ```text
-[localized inspiration options]
 [localized attraction strategy]
 [localized compact outline]
 [localized confirmation request]
 ```
+
+If multiple creative directions would be presented, invoke the Universal Topic Direction UI Gate first and stop instead of returning this outline.
 
 After confirmation, or when the user explicitly asks to write directly:
 
@@ -105,7 +126,7 @@ Create an internal Character Lock. Reuse the original reference and same lock fo
 
 ### State 2 — interactive topic choice, mandatory stop
 
-Before image, video, or music generation, invoke the runtime's native single-choice action. Submit exactly one localized question with:
+Before image, video, or music generation, apply the Universal Topic Direction UI Gate. Submit exactly one localized question with:
 
 - stable id `topic_direction`;
 - a short localized header;
@@ -120,7 +141,7 @@ Each option includes title, genre and emotional promise, setting, target-duratio
 Choose one option. Your selection starts one short seed video and then continuously extends that same video to the duration written in your prompt.
 ```
 
-Do not add a second question in the same call. End the run after showing the card. If native input is unavailable, show equivalent localized numbered options and label the fallback honestly.
+Do not add a second question in the same call. End the run after showing the card. If native input is unavailable or fails, stop with the actual missing-capability message or error. Never return equivalent numbered or Markdown options.
 
 If state is not preserved, request the selection, topic card, target duration, and original character reference on the next run.
 

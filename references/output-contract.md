@@ -8,7 +8,7 @@ Apply `references/language-routing.md` before choosing any visible output shape.
 
 For a new story request, do not default to immediate full prose unless the user explicitly asks to skip discussion.
 
-1. If the premise is vague, use `references/prewrite-interview.md` and ask with compact numbered choices.
+1. If the premise is vague, use `references/prewrite-interview.md` and present four bundled directions through the mandatory native single-choice gate in `references/topic-direction-ui.md`. Never use numbered text choices.
 2. If the premise is usable, first provide `小说如何吸引人` and `大纲`.
 3. Draft the full story only after the user confirms the direction, or when the user explicitly says `直接写`, `不用讨论`, or `按默认直接写`.
 
@@ -25,7 +25,7 @@ Before prewriting, select from `references/story-engine-library.md`:
 
 If the user gives any plot idea, named work, or author signal, also select from `references/inspiration-remix-playbook.md`:
 
-- 3-6 classic beat cards to offer the user;
+- four original direction bundles to offer through the native topic UI;
 - one recommended combination;
 - the craft features to borrow;
 - at least three elements to change so the result is a new story.

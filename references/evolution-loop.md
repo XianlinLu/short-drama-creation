@@ -9,9 +9,9 @@ The goal is to learn transferable craft rules without hard-coding one draft, one
 ```text
 User request
 -> Intent Hook: identify genre, reader promise, output shape, and key risk
--> Inspiration Remix Hook: offer classic beat/style-signal options and translate references into reusable functions
+-> Inspiration Remix Hook: build classic beat/style-signal directions and translate references into reusable functions
 -> Story Engine Library Hook: choose emotional payoff, relationship pressure, arena, engines, ladder, and hook mode
--> Prewrite Hook: ask compact choices or confirm strategy/outline before full drafting
+-> Prewrite Hook: invoke the mandatory native topic-direction UI or confirm strategy/outline before full drafting
 -> Draft Hook: write one complete story or revision
 -> Anti-AI Language Hook: remove formulaic AI prose before returning
 -> Quality Hook: check generic and genre-specific failure modes
@@ -33,7 +33,8 @@ Classify feedback before rewriting.
 | feels like an essay, report, lesson, recap, tutorial | exposition dominance | replace explanation with scene, action, conflict, object, and dialogue |
 | too much jargon or abstract language | abstraction overload | translate terms into human stakes and concrete events |
 | AI 味重, repeated "不是X而是Y", teaching tone | formulaic contrast or explanation voice | rewrite as action, image, dialogue, or consequence; target zero narration-level hits |
-| user only says "帮我生成小说" and result misses expectation | under-specified premise | ask short numbered choices, then provide strategy and outline before drafting |
+| user only says "帮我生成小说" and result misses expectation | under-specified premise | present four bundled directions through the mandatory native single-choice UI, then provide strategy and outline after selection |
+| topic directions appeared as Markdown, text, or a numbered list | topic UI gate failure | call the native single-choice action, stop after the card, and fail closed when that capability is unavailable |
 | plot direction feels wrong after full draft | skipped outline agreement | discuss reader promise, attraction strategy, and outline first; draft only after confirmation |
 | not satisfying, not爽 | missing public reversal or payoff | build a visible arena where the protagonist's value is proven |
 | protagonist feels weak or wrong | misframed character competence | distinguish true incompetence from unfamiliar rules, hidden skill, or blocked expression |

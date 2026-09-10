@@ -1,5 +1,5 @@
 name: short-drama-creation
-version: 2.1.1
+version: 2.2.0
 mode: lumina-canvas
 language: auto
 summary: 自动匹配用户语言，先生成短小种子视频，再连续延长到用户指定时长。
@@ -34,7 +34,9 @@ runtime:
     - story_language_is_selected_separately
     - character_video_demo_requires_reference_image_and_visual_request
     - character_video_demo_stops_for_topic_choice_before_generation
-    - topic_choice_uses_native_single_select_ui_when_available
+    - every_topic_direction_choice_uses_native_single_select_ui
+    - topic_direction_has_no_text_or_numbered_fallback
+    - missing_topic_ui_capability_stops_the_workflow
     - background_music_is_generated_automatically_when_connected
     - target_duration_comes_from_the_users_direct_prompt
     - final_video_uses_one_continuous_extension_chain
@@ -155,7 +157,7 @@ outputs:
   default:
     type: prewrite_then_complete_short_story
     sections:
-      - story_options_if_vague
+      - native_topic_direction_ui_if_needed
       - attraction_strategy
       - outline
       - title
@@ -187,11 +189,17 @@ quality_gates:
   - visible_process_language_consistent
   - story_language_selected_separately
   - fixed_templates_localized
-  - inspiration_remix_options_offered
+  - all_modes_use_native_topic_direction_ui
+  - topic_direction_ui_has_one_question_and_four_options
+  - topic_direction_ui_has_recommended_first_and_native_other
+  - topic_direction_ui_stops_the_current_run
+  - topic_direction_ui_has_no_text_or_numbered_fallback
+  - missing_topic_ui_capability_stops_generation
+  - inspiration_directions_shown_through_native_ui
   - classic_beats_translated_not_copied
   - emotional_payoff_selected
   - story_engine_library_loaded
-  - vague_request_gets_numbered_choices
+  - vague_request_gets_native_topic_direction_ui
   - attraction_strategy_and_outline_discussed_before_draft
   - genre_rubric_loaded
   - first_three_paragraphs_have_disturbance
@@ -210,7 +218,7 @@ quality_gates:
   - no_author_style_imitation
   - no_copyrighted_scene_copy
   - character_video_mode_requires_three_view_and_visual_intent
-  - four_topic_directions_returned_before_media_generation
+  - four_topic_directions_shown_in_native_ui_before_media_generation
   - topic_choice_stop_point_respected
   - topic_choice_uses_one_native_single_select_question
   - topic_ui_uses_localized_header_labels_and_descriptions
@@ -257,6 +265,7 @@ resources:
   output_contract: references/output-contract.md
   anti_ai_language: references/anti-ai-language.md
   language_routing: references/language-routing.md
+  topic_direction_ui: references/topic-direction-ui.md
   character_video_demo: references/character-video-demo.md
   quality_checklist: references/quality-checklist.md
   genre_quality_rubric: references/genre-quality-rubric.md

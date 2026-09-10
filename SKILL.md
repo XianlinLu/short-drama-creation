@@ -19,7 +19,8 @@ This repository is the maintainable source package. Lumina Canvas does not load 
 - Put the user's request in the Agent **Task Prompt**. When a String node is connected, reference it with Lumina's `@` syntax.
 - At the start of every run, apply `references/language-routing.md`. Detect the language of the user's latest direct request and use it for every visible plan, progress summary, option, tool status, error, outline, self-check, and reply. Keep the requested story language as a separate decision.
 - When a character turnaround or three-view image is attached and the user requests a storyboard, video demo, short film, or duration-controlled result, route to `references/character-video-demo.md` before using the fiction workflow.
-- In Character Video Demo Mode, use the runtime's native single-choice user-input action for topic selection. Lock the duration from the user's direct prompt, generate one short seed video, then extend only the latest successful full video until that duration is verified. Never fall back to standalone-clip concatenation.
+- In every mode, whenever the Agent offers creative topic or direction choices, apply `references/topic-direction-ui.md`: invoke the runtime's native single-choice user-input action and stop. Never render topic directions as Markdown, prose, tables, JSON, or numbered text. If the native action is unavailable, stop with the missing-capability error and do not provide a text fallback.
+- In Character Video Demo Mode, after the user selects through the mandatory native topic UI, lock the duration from the user's direct prompt, generate one short seed video, then extend only the latest successful full video until that duration is verified. Never fall back to standalone-clip concatenation.
 - Treat every video-generation prompt as an independent local timeline. Start its visible time instructions at `00:00` and end at that call's seed or added duration. Keep full-film or cumulative timecodes only in internal planning, structured duration parameters, and progress metadata; never write ranges such as `00:30–00:40` inside a 10-second video prompt.
 - Automatically generate original instrumental background music when connected. Embed it only through native video audio conditioning or a single-video audio mux that does not concatenate or retime the extended video; otherwise deliver the synchronized music separately and label it honestly.
 - The Agent may use only components connected to it. Never claim to have searched, saved, rendered, or called a workflow unless the corresponding component is connected and its run succeeds.
@@ -43,14 +44,22 @@ Select exactly one primary mode per run:
 
 If both are requested, Character Video Demo Mode may use the fiction engines to create the micro-story, but its topic-choice stop point, target-duration lock, continuous extension chain, and duration checks take priority. An image attachment alone does not activate this mode.
 
+## Universal Topic Direction UI Gate
+
+Before presenting two or more creative topics, themes, premises, genres, emotional directions, inspiration combinations, research-derived directions, or revision directions, read and apply `references/topic-direction-ui.md`. This gate applies regardless of input form or operating mode.
+
+Use exactly one native single-choice question with four mutually exclusive options, a recommended first option, localized header/question/descriptions, and the runtime-provided Other field. Invoke the action and end the run. Do not duplicate its options in text.
+
+If the native single-choice action is missing or fails after one safe transient retry, stop and report the actual missing capability or error. Text lists are prohibited at this gate.
+
 Fiction Mode defaults:
 
-- The user ultimately wants a complete story in the selected story language, but a vague premise should be clarified through compact choices before drafting.
+- The user ultimately wants a complete story in the selected story language, but a vague premise should be clarified through the mandatory native topic-direction UI before drafting.
 - Default output length is 1800-4000 Chinese characters for Chinese, or an equivalent short-story length in the selected story language, unless the user asks for a different length.
 - Default goal is reader compulsion: make the first page impossible to ignore, then keep raising the cost of every choice.
 - Treat named writers, films, TV shows, novels, and famous scenes as craft signals, not copy targets. Convert them into general techniques such as suspense, restraint, moral pressure, voice economy, scene rhythm, reversal, public proof, and emotional payoffs.
 - Do not directly imitate a living author's distinctive style. Do not copy protected passages, famous scenes, character names, signature lines, setting names, or recognizable plot sequences.
-- When the user gives a plot idea, proactively offer several classic beat inspirations and let the user choose or combine before outlining.
+- When the user gives a plot idea and multiple inspiration directions would help, build four original combinations and present them through the mandatory native topic UI before outlining.
 - When the user asks to search first or names a specific modern work whose public context matters, use search if available, extract only public premise/craft signals, cite sources when reporting, and then remix through abstract story functions.
 - If the user provides an existing draft, preserve useful facts, promises, and character intent; rewrite the narrative engine instead of merely polishing adjectives.
 - Avoid formulaic AI wording in visible prose, especially `不是X，而是Y`, unless it is a deliberate character voice.
@@ -64,10 +73,10 @@ Use hooks as fixed checkpoints. They are conceptual hooks, not mandatory runtime
 2. Language Routing Hook: use `references/language-routing.md` to choose the interaction language and story language. Never infer the interaction language from quoted or attached content when the user's direct instruction uses another language.
 3. Mode Routing Hook: if Character Video Demo Mode applies, follow `references/character-video-demo.md`. Read the reference image, invoke one native single-choice UI card with four topic directions, and stop. After the user's later selection, require an explicit target duration, generate one seed storyboard and one short seed video, then pass each successful full video into the next extension call until the requested duration is verified. Each call's video prompt starts at local `00:00`; cumulative time stays outside the prompt. Do not concatenate independent clips. Do not continue through fiction-only hooks unless useful internally for the micro-story.
 4. Source Research Hook: when the user explicitly asks to search or names a reference that needs current/public context, use `references/source-research-remix.md` to gather 3-6 public signals and reduce them to a Research Intake Card.
-5. Inspiration Remix Hook: when the user gives a plot, genre, trope, or named work/writer, use `references/inspiration-remix-playbook.md` to offer classic beat/style-signal choices before outlining. Reduce references to functions and craft sliders.
+5. Inspiration Remix Hook: when the user gives a plot, genre, trope, or named work/writer, use `references/inspiration-remix-playbook.md` to build classic beat/style-signal directions and present them only through the universal native topic UI before outlining.
 6. Story Engine Library Hook: select the primary emotional payoff, high-pressure relationship, conflict arena, 2-4 plot engines, escalation ladder, and hook mode from `references/story-engine-library.md`.
-7. Prewrite Interview Hook: if the request is vague, follow `references/prewrite-interview.md` and ask with short numbered choices localized to the interaction language. Do not draft the full story yet.
-8. Story Strategy Hook: if the premise is usable but the outline is not confirmed, provide localized inspiration options, attraction strategy, and a compact outline, then wait for confirmation unless the user explicitly asked to skip discussion.
+7. Prewrite Interview Hook: if the request is vague, follow `references/prewrite-interview.md` and present four bundled story directions through the universal native topic UI. Do not use numbered text choices or draft the full story yet.
+8. Story Strategy Hook: if a creative direction is still undecided, invoke the universal native topic UI and stop. If one direction is already selected but the outline is not confirmed, provide the localized attraction strategy and compact outline, then wait for confirmation unless the user explicitly asked to skip discussion.
 9. Story Engine Hook: after confirmation, extract:
    - protagonist desire
    - visible obstacle
@@ -91,15 +100,11 @@ Use hooks as fixed checkpoints. They are conceptual hooks, not mandatory runtime
 
 ## Output Defaults
 
-For a vague new-story request, output a compact option card first. Localize all headings, labels, options, reply shortcuts, and confirmation text to the interaction language. The user should be able to accept the default or reply with a compact selection such as `1B 2A 3C`. In a one-shot canvas workflow, stop after this card; do not fabricate the user's confirmation.
+For a vague new-story request, invoke the native single-choice action with four complete story directions. Localize all fields to the interaction language, put the recommended option first, let the runtime provide Other, and stop immediately after the action. Never output a topic list or compact reply code in text.
 
-For a usable premise that has not been confirmed, output the following semantic structure localized to the interaction language:
+For a usable premise with one selected direction that has not been confirmed, output the following semantic structure localized to the interaction language. If multiple directions would be shown, invoke the native topic UI instead and stop.
 
 ```text
-## 经典桥段启发
-
-[3-6 options reduced to reusable functions]
-
 ## 小说如何吸引人
 
 [strategy bullets]
@@ -166,6 +171,7 @@ Use the same skill for:
 - `references/output-contract.md`: story output shape, length, and drafting rules.
 - `references/anti-ai-language.md`: anti-trope language gate for formulaic AI wording.
 - `references/language-routing.md`: automatic interaction-language detection, separate story-language selection, template localization, and visible-process consistency rules.
+- `references/topic-direction-ui.md`: universal mandatory native single-choice gate for every creative topic or direction selection, including fail-closed behavior with no text fallback.
 - `references/character-video-demo.md`: character-turnaround intake, native topic-choice UI, target-duration parsing, seed-video generation, sequential video-extension contracts, audio handling, and delivery quality gates.
 - `references/quality-checklist.md`: seven-part self-check and repair rules.
 - `references/genre-quality-rubric.md`: genre-aware quality rubrics for loading the right reader promise.

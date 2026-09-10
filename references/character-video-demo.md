@@ -64,11 +64,11 @@ Create a compact internal Character Lock. Reuse the original reference and this 
 
 ### State 2: Topic Direction — Mandatory Stop
 
-Before any image, video, or music generation, ask the user to choose one topic direction with the runtime's native single-choice action. Use exactly one localized question with stable id `topic_direction`, a short header, four mutually exclusive original options, a recommended first option, concise descriptions, and the runtime's free-form Other path.
+Before any image, video, or music generation, apply `topic-direction-ui.md`. Ask the user to choose one topic direction with the runtime's native single-choice action. Use exactly one localized question with stable id `topic_direction`, a short header, four mutually exclusive original options, a recommended first option, concise descriptions, and the runtime's free-form Other path.
 
 Each option encodes a title, genre and emotional promise, setting, target-duration conflict, visual hook, and ending flavor. The card must explain that selection starts one short seed video followed by continuous extension to the requested duration. Do not promise six clips, two 30-second acts, or video concatenation.
 
-Do not add a second UI question in the same call. End the run after showing the topic card. If the runtime lacks native interactive input, return equivalent localized numbered options and label the fallback honestly.
+Do not add a second UI question in the same call. End the run after showing the topic card. If the runtime lacks native interactive input or the action fails after one safe retry, stop with the actual error. Never return equivalent numbered or Markdown options.
 
 If conversation state is not preserved, ask the user to return the selection, topic card, target duration, and original character reference on the next run.
 

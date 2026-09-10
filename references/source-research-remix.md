@@ -2,7 +2,7 @@
 
 Use this file when the user explicitly asks to search first, names a recent or specific work whose public context matters, or asks for "similar to X, but change it into Y".
 
-The purpose of search is not to copy the source. The purpose is to identify what readers recognize as the source's durable craft engine, then turn that engine into selectable, original story options.
+The purpose of search is not to copy the source. The purpose is to identify what readers recognize as the source's durable craft engine, then turn that engine into selectable, original story directions shown through `topic-direction-ui.md`.
 
 ## When To Search
 
@@ -55,27 +55,18 @@ Rules:
 
 ## Search-To-Remix Output
 
-After searching, present compact options:
+After searching, summarize the reusable functions briefly, then present exactly four original direction combinations through the native single-choice action defined in `topic-direction-ui.md`:
 
 ```text
-我查到的可复用叙事功能是：
-
-1. [功能 A]：[读者为什么会被抓住]
-2. [功能 B]：[冲突如何升级]
-3. [功能 C]：[爽点/反转如何释放]
-
-可选桥段组合：
-1A [经典信号] + [新题材变形]
-2A [经典信号] + [新题材变形]
-3A [经典信号] + [新题材变形]
-
-我建议组合：[A + B + 一个反向处理]。
-理由：[一句话]
-
-确认后我给大纲，或你可以回复：按建议 / 更爽 / 更黑色幽默 / 更现实 / 更悬疑。
+header: 故事主题
+question: 根据这些可复用叙事功能，你想选择哪个原创方向？
+option 1: [recommended function combination] — [reader promise and fresh transformation]
+option 2: [combination] — [one concise distinction]
+option 3: [combination] — [one concise distinction]
+option 4: [combination] — [one concise distinction]
 ```
 
-If the user has already asked for strategy and outline, include source links in a short `参考来源` line, then move to `小说如何吸引人` and `大纲`.
+Invoke the action and stop. Do not return the direction options as Markdown, a numbered list, or a text fallback. If the native action is unavailable, stop with the actual missing-capability error. After the user selects, include source links in a short `参考来源` line, then move to `小说如何吸引人` and `大纲`.
 
 ## Common Research-To-Story Adapters
 
@@ -131,5 +122,5 @@ Before drafting from searched sources:
 - Have we changed setting, relationship, stakes, central object/rule, and ending?
 - Are the cited works used as craft signals, not a copied chain of events?
 - Are living-author style requests translated into generic craft sliders?
-- Is the output offering choices before a full draft, unless the user explicitly asked to skip discussion?
+- When multiple directions are offered, were they sent only through the mandatory native topic UI?
 - Is the story's main pleasure clear:爽、笑、惊、燃、痛、甜, or黑色余味?

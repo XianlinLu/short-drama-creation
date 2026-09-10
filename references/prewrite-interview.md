@@ -6,7 +6,9 @@ Apply `references/language-routing.md` first. Every visible heading, option, exp
 
 The goal is to make the user feel the story is being designed with them, not dumped at them. A good novel request should pass through story strategy and outline confirmation before the full draft, unless the user explicitly says to skip discussion and write directly.
 
-When the user gives a plot idea, do not only ask generic options. First offer classic beat inspirations from `references/inspiration-remix-playbook.md`, then let the user choose or combine.
+Whenever this interview reaches a creative topic or direction choice, apply `references/topic-direction-ui.md`. Topic choices must use the native single-choice UI and may never be returned as numbered text.
+
+When the user gives a plot idea, do not only ask generic questions. Build four distinct direction bundles using classic beat inspirations from `references/inspiration-remix-playbook.md`, then present them through the native topic UI.
 
 When the user says to search first or names a specific reference whose context matters, use `references/source-research-remix.md` before this interview. Summarize only reusable craft signals and sources, then ask the user to choose a bridge combination.
 
@@ -14,47 +16,35 @@ When the user says to search first or names a specific reference whose context m
 
 If the user only says things like `帮我生成一个小说`, `写一篇小说`, `来个修仙打脸`, or gives only a broad genre/trope, do not start the full story.
 
-Give a short default plan plus numbered choices. Use the Lumina canvas pattern: recommended defaults first, short reason, compact options, and a reply shortcut.
+Build exactly four complete story-direction bundles. Each bundle combines a primary emotion, high-pressure relationship, conflict arena, 2-3 plot engines, escalation rhythm, and ending flavor. Put the strongest default first and mark it recommended.
 
 Choose options from `references/story-engine-library.md`. Do not keep reusing the same修仙拍卖 default unless the user signals that genre.
 If the user names a work, trope, or author, use `references/inspiration-remix-playbook.md` to translate it into reusable functions and craft sliders.
 If the user also asks for search, include 3-5 source-informed functions before the options.
 
-Output shape:
+Send these bundles through the native single-choice action defined in `topic-direction-ui.md`:
 
 ```text
-我先帮你把故事方向定住。默认我会选：[情绪承诺] + [高压关系] + [冲突场] + [2-3 个剧情引擎]。
-
-默认选择理由：[一句话，说明为什么这个方向最容易出钩子、冲突和爽点。]
-
-可选调整
-1. 主情绪：A [默认：爽/燃/甜/惊等] / B [替代情绪] / C [更暗或更慢热]
-2. 高压关系：A [默认关系] / B [更亲密更痛] / C [更对抗更刺激]
-3. 冲突场：A [默认公开场] / B [更危险场] / C [更现实场]
-4. 剧情引擎：A [默认 2-3 个引擎] / B [更反转] / C [更成长]
-5. 升级节奏：A [默认：小压迫→小反击→大陷害→大翻盘] / B [悬疑层层揭露] / C [短剧式强钩子]
-6. 结尾味道：A [默认：爽完留钩子] / B [收束干净] / C [黑色反转]
-
-你可以直接回复：按默认，或回复类似 `1B 2A 3C`。
+header: 故事主题
+question: 你想选择哪个故事方向？
+option 1: [recommended direction label] — [emotion, relationship, conflict, hook, and ending]
+option 2: [direction label] — [one concise description]
+option 3: [direction label] — [one concise description]
+option 4: [direction label] — [one concise description]
 ```
 
-Keep choices short. Do not ask a long questionnaire. The user should be able to answer in one line.
+Invoke the action and stop. Do not repeat the options in Markdown or add a reply shortcut. If the action is unavailable, stop with the missing-capability error rather than falling back to text.
 
 ## When The Request Has Enough Premise
 
-If the user already gives a theme, protagonist, core conflict, or desired trope, do not immediately draft the full story. First provide a strategy sheet and outline.
+If the user already gives a theme, protagonist, core conflict, or desired trope, determine whether one unambiguous direction is already selected.
+
+- If multiple creative directions will be offered, present exactly four through `topic-direction-ui.md` and stop.
+- If the user's direction is already unambiguous, do not manufacture a choice step; provide the strategy sheet and outline.
 
 Output shape:
 
 ```text
-## 经典桥段启发
-
-1. A [经典信号]：[可复用功能]，适合做[效果]
-2. B [经典信号]：[可复用功能]，适合做[效果]
-3. C [经典信号]：[可复用功能]，适合做[效果]
-
-我建议组合：[A + C + 反向处理]。
-
 ## 小说如何吸引人
 
 - 读者承诺：
@@ -81,7 +71,7 @@ Output shape:
 5. [公开或情感反转]
 6. [结尾回响]
 
-确认后我再写正文。下一次运行时，请把你的选择和本大纲一起传回。你可以回复：按这个写 / 加强打脸 / 更悬疑 / 更现实 / 更狠。
+确认后我再写正文。下一次运行时，请把确认结果和本大纲一起传回。
 ```
 
 ## When To Draft
@@ -94,7 +84,7 @@ Draft the full story only when the user confirms in any language. The Chinese ph
 
 If drafting directly because the user explicitly asked to skip discussion, still do the strategy and outline internally before writing.
 
-In Lumina Canvas, returning choices or an outline ends the current execution. Do not infer confirmation from silence. If the canvas does not preserve conversation state, the next Task Prompt must contain both the user's choice and the prior plan, either directly or through connected `@` text inputs.
+In Lumina Canvas, invoking the topic UI or returning an outline ends the current execution. Do not infer confirmation from silence. If the canvas does not preserve state, the next Task Prompt must contain the selected direction and prior plan, either directly or through connected `@` text inputs.
 
 ## Strategy Requirements
 

@@ -25,6 +25,7 @@ Confirm that these documents exist:
 - `agents/interface.yaml`
 - `agents/openai.yaml`
 - `references/language-routing.md`
+- `references/topic-direction-ui.md`
 - `references/character-video-demo.md`
 - every document listed under `resources` in `manifest.json`
 
@@ -35,7 +36,7 @@ Also confirm:
 - `manifest.json` parses as JSON and names `short-drama-creation`;
 - YAML documents contain no tab indentation;
 - no scaffold markers such as `TODO` remain;
-- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.
+- `LUMINA_SYSTEM_INSTRUCTIONS.md` contains the Lumina runtime contract, automatic language routing, the universal native topic-direction UI gate, prewrite stopping rule, connected-component boundary, language-aware anti-AI gate, and copyright boundary.
 - `LUMINA_SYSTEM_INSTRUCTIONS.md` contains Character Video Demo Mode, the mandatory native single-choice topic UI, explicit target-duration locking, connected media capability checks, one seed storyboard, one short seed video, sequential extension of the latest complete video, prompt-local timelines starting at zero, automatic original background music, and final duration verification.
 - `SKILL.md` and `LUMINA_SYSTEM_INSTRUCTIONS.md` contain the TTS risk-audit recovery rule, exact failed-chunk isolation, bounded retries, alternate-voice fallback, and the requirement to preserve successful upstream results.
 - metadata declares automatic language handling rather than a fixed output language;
@@ -76,7 +77,7 @@ First run:
 1. Attach the turnaround and request a character video with an explicit duration such as 45 seconds.
 2. Confirm that the Agent invokes exactly one native single-choice question with a localized title/header, four distinct topic options, concise descriptions, a recommended first option, and a free-form custom path.
 3. Confirm that it explains the one-seed-video/continuous-extension/target-duration consequence of selection and stops without generating media.
-4. If the native interaction action is intentionally unavailable for this test, confirm that the Agent labels the fallback and returns the equivalent localized numbered choices without pretending a UI card appeared.
+4. If the native interaction action is intentionally unavailable, confirm that the Agent stops with the missing-capability error, returns no text list of topics, and does not start media generation.
 
 Second run:
 
@@ -110,6 +111,28 @@ TTS risk-audit test:
 5. Confirm that downstream video generation waits for successful replacement audio.
 6. After the bounded attempts fail, confirm that the Agent stops with the chunk ID and last actual error instead of restarting the workflow.
 
+## Universal Topic UI Smoke Test
+
+Run each case with a native single-choice action connected:
+
+1. a vague fiction request;
+2. a character-image short-drama request;
+3. an existing draft asking for several revision directions;
+4. a named reference asking for several original adaptations;
+5. a search-first request that produces several research-derived directions.
+
+For every case that reaches direction selection, confirm:
+
+- exactly one native single-choice question is invoked;
+- the localized header is equivalent to `故事主题`;
+- exactly four mutually exclusive options are present;
+- the recommended option appears first;
+- the native Other path and submit control are available;
+- the Agent ends the run after creating the UI;
+- no duplicate Markdown, prose, table, JSON, or numbered topic list is returned.
+
+Repeat one case without the native action. Confirm that the Agent stops at the gate, reports the missing capability, returns no text topic options, and does not continue to an outline, story, image, audio, or video.
+
 ## Anti-AI Pattern Scan
 
 Target zero narration-level hits for these patterns:
@@ -140,4 +163,4 @@ If the story is not intentionally supernatural, rewrite with a literal anchor su
 
 ## Passing Standard
 
-The package passes when every imported document satisfies the Lumina filename, extension, and 20,000-character rules, all declared resources exist, the runtime instructions retain the essential runtime contract, automatic language routing is consistently applied, the visual demo respects its topic gate, target-duration lock, and continuous extension chain without clip concatenation, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.
+The package passes when every imported document satisfies the Lumina filename, extension, and 20,000-character rules, all declared resources exist, the runtime instructions retain the essential runtime contract, automatic language routing is consistently applied, every creative-direction stage uses the native single-choice UI with no text fallback, the visual demo respects its target-duration lock and continuous extension chain without clip concatenation, both samples demonstrate complete fiction, and no unresolved narration-level anti-AI or misleading-opening issue remains.
