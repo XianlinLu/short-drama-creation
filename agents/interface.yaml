@@ -1,276 +1,138 @@
 name: short-drama-creation
-version: 2.2.0
+version: 3.0.0
 mode: lumina-canvas
 language: auto
-summary: 自动匹配用户语言，先生成短小种子视频，再连续延长到用户指定时长。
+summary: 自动匹配用户语言，生成原创短剧并将初始视频连续延长到用户指定时长。
 
 runtime:
   platform: Lumina Canvas Agent
   system_instructions: LUMINA_SYSTEM_INSTRUCTIONS.md
-  task_input: Task Prompt or an @-referenced String input
-  output: Agent text output
-  language_policy:
-    interaction: auto-detect from latest direct user request
-    story: explicit request, otherwise preserve revised draft, otherwise interaction language
-    visible_process: interaction language
-    detection_excludes: quoted, attached, retrieved, pasted, code, metadata, and tool-output content
-  optional_tools:
-    - native interactive single-choice user-input action
-    - connected public-source research component
-    - connected character-reference or multimodal input
-    - connected reference-aware image generation component
-    - connected image-to-video component
-    - connected true video-extension component returning a longer complete video
-    - connected cumulative video-duration metadata
-    - connected original music generation component
-    - connected native video-audio input or single-video audio mux component
-    - connected last-frame, speech, sound-effect, subtitle, preview, or save component
-  constraints:
-    - only_connected_components_are_available
-    - prewrite_confirmation_requires_a_follow_up_run
-    - import_package_uses_supported_text_formats_only
-    - every_imported_document_is_at_most_20000_characters
-    - visible_process_uses_detected_interaction_language
-    - story_language_is_selected_separately
-    - character_video_demo_requires_reference_image_and_visual_request
-    - character_video_demo_stops_for_topic_choice_before_generation
-    - every_topic_direction_choice_uses_native_single_select_ui
-    - topic_direction_has_no_text_or_numbered_fallback
-    - missing_topic_ui_capability_stops_the_workflow
-    - background_music_is_generated_automatically_when_connected
-    - target_duration_comes_from_the_users_direct_prompt
-    - final_video_uses_one_continuous_extension_chain
-    - every_video_prompt_starts_at_local_zero
-    - cumulative_timecodes_stay_out_of_video_prompts
-    - independent_video_clips_are_never_concatenated
-    - media_generation_uses_actual_connected_component_contracts
+  task_input: Task Prompt or connected String input
+  output: localized Agent response and connected action artifacts
+  action_policy:
+    - use_only_connected_actions
+    - never_fabricate_artifacts_or_metadata
+    - preserve_successful_upstream_results
+  optional_actions:
+    - native single-choice user input
+    - public-source research
+    - multimodal character reference
+    - reference-aware image generation
+    - image-to-video generation
+    - true full-video extension
+    - returned video duration metadata
+    - original music generation
+    - TTS and sound effects
+    - single-video audio mux
+    - subtitles, preview, and save
 
 triggers:
   include:
-    - 小说
-    - 短篇小说
-    - 故事
-    - 网文样章
+    - 原创短剧
+    - 小说创作
+    - 故事构思
+    - 故事改写
+    - 故事续写
     - 开篇钩子
-    - 开篇误读
-    - 看不懂
-    - 爽点
-    - 爽文
-    - 情绪刺激
-    - 剧情套路
-    - 情节引擎
-    - 经典桥段
-    - 桥段重构
-    - 电影桥段
-    - 联网搜
-    - 搜索参考
-    - 先搜
-    - 参考作品
-    - 模仿风格
-    - 马伯庸
-    - 食神
-    - 悬念改写
-    - 人物欲望
     - 冲突升级
     - 对白张力
-    - 结尾余味
-    - 续写
-    - 改写
-    - 完整短篇
-    - 作家组合
-    - 叙事技法
-    - novel
-    - fiction
-    - short story
-    - story outline
-    - opening hook
-    - rewrite this story
-    - suspense story
-    - 小説
-    - 短編小説
-    - 物語
-    - ストーリー
-    - プロット
-    - 書き直し
-    - 冒頭のフック
-    - サスペンス
     - 人物三视图
     - 角色三视图
-    - 三视图分镜
     - 分镜场景图
     - 分镜视频
-    - 一分钟短片
     - 视频延长
-    - 延长到指定时长
-    - 角色视频 demo
-    - 背景音乐
-    - 自动配乐
+    - 指定视频时长
+    - 自动背景音乐
+    - 配音重试
+    - original short drama
+    - fiction writing
+    - story revision
     - character turnaround
-    - character three-view
-    - storyboard images
     - storyboard video
-    - one-minute character film
     - extend video
-    - target video duration
+    - target duration
     - background music
-    - automatic soundtrack
+    - TTS recovery
+    - オリジナル短編
+    - 小説作成
     - キャラクター三面図
-    - 絵コンテ
-    - 一分動画
-    - BGM
+    - 絵コンテ動画
+    - 動画延長
   exclude:
-    - 纯短剧剧本
-    - 电影剧本格式
-    - 非虚构书口播
     - 新闻报道
     - 学术论文
+    - 纯非虚构写作
 
 inputs:
   required:
     - user_request
   optional:
-    - theme
-    - character_setup
-    - synopsis
-    - existing_fragment
-    - desired_genre
-    - length
-    - author_signals
-    - classic_inspirations
-    - forbidden_elements
-    - target_reader
-    - emotional_payoff
-    - story_engines
-    - conflict_arena
     - interaction_language
     - story_language
+    - premise
+    - synopsis
+    - existing_draft
     - character_turnaround_image
     - selected_topic_direction
-    - target_aspect_ratio
-    - target_duration_seconds
-    - audio_mode
-    - background_music_preference
-    - tts_voice
-    - spoken_audio_mode
+    - target_duration
+    - aspect_ratio
+    - audience
+    - genre
+    - emotional_payoff
+    - forbidden_elements
+    - reference_signals
+    - research_request
+    - speech_preference
+    - music_preference
 
 outputs:
-  default:
-    type: prewrite_then_complete_short_story
-    sections:
-      - native_topic_direction_ui_if_needed
-      - attraction_strategy
-      - outline
-      - title
-      - story_body
-  sample_or_review:
-    type: story_with_self_evaluation
-    sections:
-      - input
-      - technique_mix
-      - story_body
-      - seven_part_self_evaluation
-  character_video_demo:
-    type: topic_gated_seed_and_continuously_extended_video
-    sections:
-      - four_topic_directions
-      - selected_topic_and_target_duration
-      - continuation_map
-      - seed_storyboard
-      - short_seed_video
-      - sequential_extension_chain
-      - original_background_music
-      - duration_verified_final_video
-      - delivery_and_deviation_summary
+  story:
+    - native_topic_card_when_direction_is_open
+    - attraction_strategy_when_planning_is_needed
+    - outline_when_planning_is_needed
+    - complete_original_story
+    - optional_quality_note
+  character_video:
+    - native_topic_card_before_media
+    - selected_direction_and_locked_duration
+    - continuity_plan
+    - initial_storyboard
+    - short_initial_video
+    - sequential_full_video_extensions
+    - original_background_music
+    - optional_verified_speech
+    - duration_verified_final_video
+    - localized_delivery_summary
 
-quality_gates:
-  - intent_hook_selected
-  - interaction_language_detected_from_latest_direct_request
-  - quoted_and_attached_content_ignored_for_language_detection
-  - visible_process_language_consistent
-  - story_language_selected_separately
-  - fixed_templates_localized
-  - all_modes_use_native_topic_direction_ui
-  - topic_direction_ui_has_one_question_and_four_options
-  - topic_direction_ui_has_recommended_first_and_native_other
-  - topic_direction_ui_stops_the_current_run
-  - topic_direction_ui_has_no_text_or_numbered_fallback
-  - missing_topic_ui_capability_stops_generation
-  - inspiration_directions_shown_through_native_ui
-  - classic_beats_translated_not_copied
-  - emotional_payoff_selected
-  - story_engine_library_loaded
-  - vague_request_gets_native_topic_direction_ui
-  - attraction_strategy_and_outline_discussed_before_draft
-  - genre_rubric_loaded
-  - first_three_paragraphs_have_disturbance
-  - protagonist_has_visible_desire
-  - conflict_escalates_at_least_three_times
-  - scenes_reveal_new_information_or_cost
-  - dialogue_contains_subtext_or_pressure
-  - imagery_is_concrete_not_decorative
-  - ending_reframes_opening
-  - opening_semantic_clarity_gate_passed
-  - anti_ai_language_gate_passed
-  - lumina_connected_tool_boundary_respected
-  - prewrite_stop_point_respected
-  - feedback_classified_before_rewrite
-  - transferable_rules_not_one_off_content
-  - no_author_style_imitation
-  - no_copyrighted_scene_copy
-  - character_video_mode_requires_three_view_and_visual_intent
-  - four_topic_directions_shown_in_native_ui_before_media_generation
-  - topic_choice_stop_point_respected
-  - topic_choice_uses_one_native_single_select_question
-  - topic_ui_uses_localized_header_labels_and_descriptions
-  - topic_ui_includes_recommended_and_custom_paths
-  - original_micro_story_created_after_selection
-  - explicit_target_duration_locked_before_generation
-  - connected_duration_limits_inspected
-  - target_duration_is_reachable_before_media_generation
-  - one_seed_storyboard_generated
-  - one_short_seed_video_generated
-  - each_extension_uses_previous_complete_video
-  - extensions_run_sequentially
-  - each_video_prompt_uses_an_independent_local_timeline
-  - each_video_prompt_starts_at_zero
-  - prompt_local_end_matches_current_call_duration
-  - global_timecodes_stay_out_of_video_action_prompts
-  - tail_only_outputs_are_not_treated_as_extensions
+constraints:
+  - choose_one_primary_route_per_run
+  - visible_workflow_uses_latest_direct_request_language
+  - every_visible_template_is_localized
+  - story_language_is_resolved_separately
+  - every_direction_choice_uses_one_native_single_choice_card
+  - direction_card_has_exactly_four_options_with_recommended_first
+  - direction_card_uses_native_other_and_submit
+  - direction_action_ends_current_execution
+  - missing_direction_action_has_no_text_fallback
+  - character_video_requires_reference_and_visual_request
+  - topic_selection_precedes_all_media
+  - target_duration_is_explicit
+  - initial_video_is_followed_by_true_extensions
+  - every_extension_uses_latest_complete_video
   - independent_clips_are_not_concatenated
-  - no_loop_speed_change_padding_or_silent_rounding
-  - final_duration_matches_user_target_within_declared_tolerance
-  - character_and_story_continuity_checked_across_extensions
-  - seed_and_extension_outputs_are_actual_tool_results
-  - original_instrumental_background_music_generated_by_default
-  - music_duration_matches_final_timeline
-  - music_energy_curve_matches_story_beats
-  - embedded_audio_uses_non_concatenating_route_only
-  - separate_music_is_labeled_when_embedding_is_unavailable
-  - tts_risk_rejection_identifies_exact_failed_chunk
-  - tts_recovery_rewrites_only_rejected_spoken_text
-  - successful_tts_chunks_and_upstream_media_are_preserved
-  - only_failed_tts_step_is_retried
-  - alternate_tts_voice_is_used_only_after_neutral_text_rejection
-  - downstream_video_waits_for_successful_tts
-  - tts_recovery_has_bounded_retry_stop
-  - missing_media_capability_reported_without_fabrication
+  - every_video_prompt_starts_at_zero
+  - cumulative_timecodes_do_not_enter_video_prompts
+  - music_is_original_and_matches_final_duration
+  - rejected_tts_chunk_is_recovered_in_isolation
+  - completed_outputs_are_preserved
+  - missing_required_media_action_stops_without_fabrication
+  - only_real_action_results_are_delivered
+  - all_import_documents_are_supported_text_under_20000_characters
 
 resources:
-  skill: SKILL.md
-  technique_matrix: references/technique-matrix.md
-  inspiration_remix_playbook: references/inspiration-remix-playbook.md
-  source_research_remix: references/source-research-remix.md
-  story_engine_library: references/story-engine-library.md
-  prewrite_interview: references/prewrite-interview.md
-  output_contract: references/output-contract.md
-  anti_ai_language: references/anti-ai-language.md
-  language_routing: references/language-routing.md
-  topic_direction_ui: references/topic-direction-ui.md
-  character_video_demo: references/character-video-demo.md
-  quality_checklist: references/quality-checklist.md
-  genre_quality_rubric: references/genre-quality-rubric.md
-  evolution_loop: references/evolution-loop.md
-  sample_wuxia_suspense: examples/sample-01-wuxia-suspense.md
-  sample_sci_fi_memory: examples/sample-02-sci-fi-memory.md
-  repository_validation: references/repository-validation.md
-  lumina_system_instructions: LUMINA_SYSTEM_INSTRUCTIONS.md
+  language_and_topic_ui: references/interaction-and-topic-ui.md
+  story: references/story-workflow.md
+  video: references/continuous-video-workflow.md
+  audio: references/audio-and-tts.md
+  originality_and_quality: references/originality-and-quality.md
+  validation: references/package-validation.md

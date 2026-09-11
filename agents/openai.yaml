@@ -1,7 +1,7 @@
 interface:
   display_name: "Short Drama Creation"
-  short_description: "生成种子视频并连续延长到用户指定时长"
-  default_prompt: "Use $short-drama-creation to turn my character reference into an original short-drama seed video, then continuously extend that same video to the duration specified in my prompt."
+  short_description: "原创短剧、连续视频延长与自动多语言创作"
+  default_prompt: "Use $short-drama-creation to turn my character reference into an original short drama, then continuously extend the initial video to the duration specified in my prompt."
 
 policy:
   allow_implicit_invocation: true
