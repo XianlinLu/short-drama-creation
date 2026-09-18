@@ -87,6 +87,12 @@ After the user submits a direction, parse target duration only from their direct
 
 Inspect connected action limits: permitted initial-video lengths, extension increments, maximum cumulative duration, duration metadata, and tolerance. Choose the shortest practical initial duration and calculate an ordered extension plan. If the exact target is not reachable, explain supported outcomes and wait for the user's decision. Never silently round.
 
+### Smart aspect ratio
+
+Resolve ratio only before the initial video: supported user request, destination, composition (`9:16` single/mobile; `16:9` wide/multi), then shared default. Ignore the character-sheet canvas. Store actual output metadata as `locked_ratio`.
+
+For each extension, omit `ratio`; never send a value, `auto`, `null`, empty text, or default. Output inherits the input. On `InvalidParameter.TaskTypeConstraint`, keep the latest video, remove the field, retry that extension once, and verify duration and ratio. If a wrapper reinserts it, stop with a connector error. Never restart, crop, pad, stretch, or transcode.
+
 ### 4. Continuity plan
 
 Create one compact story for a single continuous film. Internally record identity anchors, environment, lighting, opening action, narrative changes for the initial call and each extension, prop positions, movement direction, emotion curve, music curve, and ending image.

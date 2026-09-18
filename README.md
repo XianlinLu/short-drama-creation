@@ -45,6 +45,14 @@ Skill 根据用户最新的直接请求确定交互语言。用户使用英语�
 
 每一次延长都以上一次成功返回的完整视频为输入，并等待结果验证通过后才进行下一步。只返回新增尾部片段的能力不会被当作视频延长，也不会改用独立片段拼接。
 
+### 智能画面比例
+
+画面比例只在初始分镜和初始视频阶段决定。Skill 会依次参考用户明确要求、发布场景和构图需求：单人全身或移动端短剧优先 `9:16`，多人调度、宽阔动作或环境叙事优先 `16:9`；三视图本身的画布比例不会强制成为成片比例。
+
+初始视频生成后，Skill 会把返回元数据中的实际比例锁定为最终比例。所有视频延长调用都完全省略 `ratio` 参数，不传具体值，也不传 `auto`、`null` 或空字符串，因为延长视频会自动继承输入视频比例。
+
+如果延长调用因 `InvalidParameter.TaskTypeConstraint` 拒绝比例参数，Skill 会保留最新完整视频，删除失败请求中的 `ratio` 字段，并只重试该次延长。若连接组件仍自动写入比例字段，流程会报告配置问题，不会重新生成、裁剪、填边、拉伸或转码。
+
 ### 视频版权风控恢复
 
 当视频生成返回版权相似性风控错误时，Skill 不会重复提交同一请求或尝试规避审核。它会保留最后一个已验证视频和所有成功产物，只处理失败的视频步骤。
@@ -134,6 +142,14 @@ Visible questions, options, progress notes, and errors follow the language of th
 The user supplies a duration such as `45 seconds`, `1 minute`, `1 minute 30 seconds`, or `00:45`. The skill checks available initial lengths, extension increments, cumulative limits, and returned duration metadata before generation.
 
 Each extension consumes the previous complete video and must return a longer complete video. A tail-only clip is rejected as an extension, and independent clips are never concatenated. Duration is not faked through loops, freezes, padding, speed changes, or silent rounding.
+
+### Smart aspect ratio
+
+Aspect ratio is selected only for the initial storyboard and initial video. The skill prioritizes an explicit supported user choice, stated destination, and composition: a single full-body character or mobile-first short drama favors `9:16`, while multi-character blocking, wide action, or environment-led storytelling favors `16:9`. A three-view reference sheet does not force the final canvas ratio.
+
+After the initial video returns, its actual metadata ratio becomes the locked final ratio. Every extension request completely omits the `ratio` parameter—without a numeric value, `auto`, `null`, or an empty string—because extension output inherits its input video's ratio.
+
+If an extension rejects the ratio with `InvalidParameter.TaskTypeConstraint`, the skill keeps the latest complete video, removes the `ratio` field, and retries only that extension. If the connected wrapper continues to inject the field, the workflow reports a configuration problem instead of restarting, cropping, padding, stretching, or transcoding the video.
 
 ### Video copyright-policy recovery
 

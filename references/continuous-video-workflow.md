@@ -46,6 +46,8 @@ Inspect actual action limits:
 
 Choose the shortest practical initial duration and an ordered extension plan. If the exact target is unreachable, explain the supported nearest outcomes and wait for the user to choose. Never silently round.
 
+Resolve the initial storyboard and video orientation through `aspect-ratio-routing.md`. After the initial video returns, lock its actual metadata ratio. Never submit a `ratio` field to a video-extension action; every extension inherits the input video's ratio.
+
 ## State D: continuity map
 
 Create one compact original story that can unfold as a single continuous film. Record:
@@ -101,6 +103,8 @@ Do not launch dependent extensions in parallel. Do not use separately generated 
 Reject an extension result when it is only a tail clip, resets the scene without intent, loses the character identity, or fails the duration increase. Retry only the failed extension with a corrected prompt when safe.
 
 If the action returns a copyright-related output policy rejection, do not treat it as an ordinary generation failure. Apply `video-copyright-recovery.md`, preserve the latest verified complete video, and obey its two-attempt limit.
+
+If an extension rejects `ratio` with `InvalidParameter.TaskTypeConstraint`, apply `aspect-ratio-routing.md`: keep the latest complete video, remove the ratio field entirely, and retry only that extension once.
 
 ## State H: audio and finish
 

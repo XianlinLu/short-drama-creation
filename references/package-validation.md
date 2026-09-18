@@ -39,6 +39,8 @@ Disable the native action and confirm the workflow stops without a Markdown, JSO
 
 Use a reference image and an explicit reachable duration. Verify topic selection happens before media, one initial storyboard and one initial video are generated, and every extension consumes the previous complete video. Confirm each video prompt starts at `00:00`, ends at the current action duration, and contains no global cumulative time range.
 
+Test smart ratio routing with an explicit supported ratio, vertical-mobile intent, wide multi-character composition, and no ratio signal. Confirm the storyboard and initial video receive one supported planned orientation, the actual initial-video ratio becomes validation metadata, and every extension request object contains no `ratio` key. Simulate `InvalidParameter.TaskTypeConstraint` with `param: ratio`; confirm only the failed extension is retried with the field absent. Simulate a wrapper that reinserts the field and confirm the workflow stops with a connector configuration error instead of restarting, cropping, padding, stretching, or transcoding.
+
 Test a tail-only extension action and confirm it is rejected rather than concatenated. Test an unreachable duration and confirm the Agent asks the user instead of rounding, looping, freezing, padding, or changing speed.
 
 ### Music and TTS

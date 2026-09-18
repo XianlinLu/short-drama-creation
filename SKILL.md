@@ -1,6 +1,6 @@
 ---
 name: short-drama-creation
-description: Create original short fiction and reference-consistent character videos. Use for topic selection, story design or revision, storyboard generation, a short initial video followed by true continuous extension, automatic music, multilingual interaction, targeted TTS recovery, or bounded recovery from video and audio copyright-policy rejection.
+description: Create original short fiction and reference-consistent character videos. Use for topic selection, story design or revision, storyboard generation, smart aspect-ratio routing, a short initial video followed by true continuous extension, automatic music, multilingual interaction, targeted TTS recovery, or bounded media policy recovery.
 ---
 
 # Short Drama Creation
@@ -80,6 +80,17 @@ Critical invariants:
 - Generate original instrumental background music automatically when a compatible connected action exists.
 - Embed music only through a route that preserves one continuous video. Otherwise return the music separately and label it clearly.
 
+## Smart aspect ratio
+
+Read `references/aspect-ratio-routing.md` before the initial storyboard and every video-extension call.
+
+- Select the initial ratio from an explicit supported user choice, stated destination, composition needs, or the shared action default, in that order.
+- A three-view character sheet supplies identity but does not force the final canvas ratio.
+- Use the same planned orientation for the storyboard and initial video, then lock the initial video's actual metadata ratio.
+- For every video-extension action, omit the `ratio` field entirely. Do not send the locked ratio, `auto`, `null`, or an empty value. The output inherits the input video's ratio.
+- If an extension returns `InvalidParameter.TaskTypeConstraint` for `ratio`, preserve the latest complete video, remove that field from the failed request, and retry only the failed extension once.
+- If a connector automatically reinserts the field, stop and report a connector configuration problem. Never restart earlier generation or crop, pad, stretch, or transcode to hide the error.
+
 ## Video copyright-policy recovery
 
 Read `references/video-copyright-recovery.md` when a video action returns error code `23007`, `OutputVideoSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side policy rejection.
@@ -142,6 +153,7 @@ Read `references/originality-and-quality.md` before final delivery.
 - `references/interaction-and-topic-ui.md` — language routing and the mandatory native direction card.
 - `references/story-workflow.md` — original story planning, drafting, research translation, and revision.
 - `references/continuous-video-workflow.md` — character intake, seed generation, true extension, local timelines, and duration checks.
+- `references/aspect-ratio-routing.md` — intelligent initial ratio selection, inherited extension ratio, and invalid-ratio recovery.
 - `references/audio-and-tts.md` — automatic music and rejected-chunk TTS recovery.
 - `references/audio-copyright-recovery.md` — bounded, non-evasive recovery for output-side audio copyright policy rejections.
 - `references/video-copyright-recovery.md` — bounded, non-evasive recovery for output-side video copyright policy rejections.

@@ -9,6 +9,7 @@ Before delivery, verify the applicable items:
 - character identity and scene continuity survive every media step;
 - one initial video leads to sequential full-video extensions;
 - every generation prompt begins at local `00:00`;
+- the initial ratio was selected once, actual output ratio was locked as metadata, and every extension request omitted the `ratio` field;
 - final duration comes from returned metadata;
 - no independent clips, loops, freezes, padding, speed changes, or hidden rounding were used;
 - music matches the verified duration;
