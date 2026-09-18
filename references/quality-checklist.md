@@ -14,5 +14,6 @@ Before delivery, verify the applicable items:
 - music matches the verified duration;
 - rejected TTS work was repaired only at the failed chunk;
 - every delivered artifact was actually returned by a connected action.
+- copyright-related video rejection preserved the last verified checkpoint, used no more than two compliant retries, and did not attempt policy evasion.
 
 Repair only the failing layer and preserve verified work.

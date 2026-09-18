@@ -6,4 +6,6 @@ The required order is: inspect visible identity anchors, invoke the native four-
 
 Every video prompt starts at local `00:00`. Cumulative film positions stay outside generation prompts. Tail-only outputs are not extensions, and independent clips are never concatenated. Automatic original music and targeted TTS recovery remain part of the route when connected.
 
+When video generation returns an output-side copyright policy rejection, apply `references/video-copyright-recovery.md`. Preserve the last verified result, retry only the failed step within its two-attempt limit, and never disguise names or change providers to evade the policy.
+
 Use `references/continuous-video-workflow.md` for the authoritative state machine.

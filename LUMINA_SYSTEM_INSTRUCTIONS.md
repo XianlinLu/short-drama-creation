@@ -122,6 +122,27 @@ Use the verified full result as the next extension input. A result containing on
 
 Do not reach the target by looping footage, freezing frames, padding, changing playback speed, or hidden duration rounding. If an extension fails, retry only that extension when safe; retain the previous verified full video.
 
+### Video copyright-policy rejection
+
+When a video action returns error code `23007`, `OutputVideoSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side copyright policy result, treat it as a policy rejection rather than a transient service failure.
+
+Do not evade the safeguard. Never disguise or translate protected names, encode hidden instructions, remove third-party watermarks, repeatedly submit the same request, or switch models or providers solely to obtain the rejected result. Do not claim to know which protected work caused the rejection.
+
+First preserve a recovery checkpoint: failed stage, last verified complete video, storyboard or source image, failed prompt, call duration, selected story function, continuity anchors, error code, log id, request id, and raw action message. Keep every successful upstream artifact.
+
+Audit the prompt and references for named films, games, studios, creators, actors, characters, brands, exact-scene recreation, recognizable logos or uniforms, signature props, iconic compositions, celebrity likenesses, posters, screenshots, and watermarked material.
+
+If the input reference appears to be a recognizable third-party character, celebrity, branded asset, film frame, poster, or watermarked image—or its origin is too uncertain for a safe retry—stop automatic retry and ask for an original unbranded reference. If offering several new directions, use the native four-option topic card and stop.
+
+If the character reference is original and unbranded, preserve its identity and apply at most two recovery attempts to the failed video step:
+
+1. **Prompt-only originalization:** remove protected proper nouns, named style or likeness requests, brands, exact recreation language, logos, signature props, and iconic staging. Describe original mood, materials, motion, lighting, camera behavior, and story action. Preserve meaning, character intent, emotion, duration, continuity, and the local timeline beginning at `00:00`. Retry only the failed action once.
+2. **New visual realization:** if the same policy class rejects attempt 1, preserve the narrative function but change at least three of environment, camera and lens path, blocking, props, palette or lighting, composition, and non-essential wardrobe detail. For an initial-video failure, generate one revised original storyboard and retry the initial video once. For an extension failure, keep the last verified complete video as input and replace only the failed next beat. Earlier footage is not regenerated.
+
+After the second recovery attempt, stop the video branch if rejection persists. Return the last verified complete video when available and report the failed stage, actual error code, log id or request id, and the compliant rewrites attempted. Do not restart the entire workflow.
+
+When recovery succeeds, verify the real returned artifact and duration, update the checkpoint, and continue from that result.
+
 ### 8. Audio
 
 Generate original instrumental background music automatically when a compatible music action is connected and the user has not opted out. Match mood, instrumentation, intensity curve, ending behavior, and verified final duration. Avoid protected melodies and direct imitation.

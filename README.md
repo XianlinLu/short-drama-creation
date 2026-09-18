@@ -45,6 +45,14 @@ Skill 根据用户最新的直接请求确定交互语言。用户使用英语�
 
 每一次延长都以上一次成功返回的完整视频为输入，并等待结果验证通过后才进行下一步。只返回新增尾部片段的能力不会被当作视频延长，也不会改用独立片段拼接。
 
+### 视频版权风控恢复
+
+当视频生成返回版权相似性风控错误时，Skill 不会重复提交同一请求或尝试规避审核。它会保留最后一个已验证视频和所有成功产物，只处理失败的视频步骤。
+
+第一次恢复会删除作品名、角色名、品牌、指定创作者、真人肖像、精确复刻和标志性镜头等高相似信号，并用原创的动作、环境、光线和镜头语言重新表达同一故事功能。仍然失败时，第二次恢复会重新设计失败段落的视觉表达，同时保持原创角色、故事含义、时长、连续性和本次调用从 `00:00` 开始的时间轴。
+
+如果参考图本身是可识别的第三方角色、名人、品牌素材、影视画面、海报或带水印图片，流程会停止自动重试并要求换成原创无标识素材。两次合规恢复仍被拒绝时，流程返回真实错误编号和最后一个成功视频，不会无限重试或重启整条工作流。
+
 ### 每个视频提示词从零计时
 
 初始视频和每一次延长都是独立的视频生成调用，因此对应提示词都从本次调用的 `00:00` 开始，并在本次调用的时长结束。
@@ -118,6 +126,14 @@ Visible questions, options, progress notes, and errors follow the language of th
 The user supplies a duration such as `45 seconds`, `1 minute`, `1 minute 30 seconds`, or `00:45`. The skill checks available initial lengths, extension increments, cumulative limits, and returned duration metadata before generation.
 
 Each extension consumes the previous complete video and must return a longer complete video. A tail-only clip is rejected as an extension, and independent clips are never concatenated. Duration is not faked through loops, freezes, padding, speed changes, or silent rounding.
+
+### Video copyright-policy recovery
+
+When video generation returns a copyright-similarity policy error, the skill preserves the last verified video and retries only the failed step. It never repeats identical inputs or attempts to evade the safeguard.
+
+The first recovery removes named works, characters, brands, creator or likeness requests, exact recreations, and iconic staging, then expresses the same story function with original action, environment, lighting, and camera language. If rejection persists, one final recovery creates a substantially new visual realization while retaining the original character, story meaning, duration, continuity, and the call-local timeline beginning at `00:00`.
+
+Recognizable third-party characters, celebrities, branded assets, film frames, posters, or watermarked references stop automatic retry and require an original unbranded replacement. After two rejected recovery attempts, the workflow returns the real error identifiers and last successful video instead of looping or restarting the full process.
 
 ### Zero-based prompts for every call
 

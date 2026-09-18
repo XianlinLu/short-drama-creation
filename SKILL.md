@@ -1,6 +1,6 @@
 ---
 name: short-drama-creation
-description: Create original short fiction and reference-consistent character videos. Use when a user wants topic selection, story design or revision, storyboard generation, a short initial video followed by true continuous extension to a requested duration, automatic music, multilingual interaction, or targeted TTS recovery.
+description: Create original short fiction and reference-consistent character videos. Use when a user wants topic selection, story design or revision, storyboard generation, a short initial video followed by true continuous extension to a requested duration, automatic music, multilingual interaction, targeted TTS recovery, or bounded recovery from video copyright-policy rejection.
 ---
 
 # Short Drama Creation
@@ -80,6 +80,18 @@ Critical invariants:
 - Generate original instrumental background music automatically when a compatible connected action exists.
 - Embed music only through a route that preserves one continuous video. Otherwise return the music separately and label it clearly.
 
+## Video copyright-policy recovery
+
+Read `references/video-copyright-recovery.md` when a video action returns error code `23007`, `OutputVideoSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side policy rejection.
+
+- Treat it as a policy rejection, not a transient network error.
+- Preserve every verified upstream artifact and isolate the failed initial-video or extension call.
+- Do not bypass safeguards, disguise protected names, or repeat identical requests.
+- If the character reference itself appears to contain a recognizable third-party character, celebrity, logo, branded asset, film frame, poster, or watermark, stop and request an original unbranded reference.
+- Otherwise, retry the failed video step once with a prompt-only originalization that removes named works, creators, brands, likeness instructions, exact-scene language, signature props, and iconic staging while preserving story meaning, emotion, duration, continuity, and the local `00:00` timeline.
+- If that retry is rejected, make one final attempt using a newly staged visual expression. Change at least three visual dimensions. For an extension, keep the last verified complete video and replace only the failed next beat.
+- After two compliant recovery attempts, stop the video branch and report the real error identifiers. Never loop, restart the whole workflow, or switch providers solely to evade the rejection.
+
 ## TTS failure handling
 
 Read `references/audio-and-tts.md` whenever speech is requested or an audio action fails.
@@ -119,6 +131,7 @@ Read `references/originality-and-quality.md` before final delivery.
 - `references/story-workflow.md` — original story planning, drafting, research translation, and revision.
 - `references/continuous-video-workflow.md` — character intake, seed generation, true extension, local timelines, and duration checks.
 - `references/audio-and-tts.md` — automatic music and rejected-chunk TTS recovery.
+- `references/video-copyright-recovery.md` — bounded, non-evasive recovery for output-side video copyright policy rejections.
 - `references/originality-and-quality.md` — story craft, genre promises, originality, and final review.
 - `references/package-validation.md` — import, configuration, and behavioral validation.
 - `examples/character-video-flow.md` — non-executable character-video acceptance example.

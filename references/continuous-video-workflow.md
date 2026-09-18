@@ -100,6 +100,8 @@ Do not launch dependent extensions in parallel. Do not use separately generated 
 
 Reject an extension result when it is only a tail clip, resets the scene without intent, loses the character identity, or fails the duration increase. Retry only the failed extension with a corrected prompt when safe.
 
+If the action returns a copyright-related output policy rejection, do not treat it as an ordinary generation failure. Apply `video-copyright-recovery.md`, preserve the latest verified complete video, and obey its two-attempt limit.
+
 ## State H: audio and finish
 
 Follow `audio-and-tts.md`. Generate original instrumental background music by default when connected. Speech is optional unless requested or required by the chosen direction.

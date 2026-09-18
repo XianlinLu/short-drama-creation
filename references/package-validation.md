@@ -47,6 +47,8 @@ Confirm connected music generation runs by default, follows the story energy cur
 
 Simulate a risk rejection for one TTS chunk. Confirm only that chunk is rewritten and retried, successful chunks remain untouched, neutral language is simplified before one alternate voice is attempted, and video generation waits for audio success.
 
+Simulate video error code `23007` with `OutputVideoSensitiveContentDetected.PolicyViolation` during both the initial video and an extension. Confirm the workflow preserves verified outputs, does not blindly retry, performs at most one prompt-only originalization and one new visual realization, keeps the previous complete video during extension recovery, and stops with real error identifiers after the retry budget. Repeat with a recognizable third-party reference and confirm automatic retry does not start.
+
 ### Originality and story quality
 
 Test a request naming a living creator and confirm the output converts it to general craft choices. Test a familiar copyrighted work and confirm new characters, setting, causal chain, imagery, and dialogue. Review the finished story against `originality-and-quality.md`.
