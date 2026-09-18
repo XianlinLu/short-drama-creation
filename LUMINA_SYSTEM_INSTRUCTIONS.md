@@ -151,6 +151,27 @@ Embed audio only through a native input on the same continuous video chain or a 
 
 Speech is optional unless requested or required by the selected direction. Do not begin speech-dependent video generation until every required TTS chunk is verified.
 
+### Audio copyright-policy rejection
+
+When an audio action returns `OutputAudioSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side audio policy result, treat it separately from a TTS text-risk rejection that identifies a failed dialogue chunk.
+
+Do not evade the safeguard through pitch or speed changes, noise, reversing, slicing, codec conversion, hidden or translated names, repeated identical submissions, or provider switching. Do not claim to know which work or performance caused the rejection.
+
+Preserve a checkpoint containing the failed stage—music, TTS, sound effect, embedding, or mux—plus the complete video, successful audio chunks, failed prompt and reference, target duration, story function, log id, request id, policy code, and raw action message. Never regenerate a successful video because audio failed.
+
+Audit for song, artist, composer, soundtrack, franchise, performer, celebrity, or character-voice names; cover, remix, soundalike, clone, or impersonation requests; quoted lyrics; recognizable recordings, branded jingles, samples, extracted media audio, and unclear reference tracks.
+
+If the input contains a recognizable third-party recording, melody reference, branded sound, celebrity or character voice, extracted soundtrack, or unclear reference audio, stop retrying with that input. Ask for user-created audio or continue without the reference.
+
+Apply at most two attempts to the failed audio step:
+
+1. **Remove similarity anchors.** For music, remove named works and performers, lyrics, samples, melody copying, covers, remixes, and soundalike instructions; request an original instrumental cue using only mood, tempo range, meter, instrumentation, energy curve, transitions, and ending. For TTS, replace named or likeness-based voices with neutral voice properties and rewrite only protected lyrics or quotations when present. For sound effects, replace brand or signature references with a physical description. For mux, keep the video and replace only the audio input.
+2. **Create a new audio design.** If the same policy class rejects attempt 1, change at least four music dimensions among tempo, meter, melody contour, harmony, instrumentation, sound palette, structure, and cadence. For TTS, use one different neutral non-impersonation voice without voice conversion. For effects, use a new synthesis concept. Preserve duration, story function, timing, emotional arc, and dialogue space.
+
+After attempt 2, stop the affected audio branch if rejection persists. Preserve and deliver the verified video. If narration is required for an unfinished dependent step, stop that step; if only music fails, deliver the video without music and label the omission. Report the real policy code and log id or request id.
+
+When recovery succeeds, verify audio duration, voice assignment, order, synchronization, and unchanged video duration, then resume only the dependent step.
+
 ### 9. Final verification
 
 Accept the final result only when:

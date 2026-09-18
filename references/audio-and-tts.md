@@ -16,6 +16,8 @@ Use one of these delivery paths:
 
 Never create multiple video segments merely to add music. Verify duration after any mux action.
 
+If an audio action returns `OutputAudioSensitiveContentDetected.PolicyViolation` or an equivalent output-side copyright result, apply `audio-copyright-recovery.md`. Do not route it through the dialogue risk-audit protocol unless the action explicitly identifies a rejected text chunk.
+
 ## Speech preparation
 
 Split dialogue or narration only when the TTS action requires chunks. Keep a stable chunk map containing chunk id, character, text, intended emotion, voice, expected duration, and status. Generate only text that will be heard; do not place camera directions inside spoken content.

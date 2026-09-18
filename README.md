@@ -53,6 +53,14 @@ Skill 根据用户最新的直接请求确定交互语言。用户使用英语�
 
 如果参考图本身是可识别的第三方角色、名人、品牌素材、影视画面、海报或带水印图片，流程会停止自动重试并要求换成原创无标识素材。两次合规恢复仍被拒绝时，流程返回真实错误编号和最后一个成功视频，不会无限重试或重启整条工作流。
 
+### 音频版权风控恢复
+
+当音乐、配音、音效或混音返回音频版权相似性错误时，Skill 会保留完整视频和所有成功音频，只处理失败的音频步骤。它不会用变调、变速、加噪、倒放、切片、转码或切换服务来规避审核。
+
+第一次恢复会删除歌曲名、歌手、影视配乐、角色音色、名人模仿、歌词、采样和“相似曲”等要求，改为原创器乐、普通非模仿音色或功能性音效。仍被拒绝时，第二次恢复会重建音频设计：音乐至少改变四项作曲维度，配音改用一个中性的非模仿音色，音效更换合成思路。
+
+两次恢复失败后，受影响的音频分支会停止。仅背景音乐失败时，可明确标注并交付已经验证的视频；必要旁白失败时，则停止依赖该旁白的后续步骤并返回真实错误编号。
+
 ### 每个视频提示词从零计时
 
 初始视频和每一次延长都是独立的视频生成调用，因此对应提示词都从本次调用的 `00:00` 开始，并在本次调用的时长结束。
@@ -134,6 +142,14 @@ When video generation returns a copyright-similarity policy error, the skill pre
 The first recovery removes named works, characters, brands, creator or likeness requests, exact recreations, and iconic staging, then expresses the same story function with original action, environment, lighting, and camera language. If rejection persists, one final recovery creates a substantially new visual realization while retaining the original character, story meaning, duration, continuity, and the call-local timeline beginning at `00:00`.
 
 Recognizable third-party characters, celebrities, branded assets, film frames, posters, or watermarked references stop automatic retry and require an original unbranded replacement. After two rejected recovery attempts, the workflow returns the real error identifiers and last successful video instead of looping or restarting the full process.
+
+### Audio copyright-policy recovery
+
+If music, TTS, sound-effect, or mux output triggers an audio copyright-similarity policy error, the skill preserves the complete video and every successful audio result, then retries only the failed audio step. It never uses pitch shifting, speed changes, noise, reversal, slicing, transcoding, or provider switching to evade review.
+
+The first recovery removes named songs, performers, soundtracks, character or celebrity voices, lyrics, samples, and soundalike requests, replacing them with an original instrumental cue, neutral non-impersonation voice, or functional sound effect. If rejected again, one final recovery creates a new audio design: music changes at least four compositional dimensions, TTS uses a different neutral voice, and sound effects use a new synthesis concept.
+
+After two failed attempts, the affected audio branch stops. A verified video may be delivered without optional music when clearly labeled; required narration blocks only the dependent downstream step and returns the real error identifiers.
 
 ### Zero-based prompts for every call
 

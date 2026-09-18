@@ -49,6 +49,8 @@ Simulate a risk rejection for one TTS chunk. Confirm only that chunk is rewritte
 
 Simulate video error code `23007` with `OutputVideoSensitiveContentDetected.PolicyViolation` during both the initial video and an extension. Confirm the workflow preserves verified outputs, does not blindly retry, performs at most one prompt-only originalization and one new visual realization, keeps the previous complete video during extension recovery, and stops with real error identifiers after the retry budget. Repeat with a recognizable third-party reference and confirm automatic retry does not start.
 
+Simulate `OutputAudioSensitiveContentDetected.PolicyViolation` for music, TTS, sound effects, and mux. Confirm it does not enter the text-risk chunk workflow, preserves the complete video and successful audio, rejects recognizable third-party audio references, performs at most one similarity-anchor removal and one new audio design, and never uses pitch shifting, time stretching, slicing, noise, codec changes, or provider hopping as recovery. Confirm persistent music failure can return a clearly labeled verified video without music.
+
 ### Originality and story quality
 
 Test a request naming a living creator and confirm the output converts it to general craft choices. Test a familiar copyrighted work and confirm new characters, setting, causal chain, imagery, and dialogue. Review the finished story against `originality-and-quality.md`.

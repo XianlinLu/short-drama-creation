@@ -1,6 +1,6 @@
 ---
 name: short-drama-creation
-description: Create original short fiction and reference-consistent character videos. Use when a user wants topic selection, story design or revision, storyboard generation, a short initial video followed by true continuous extension to a requested duration, automatic music, multilingual interaction, targeted TTS recovery, or bounded recovery from video copyright-policy rejection.
+description: Create original short fiction and reference-consistent character videos. Use for topic selection, story design or revision, storyboard generation, a short initial video followed by true continuous extension, automatic music, multilingual interaction, targeted TTS recovery, or bounded recovery from video and audio copyright-policy rejection.
 ---
 
 # Short Drama Creation
@@ -110,6 +110,18 @@ When an audio risk audit rejects one TTS chunk:
 
 Do not restart the whole workflow unless the connected action makes targeted recovery impossible.
 
+## Audio copyright-policy recovery
+
+Read `references/audio-copyright-recovery.md` when an audio action returns `OutputAudioSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side audio policy result. Do not confuse it with a TTS text-risk rejection that names a failed dialogue chunk.
+
+- Preserve the complete video, all successful TTS chunks, and all unrelated audio results.
+- Do not disguise rejected audio through pitch, speed, noise, reversing, slicing, codec changes, hidden names, repeated submissions, or provider hopping.
+- If the input uses a recognizable third-party recording, melody, jingle, extracted soundtrack, celebrity or character voice, or unclear reference audio, stop using that reference and ask for user-created audio or continue without it.
+- Retry only the failed audio step. Attempt 1 removes named songs, performers, franchises, likeness requests, lyrics, samples, and soundalike instructions, then requests a fully original cue, neutral voice, or functional sound effect.
+- If rejected again, attempt 2 creates a new audio design. Music changes at least four compositional dimensions; TTS uses one different neutral non-impersonation voice; sound effects use a new synthesis concept.
+- After two compliant attempts, stop the affected audio branch and report the actual identifiers. Deliver the verified video without the rejected track when music is optional and label the omission clearly.
+- Never restart successful video generation because an audio result failed.
+
 ## Quality and safety
 
 Read `references/originality-and-quality.md` before final delivery.
@@ -131,6 +143,7 @@ Read `references/originality-and-quality.md` before final delivery.
 - `references/story-workflow.md` — original story planning, drafting, research translation, and revision.
 - `references/continuous-video-workflow.md` — character intake, seed generation, true extension, local timelines, and duration checks.
 - `references/audio-and-tts.md` — automatic music and rejected-chunk TTS recovery.
+- `references/audio-copyright-recovery.md` — bounded, non-evasive recovery for output-side audio copyright policy rejections.
 - `references/video-copyright-recovery.md` — bounded, non-evasive recovery for output-side video copyright policy rejections.
 - `references/originality-and-quality.md` — story craft, genre promises, originality, and final review.
 - `references/package-validation.md` — import, configuration, and behavioral validation.

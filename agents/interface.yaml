@@ -1,5 +1,5 @@
 name: short-drama-creation
-version: 3.1.0
+version: 3.2.0
 mode: lumina-canvas
 language: auto
 summary: 自动匹配用户语言，生成原创短剧并将初始视频连续延长到用户指定时长。
@@ -47,6 +47,8 @@ triggers:
     - 视频版权风控
     - 视频生成 23007
     - OutputVideoSensitiveContentDetected
+    - 音频版权风控
+    - OutputAudioSensitiveContentDetected
     - original short drama
     - fiction writing
     - story revision
@@ -57,6 +59,7 @@ triggers:
     - background music
     - TTS recovery
     - video copyright policy error
+    - audio copyright policy error
     - オリジナル短編
     - 小説作成
     - キャラクター三面図
@@ -129,6 +132,9 @@ constraints:
   - recognizable_third_party_reference_requires_original_replacement
   - failed_video_step_retries_without_restarting_verified_work
   - policy_recovery_never_obfuscates_or_provider_hops
+  - audio_output_copyright_error_is_not_tts_text_risk
+  - audio_copyright_recovery_preserves_video_and_successful_chunks
+  - audio_policy_recovery_never_pitch_shifts_slices_or_provider_hops
   - independent_clips_are_not_concatenated
   - every_video_prompt_starts_at_zero
   - cumulative_timecodes_do_not_enter_video_prompts
@@ -145,5 +151,6 @@ resources:
   video: references/continuous-video-workflow.md
   video_copyright_recovery: references/video-copyright-recovery.md
   audio: references/audio-and-tts.md
+  audio_copyright_recovery: references/audio-copyright-recovery.md
   originality_and_quality: references/originality-and-quality.md
   validation: references/package-validation.md

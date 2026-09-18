@@ -8,4 +8,6 @@ Every video prompt starts at local `00:00`. Cumulative film positions stay outsi
 
 When video generation returns an output-side copyright policy rejection, apply `references/video-copyright-recovery.md`. Preserve the last verified result, retry only the failed step within its two-attempt limit, and never disguise names or change providers to evade the policy.
 
+When music, speech, effects, or mux returns an output-side audio copyright policy rejection, apply `references/audio-copyright-recovery.md`. Keep the verified video and successful audio, retry only the failed audio branch, and never transform rejected audio to disguise it.
+
 Use `references/continuous-video-workflow.md` for the authoritative state machine.
