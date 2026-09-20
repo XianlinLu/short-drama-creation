@@ -17,5 +17,6 @@ Before delivery, verify the applicable items:
 - every delivered artifact was actually returned by a connected action.
 - copyright-related video rejection preserved the last verified checkpoint, used no more than two compliant retries, and did not attempt policy evasion.
 - copyright-related audio rejection preserved the video and successful chunks, used no more than two original-generation attempts, and did not transform rejected audio to evade the policy.
+- storyboard production did not pass the asset, voice, or per-scene confirmation gates early, and every scene used the latest confirmed asset and voice versions.
 
 Repair only the failing layer and preserve verified work.

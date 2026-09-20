@@ -91,6 +91,22 @@ Skill 根据用户最新的直接请求确定交互语言。用户使用英语�
 
 完成故事会检查开场可理解性、人物欲望、冲突升级、对白张力、画面作用、因果关系和结尾余味；视频会检查人物外观、服装、动作、场景、道具、光线、时长和音频连续性。
 
+### 分镜制作工作流
+
+当剧本和选题方向已经确认，并且用户选择“制作分镜表”时，Skill 会进入独立的分镜制作流程：
+
+1. 解析最终剧本，整理全部主要角色的外貌、年龄、服装、身份、性格、关系和声音需求。
+2. 为每个角色生成一张独立的 `16:9` 角色资产图，其中同时包含正面面部近景、正面全身、侧面全身和背面全身；四个视图保持五官、发型、服装、身材比例和画风一致。
+3. 展示全部角色资产并停止，等待用户逐一确认或修改。只要仍有角色资产未确认，就不会生成试音。
+4. 全部资产确认后，为每个角色生成一段 `20–30 秒` 的试音，展示中性表达、日常交流、紧张、坚定和柔和收尾等语气变化。
+5. 展示全部试音并停止，等待逐一确认。任何角色音色未确认时，都不能开始场景对白或视频。
+6. 全部音色确认后，解析场景一并生成分镜表，记录镜号、时长、景别、机位、角色版本、动作、对白、环境、道具和转场。
+7. 使用角色已经确认的对应音色，按剧本顺序生成场景一对白，保留台词、情绪、停顿、打断和说话顺序。
+8. 根据确认的角色资产、对白、场景描述和分镜生成场景一视频，随后停止并等待用户确认；确认后才处理下一场景。
+9. 没有角色的剧本会跳过角色资产和试音，直接进入场景拆解。
+
+Skill 会给剧本、角色设定、资产、音色、对白、分镜和场景视频分别记录版本。角色形象变化会使包含该角色的场景视频失效；音色变化会使该角色的对白和依赖视频失效。系统只重新生成受影响的内容，并始终使用最新确认版本。
+
 ### 使用方法
 
 1. 导入仓库中的受支持文本文件。
@@ -182,6 +198,22 @@ If an audio risk audit rejects one TTS chunk, the skill identifies that exact ch
 ### Originality and quality
 
 References contribute only broad craft functions such as reveal timing, relationship pressure, pacing, or visual contrast. The skill creates new characters, worlds, causality, scenes, dialogue, and imagery. It does not reproduce protected characters, signature objects, iconic shots, or distinctive plot chains, and it does not imitate the recognizable style of a living creator.
+
+### Storyboard production workflow
+
+When the screenplay and creative direction are confirmed and the user selects “Create Storyboard,” the skill enters a gated production route:
+
+1. Parse the final screenplay and build profiles for every principal character, including appearance, age range, wardrobe, identity, personality, relationships, and voice needs.
+2. Generate one separate `16:9` asset sheet per character containing a front facial close-up plus front, side, and back full-body views with consistent identity, clothing, proportions, and style.
+3. Show all character sheets and stop for individual confirmation or revision. Auditions cannot begin while any asset remains unconfirmed.
+4. After all assets are confirmed, generate one `20–30 second` audition per character with enough emotional variation to evaluate casting.
+5. Show all auditions and stop for individual confirmation. Scene dialogue and video remain blocked until every voice is confirmed.
+6. Parse scene one and create a storyboard table covering shot id, duration, framing, camera, character versions, action, dialogue, environment, props, and transition.
+7. Generate scene-one dialogue in screenplay order with each character's confirmed voice, emotion, pauses, interruption, and timing.
+8. Generate scene one from confirmed assets, verified dialogue, scene description, and storyboard, then stop for approval before processing the next scene.
+9. Characterless scripts skip asset sheets and auditions and proceed directly to scene breakdown.
+
+The skill versions the screenplay, profiles, assets, voices, dialogue, storyboards, and scene videos. Appearance changes invalidate dependent scene videos; voice changes invalidate that character's dialogue and dependent videos. Only affected work is regenerated, always from the latest confirmed versions.
 
 ### How to use
 

@@ -47,7 +47,9 @@ Use **Story Route** for planning, drafting, continuation, analysis, or revision.
 
 Use **Character Video Route** only when a character turnaround or three-view image is present and the user requests storyboards, animation, a video demo, a short film, or a duration-controlled video. An image alone does not start media generation.
 
-When both routes apply, story craft may shape the micro-story, but the Character Video Route controls state transitions and action calls.
+Use **Storyboard Production Route** when the screenplay and creative direction are confirmed and the user selects `制作分镜表` or an equivalent next step.
+
+Storyboard Production Route takes priority after that next step is selected. Otherwise, when story and character-video routes both apply, story craft may shape the micro-story but Character Video Route controls media states.
 
 ## Story Route
 
@@ -68,6 +70,23 @@ When the user requests source-backed research and a connected research action ex
 References to a work or creator may influence general craft variables such as chronology, sentence movement, dialogue density, reveal frequency, social pressure, emotional distance, or visual rhythm. Do not imitate a living creator's distinctive style. Do not reproduce recognizable characters, branded worlds, dialogue, signature props, iconic staging, or distinctive scene chains.
 
 Before returning finished fiction, check that the literal opening is understandable, the protagonist has an observable want, conflict escalates, the climax depends on prior choices or evidence, imagery affects action, and the ending produces consequence or reinterpretation. Remove repetitive stock phrasing and formulaic contrast narration.
+
+## Storyboard Production Route
+
+Follow `references/storyboard-production-workflow.md`. Keep a version ledger for screenplay, character profiles, asset sheets, voices, storyboards, dialogue, and scene videos. Never use pending, revised, or stale dependencies.
+
+1. Parse only the final confirmed screenplay. Identify every principal character and record explicit appearance, apparent age range, hair, body proportions, wardrobe, identity, role, personality, relationships, emotional baseline, and neutral voice requirements. Separate script facts from production choices.
+2. Generate one separate **16:9** asset sheet per character. Each sheet contains a front facial close-up plus front, side, and back full-body views. All four views must share the same face, hair, clothes, proportions, accessories, palette, age presentation, and style. After showing every sheet, stop until each character asset is explicitly confirmed or revised.
+3. Only after all assets are confirmed, generate one separate **20–30 second** audition per character in the story language. Use a neutral non-impersonation voice matching age range, identity, personality, role, and emotion. Original audition text must demonstrate neutral delivery, conversation, tension, determination, and a softer ending. Show all auditions and stop for per-character confirmation.
+4. Do not create scene dialogue or video while any voice is unconfirmed. Once all are confirmed, lock `character_id → voice handle + voice_version`.
+5. Parse scene one. Build a storyboard table with shot id, duration, framing, camera, characters and asset versions, action, dialogue/audio cue, environment/props, and transition.
+6. Generate scene-one dialogue in exact screenplay order using each confirmed voice. Preserve wording, emotion, pauses, interruptions, and speaker order; keep line ids and successful chunks. Apply TTS and audio recovery rules, then verify speaker, order, timing, and synchronization.
+7. Generate scene one from the confirmed assets, verified dialogue, scene description, and storyboard. Apply smart ratio, local `00:00` timing, continuity, and media recovery. Use real returned artifacts.
+8. Show scene one and stop. Process scene two only after scene one is confirmed; repeat one scene at a time. When a continuous final film is requested, later scenes extend the latest confirmed complete-video checkpoint. Separate previews stay labeled previews and are never presented as a concatenated final film.
+
+If the screenplay contains no characters, mark it characterless, skip asset sheets and auditions, and continue to scene parsing. Optional narration may use a neutral narrator without character casting unless the user requests it.
+
+When appearance changes, increment its asset version and mark every scene video containing that character stale. When voice changes, increment its voice version and mark that character's dialogue plus dependent videos stale. Script changes invalidate affected characters and scenes. Regenerate only stale dependencies with the latest confirmed versions; a changed checkpoint in a continuous extension chain invalidates every later checkpoint. Stop at the relevant confirmation gate again.
 
 ## Character Video Route
 
@@ -130,24 +149,7 @@ Do not reach the target by looping footage, freezing frames, padding, changing p
 
 ### Video copyright-policy rejection
 
-When a video action returns error code `23007`, `OutputVideoSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side copyright policy result, treat it as a policy rejection rather than a transient service failure.
-
-Do not evade the safeguard. Never disguise or translate protected names, encode hidden instructions, remove third-party watermarks, repeatedly submit the same request, or switch models or providers solely to obtain the rejected result. Do not claim to know which protected work caused the rejection.
-
-First preserve a recovery checkpoint: failed stage, last verified complete video, storyboard or source image, failed prompt, call duration, selected story function, continuity anchors, error code, log id, request id, and raw action message. Keep every successful upstream artifact.
-
-Audit the prompt and references for named films, games, studios, creators, actors, characters, brands, exact-scene recreation, recognizable logos or uniforms, signature props, iconic compositions, celebrity likenesses, posters, screenshots, and watermarked material.
-
-If the input reference appears to be a recognizable third-party character, celebrity, branded asset, film frame, poster, or watermarked image—or its origin is too uncertain for a safe retry—stop automatic retry and ask for an original unbranded reference. If offering several new directions, use the native four-option topic card and stop.
-
-If the character reference is original and unbranded, preserve its identity and apply at most two recovery attempts to the failed video step:
-
-1. **Prompt-only originalization:** remove protected proper nouns, named style or likeness requests, brands, exact recreation language, logos, signature props, and iconic staging. Describe original mood, materials, motion, lighting, camera behavior, and story action. Preserve meaning, character intent, emotion, duration, continuity, and the local timeline beginning at `00:00`. Retry only the failed action once.
-2. **New visual realization:** if the same policy class rejects attempt 1, preserve the narrative function but change at least three of environment, camera and lens path, blocking, props, palette or lighting, composition, and non-essential wardrobe detail. For an initial-video failure, generate one revised original storyboard and retry the initial video once. For an extension failure, keep the last verified complete video as input and replace only the failed next beat. Earlier footage is not regenerated.
-
-After the second recovery attempt, stop the video branch if rejection persists. Return the last verified complete video when available and report the failed stage, actual error code, log id or request id, and the compliant rewrites attempted. Do not restart the entire workflow.
-
-When recovery succeeds, verify the real returned artifact and duration, update the checkpoint, and continue from that result.
+On error `23007`, `OutputVideoSensitiveContentDetected.PolicyViolation`, or equivalent, apply `references/video-copyright-recovery.md`. Preserve the last verified video and error identifiers; never disguise names, repeat identical inputs, or provider-hop. A recognizable third-party reference stops for an original replacement. Otherwise retry only the failed step twice at most: first remove similarity anchors, then create a new visual realization changing at least three dimensions. Stop after attempt two, or verify the real result and continue from it. Never restart successful stages.
 
 ### 8. Audio
 
@@ -159,24 +161,7 @@ Speech is optional unless requested or required by the selected direction. Do no
 
 ### Audio copyright-policy rejection
 
-When an audio action returns `OutputAudioSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side audio policy result, treat it separately from a TTS text-risk rejection that identifies a failed dialogue chunk.
-
-Do not evade the safeguard through pitch or speed changes, noise, reversing, slicing, codec conversion, hidden or translated names, repeated identical submissions, or provider switching. Do not claim to know which work or performance caused the rejection.
-
-Preserve a checkpoint containing the failed stage—music, TTS, sound effect, embedding, or mux—plus the complete video, successful audio chunks, failed prompt and reference, target duration, story function, log id, request id, policy code, and raw action message. Never regenerate a successful video because audio failed.
-
-Audit for song, artist, composer, soundtrack, franchise, performer, celebrity, or character-voice names; cover, remix, soundalike, clone, or impersonation requests; quoted lyrics; recognizable recordings, branded jingles, samples, extracted media audio, and unclear reference tracks.
-
-If the input contains a recognizable third-party recording, melody reference, branded sound, celebrity or character voice, extracted soundtrack, or unclear reference audio, stop retrying with that input. Ask for user-created audio or continue without the reference.
-
-Apply at most two attempts to the failed audio step:
-
-1. **Remove similarity anchors.** For music, remove named works and performers, lyrics, samples, melody copying, covers, remixes, and soundalike instructions; request an original instrumental cue using only mood, tempo range, meter, instrumentation, energy curve, transitions, and ending. For TTS, replace named or likeness-based voices with neutral voice properties and rewrite only protected lyrics or quotations when present. For sound effects, replace brand or signature references with a physical description. For mux, keep the video and replace only the audio input.
-2. **Create a new audio design.** If the same policy class rejects attempt 1, change at least four music dimensions among tempo, meter, melody contour, harmony, instrumentation, sound palette, structure, and cadence. For TTS, use one different neutral non-impersonation voice without voice conversion. For effects, use a new synthesis concept. Preserve duration, story function, timing, emotional arc, and dialogue space.
-
-After attempt 2, stop the affected audio branch if rejection persists. Preserve and deliver the verified video. If narration is required for an unfinished dependent step, stop that step; if only music fails, deliver the video without music and label the omission. Report the real policy code and log id or request id.
-
-When recovery succeeds, verify audio duration, voice assignment, order, synchronization, and unchanged video duration, then resume only the dependent step.
+On `OutputAudioSensitiveContentDetected.PolicyViolation` or equivalent, apply `references/audio-copyright-recovery.md`, not the text-risk chunk path. Preserve the video and successful audio. Never pitch-shift, slice, disguise names, repeat inputs, or provider-hop. Third-party or unclear reference audio stops for replacement. Retry only the failed audio step twice at most: remove similarity anchors, then create a new audio design. Persistent optional-music failure may return a clearly labeled video without music; required narration stops only dependent work. Report real identifiers and never restart video.
 
 ### 9. Final verification
 

@@ -43,6 +43,16 @@ Test smart ratio routing with an explicit supported ratio, vertical-mobile inten
 
 Test a tail-only extension action and confirm it is rejected rather than concatenated. Test an unreachable duration and confirm the Agent asks the user instead of rounding, looping, freezing, padding, or changing speed.
 
+### Storyboard production
+
+Use a confirmed screenplay with at least two principal characters and select `制作分镜表`. Confirm the Agent extracts a character registry, generates one separate 16:9 four-view sheet per character, displays all assets, and stops before auditions. Confirm no audition starts until every asset is explicitly confirmed.
+
+After confirmation, verify one 20–30 second audition per character with varied delivery, followed by another stop. Leave one voice unconfirmed and confirm no scene dialogue, storyboard video, or downstream scene action starts. Confirm all-voice approval creates a stable voice map.
+
+For scene one, verify a shot table, exact-order dialogue using confirmed voice versions, and video generation using confirmed asset versions, audio, scene description, and storyboard. Confirm scene two does not start before scene-one approval. Repeat with a characterless screenplay and confirm asset and audition stages are skipped.
+
+Change one character's appearance after scene output; confirm only scene videos containing that character become stale. Change one confirmed voice; confirm only that character's affected dialogue and dependent scene videos become stale. Verify regeneration uses the newest confirmed versions and a changed continuous-video checkpoint invalidates every later checkpoint.
+
 ### Music and TTS
 
 Confirm connected music generation runs by default, follows the story energy curve, and matches final duration. Confirm missing non-concatenating embedding returns a separately labeled track.

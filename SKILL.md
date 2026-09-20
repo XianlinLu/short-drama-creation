@@ -1,6 +1,6 @@
 ---
 name: short-drama-creation
-description: Create original short fiction and reference-consistent character videos. Use for topic selection, story design or revision, storyboard generation, smart aspect-ratio routing, a short initial video followed by true continuous extension, automatic music, multilingual interaction, targeted TTS recovery, or bounded media policy recovery.
+description: Create original fiction, storyboard production packages, and reference-consistent character videos. Use for story design or revision, character asset sheets, voice auditions, scene-by-scene dialogue and video, smart aspect-ratio routing, continuous extension, automatic music, multilingual interaction, or bounded media recovery.
 ---
 
 # Short Drama Creation
@@ -19,6 +19,7 @@ Choose one main route for the current run:
 
 - **Story route:** the user asks for fiction planning, drafting, continuation, analysis, or revision.
 - **Character-video route:** a character turnaround or three-view image is supplied and the user asks for storyboards, motion, a short film, or a duration-controlled video.
+- **Storyboard-production route:** a screenplay and its direction are confirmed, and the user selects `制作分镜表` or an equivalent next step.
 
 An attached image by itself does not authorize media generation. Mixed requests may use story design internally, but the character-video state machine controls media actions.
 
@@ -51,6 +52,30 @@ Default story delivery:
 ```
 
 When the user requests a demonstration or explicit craft review, add localized sections for the supplied input, chosen technique mix, complete story, and concise creation self-review.
+
+## Storyboard-production route
+
+Read `references/storyboard-production-workflow.md` and follow its confirmation gates strictly:
+
+```text
+confirmed screenplay
+→ character extraction
+→ one 16:9 four-view asset sheet per character
+→ stop for all asset confirmations
+→ one 20–30 second audition per character
+→ stop for all voice confirmations
+→ scene-one storyboard table and confirmed-voice dialogue
+→ scene-one video
+→ stop for scene confirmation
+→ repeat one scene at a time
+```
+
+- Each character sheet contains a front facial close-up plus front, side, and back full-body views with one consistent identity and costume.
+- No audition starts until every character asset is confirmed. No scene dialogue or video starts until every character voice is confirmed.
+- If the screenplay has no characters, skip character assets and auditions and proceed to scene breakdown.
+- Track screenplay, profile, asset, voice, storyboard, dialogue, and video versions. A changed appearance invalidates dependent scene videos; a changed voice invalidates that character's dialogue and dependent videos.
+- Use only the latest confirmed versions. Regenerate stale dependencies in order and stop after each scene video for user confirmation.
+- Scene videos follow smart ratio, local timing, media recovery, and continuous-extension rules. Separate previews are never represented as a concatenated final film.
 
 ## Character-video route
 
@@ -152,6 +177,7 @@ Read `references/originality-and-quality.md` before final delivery.
 
 - `references/interaction-and-topic-ui.md` — language routing and the mandatory native direction card.
 - `references/story-workflow.md` — original story planning, drafting, research translation, and revision.
+- `references/storyboard-production-workflow.md` — character sheets, voice casting, storyboard tables, scene dialogue, scene video, confirmations, and version invalidation.
 - `references/continuous-video-workflow.md` — character intake, seed generation, true extension, local timelines, and duration checks.
 - `references/aspect-ratio-routing.md` — intelligent initial ratio selection, inherited extension ratio, and invalid-ratio recovery.
 - `references/audio-and-tts.md` — automatic music and rejected-chunk TTS recovery.

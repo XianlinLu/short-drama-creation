@@ -1,8 +1,8 @@
 name: short-drama-creation
-version: 3.3.0
+version: 3.4.0
 mode: lumina-canvas
 language: auto
-summary: 自动匹配用户语言，生成原创短剧并将初始视频连续延长到用户指定时长。
+summary: 自动匹配用户语言，支持原创短剧、角色资产、试音、逐场分镜视频和连续延长。
 
 runtime:
   platform: Lumina Canvas Agent
@@ -51,6 +51,10 @@ triggers:
     - OutputAudioSensitiveContentDetected
     - 智能画面比例
     - InvalidParameter.TaskTypeConstraint
+    - 制作分镜表
+    - 角色资产图
+    - 角色试音
+    - 场景对白
     - original short drama
     - fiction writing
     - story revision
@@ -63,6 +67,9 @@ triggers:
     - video copyright policy error
     - audio copyright policy error
     - smart aspect ratio
+    - storyboard production
+    - character asset sheet
+    - voice audition
     - オリジナル短編
     - 小説作成
     - キャラクター三面図
@@ -95,6 +102,11 @@ inputs:
     - speech_preference
     - music_preference
     - video_generation_error
+    - confirmed_screenplay
+    - storyboard_next_step_selected
+    - character_asset_feedback
+    - character_voice_feedback
+    - scene_video_feedback
 
 outputs:
   story:
@@ -115,6 +127,17 @@ outputs:
     - duration_verified_final_video
     - localized_delivery_summary
     - copyright_recovery_summary_when_needed
+  storyboard_production:
+    - final_screenplay_character_registry
+    - one_16_9_four_view_asset_sheet_per_character
+    - character_asset_confirmation_checkpoint
+    - one_20_to_30_second_audition_per_character
+    - character_voice_confirmation_checkpoint
+    - scene_storyboard_table
+    - confirmed_voice_dialogue_audio
+    - scene_video
+    - per_scene_confirmation_checkpoint
+    - dependency_version_summary
 
 constraints:
   - choose_one_primary_route_per_run
@@ -128,6 +151,12 @@ constraints:
   - missing_direction_action_has_no_text_fallback
   - character_video_requires_reference_and_visual_request
   - topic_selection_precedes_all_media
+  - storyboard_route_requires_confirmed_screenplay_and_selected_next_step
+  - all_assets_confirm_before_auditions
+  - all_voices_confirm_before_scene_media
+  - scene_video_stops_for_confirmation_before_next_scene
+  - characterless_script_skips_character_assets_and_auditions
+  - changed_character_asset_or_voice_invalidates_dependent_outputs
   - target_duration_is_explicit
   - initial_video_is_followed_by_true_extensions
   - initial_ratio_uses_smart_supported_selection
@@ -155,6 +184,7 @@ constraints:
 resources:
   language_and_topic_ui: references/interaction-and-topic-ui.md
   story: references/story-workflow.md
+  storyboard_production: references/storyboard-production-workflow.md
   video: references/continuous-video-workflow.md
   aspect_ratio: references/aspect-ratio-routing.md
   video_copyright_recovery: references/video-copyright-recovery.md
