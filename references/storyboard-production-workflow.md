@@ -111,7 +111,7 @@ Generate scene-one dialogue in exact screenplay order. For every line:
 - keep stable line and chunk identifiers;
 - preserve successful chunks when one line fails.
 
-Assemble or mix dialogue only through a connected action that supports ordered timing. Apply `audio-and-tts.md` for text-risk rejection and `audio-copyright-recovery.md` for output-side audio copyright rejection. Verify speaker identity, line order, duration, and synchronization before video generation.
+Assemble or mix dialogue only through a connected action that supports ordered timing. Apply `audio-and-tts.md` for text-risk rejection, `audio-copyright-recovery.md` for output-side audio copyright rejection, and `audio-duration-preflight.md` before passing audio to video. When individual lines are below the video model's minimum, prefer a verified timed scene mix; otherwise extend only the audio container with supported natural silence or room tone without adding words. Verify speaker identity, line order, actual duration, and synchronization before video generation.
 
 ## Stage 7: scene video
 

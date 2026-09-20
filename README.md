@@ -85,6 +85,12 @@ Skill 根据用户最新的直接请求确定交互语言。用户使用英语�
 
 它只重试失败的音频步骤。再次失败时会逐步简化措辞；文本已经中性时，可切换一次可用音色。成功的配音分块、分镜和视频不会被重做。音频确认成功后才继续依赖它的视频步骤。
 
+### 音频最小时长预检
+
+任何音频进入视频生成前，Skill 都会读取实际编码时长并按当前模型与任务的下限校验。对于 `dreamina-seedance-2-5` 的 `r2v`，最低要求为 `1.8 秒`，实际生成以至少 `2.0 秒` 为安全目标；可选的空音频不会被提交。
+
+如果错误指出某个 `content[n]` 音频过短，Skill 只重建该音频并保留其他视频、角色资产、对白和成功产物。短台词不会被擅自加词，而是通过自然停顿、环境底噪或已对齐的场景混音满足长度要求。替换音频通过元数据校验后，只重试失败的视频调用；修复次数有限，连接组件若自动截短音频则会返回配置问题，不会重启整条流程。
+
 ### 原创与质量控制
 
 参考作品只用于提取抽象叙事功能，例如节奏、悬念密度、关系压力或视觉对比。Skill 会重新创建人物、世界、因果链、场景顺序、对白和意象，不复制受保护角色、标志性道具、经典镜头或辨识度很高的剧情链，也不会直接模仿在世创作者的独特风格。
@@ -194,6 +200,12 @@ When a compatible action is connected, the skill automatically creates original 
 ### Targeted TTS recovery
 
 If an audio risk audit rejects one TTS chunk, the skill identifies that exact chunk and rewrites only its spoken text while preserving meaning, intent, pace, and emotional direction. It retries only the failed audio step, simplifies wording progressively, and can try one alternate voice when neutral text is still rejected. Successful audio and upstream media remain untouched, and dependent video generation waits for confirmed audio success.
+
+### Audio minimum-duration preflight
+
+Before audio enters a video call, the skill validates its actual encoded duration against the active model/task minimum. For `dreamina-seedance-2-5` in `r2v`, the minimum is `1.8 seconds` and the safe production target is at least `2.0 seconds`; optional empty audio is omitted.
+
+When an error identifies a short `content[n]` item, only that artifact is rebuilt while all other video, character, dialogue, and successful outputs remain intact. Approved short dialogue gains supported natural pauses, room tone, or a synchronized scene mix rather than invented words. After metadata verification, only the failed video call is retried. Repairs are bounded, and automatic trimming by a connector is reported as a configuration problem instead of restarting the workflow.
 
 ### Originality and quality
 

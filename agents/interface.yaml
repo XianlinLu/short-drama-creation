@@ -1,5 +1,5 @@
 name: short-drama-creation
-version: 3.4.0
+version: 3.5.0
 mode: lumina-canvas
 language: auto
 summary: 自动匹配用户语言，支持原创短剧、角色资产、试音、逐场分镜视频和连续延长。
@@ -49,6 +49,8 @@ triggers:
     - OutputVideoSensitiveContentDetected
     - 音频版权风控
     - OutputAudioSensitiveContentDetected
+    - 音频时长不足
+    - content 音频时长
     - 智能画面比例
     - InvalidParameter.TaskTypeConstraint
     - 制作分镜表
@@ -66,6 +68,8 @@ triggers:
     - TTS recovery
     - video copyright policy error
     - audio copyright policy error
+    - audio duration too short
+    - minimum audio duration
     - smart aspect ratio
     - storyboard production
     - character asset sheet
@@ -169,6 +173,11 @@ constraints:
   - failed_video_step_retries_without_restarting_verified_work
   - policy_recovery_never_obfuscates_or_provider_hops
   - audio_output_copyright_error_is_not_tts_text_risk
+  - every_video_audio_input_uses_actual_duration_metadata
+  - dreamina_seedance_2_5_r2v_audio_is_at_least_1_8_seconds
+  - short_audio_is_repaired_only_at_the_named_content_index
+  - optional_empty_audio_is_omitted
+  - duration_repair_is_bounded_and_does_not_restart_workflow
   - audio_copyright_recovery_preserves_video_and_successful_chunks
   - audio_policy_recovery_never_pitch_shifts_slices_or_provider_hops
   - independent_clips_are_not_concatenated
@@ -189,6 +198,7 @@ resources:
   aspect_ratio: references/aspect-ratio-routing.md
   video_copyright_recovery: references/video-copyright-recovery.md
   audio: references/audio-and-tts.md
+  audio_duration_preflight: references/audio-duration-preflight.md
   audio_copyright_recovery: references/audio-copyright-recovery.md
   originality_and_quality: references/originality-and-quality.md
   validation: references/package-validation.md

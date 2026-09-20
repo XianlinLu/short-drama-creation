@@ -110,6 +110,8 @@ If an extension rejects `ratio` with `InvalidParameter.TaskTypeConstraint`, appl
 
 Follow `audio-and-tts.md`. Generate original instrumental background music by default when connected. Speech is optional unless requested or required by the chosen direction.
 
+Before any audio-bearing video or extension call, apply `audio-duration-preflight.md` to every submitted item. Use actual duration metadata, omit optional empty audio, and repair only an identified short `content[n]` item.
+
 Embedding is allowed only through a native audio input on the same video chain or a single-video mux action that does not concatenate video. Otherwise return the music or speech separately with synchronization guidance.
 
 Final acceptance requires:

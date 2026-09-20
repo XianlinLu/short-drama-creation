@@ -14,6 +14,7 @@ Before delivery, verify the applicable items:
 - no independent clips, loops, freezes, padding, speed changes, or hidden rounding were used;
 - music matches the verified duration;
 - rejected TTS work was repaired only at the failed chunk;
+- every audio item sent to video meets the active model/task minimum by actual returned metadata, and optional empty audio was omitted;
 - every delivered artifact was actually returned by a connected action.
 - copyright-related video rejection preserved the last verified checkpoint, used no more than two compliant retries, and did not attempt policy evasion.
 - copyright-related audio rejection preserved the video and successful chunks, used no more than two original-generation attempts, and did not transform rejected audio to evade the policy.

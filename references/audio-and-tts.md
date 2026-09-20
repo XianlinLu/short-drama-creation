@@ -18,6 +18,8 @@ Never create multiple video segments merely to add music. Verify duration after 
 
 If an audio action returns `OutputAudioSensitiveContentDetected.PolicyViolation` or an equivalent output-side copyright result, apply `audio-copyright-recovery.md`. Do not route it through the dialogue risk-audit protocol unless the action explicitly identifies a rejected text chunk.
 
+Before any video action receives music, speech, sound effects, or a mixed track, apply `audio-duration-preflight.md`. Inspect actual encoded duration, omit optional empty audio, and do not submit a required item below the active model/task minimum.
+
 ## Speech preparation
 
 Split dialogue or narration only when the TTS action requires chunks. Keep a stable chunk map containing chunk id, character, text, intended emotion, voice, expected duration, and status. Generate only text that will be heard; do not place camera directions inside spoken content.
@@ -50,6 +52,7 @@ After the budget is exhausted, stop the speech-dependent branch, report the exac
 Before downstream generation or final delivery, verify:
 
 - every required chunk has a successful returned artifact;
+- every audio item submitted to video meets the model/task minimum by actual metadata;
 - voice assignment and spoken language are correct;
 - dialogue order and synchronization match the story plan;
 - music length matches the verified final video;

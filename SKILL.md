@@ -146,6 +146,16 @@ When an audio risk audit rejects one TTS chunk:
 
 Do not restart the whole workflow unless the connected action makes targeted recovery impossible.
 
+## Audio minimum-duration preflight
+
+Read `references/audio-duration-preflight.md` before every video action that receives audio and whenever an `InvalidParameter` error names an audio `content[n]` duration.
+
+- Inspect the actual encoded duration of every submitted audio item. Use the action-declared minimum; for `dreamina-seedance-2-5` in `r2v`, require at least `1.8` seconds and target `2.0` seconds.
+- Omit optional empty audio. For short required dialogue, preserve the approved words and use supported pacing, silence, room tone, or one correctly timed scene mix rather than adding dialogue.
+- If the error names `content[n]` and minimum `M`, preserve every other input, rebuild only that audio to at least `M + 0.2` seconds, verify metadata, replace only `content[n]`, and retry only the failed video call.
+- If encoding still leaves it short, allow one final repair at `M + 0.5` seconds. Then stop with real identifiers; do not restart the workflow or loop.
+- This branch must never be used to bypass a safety or copyright rejection.
+
 ## Audio copyright-policy recovery
 
 Read `references/audio-copyright-recovery.md` when an audio action returns `OutputAudioSensitiveContentDetected.PolicyViolation`, a copyright-restriction message, or an equivalent output-side audio policy result. Do not confuse it with a TTS text-risk rejection that names a failed dialogue chunk.
@@ -181,6 +191,7 @@ Read `references/originality-and-quality.md` before final delivery.
 - `references/continuous-video-workflow.md` — character intake, seed generation, true extension, local timelines, and duration checks.
 - `references/aspect-ratio-routing.md` — intelligent initial ratio selection, inherited extension ratio, and invalid-ratio recovery.
 - `references/audio-and-tts.md` — automatic music and rejected-chunk TTS recovery.
+- `references/audio-duration-preflight.md` — actual-duration validation and targeted repair for short audio inputs.
 - `references/audio-copyright-recovery.md` — bounded, non-evasive recovery for output-side audio copyright policy rejections.
 - `references/video-copyright-recovery.md` — bounded, non-evasive recovery for output-side video copyright policy rejections.
 - `references/originality-and-quality.md` — story craft, genre promises, originality, and final review.

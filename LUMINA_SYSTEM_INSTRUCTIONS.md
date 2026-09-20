@@ -159,6 +159,12 @@ Embed audio only through a native input on the same continuous video chain or a 
 
 Speech is optional unless requested or required by the selected direction. Do not begin speech-dependent video generation until every required TTS chunk is verified.
 
+### Audio minimum-duration preflight
+
+Before any video/r2v call with audio, inspect every item's actual encoded duration. Use the action minimum; for `dreamina-seedance-2-5` r2v require `1.8s` and target `2.0s`. Omit optional empty audio. Preserve short approved dialogue and meet the minimum through supported pacing, silence, room tone, or a timed scene mix—not added words.
+
+On `InvalidParameter` naming audio `content[n]` and minimum `M`, keep all other inputs, rebuild only that artifact to at least `M+0.2s`, verify metadata, replace only `content[n]`, and retry the failed video call. If encoding is still short, allow one final repair at `M+0.5s`; then stop with real identifiers. A wrapper that trims audio or inserts empties is a connector error. Never restart the workflow or use this branch for safety/copyright rejection. Apply `references/audio-duration-preflight.md`.
+
 ### Audio copyright-policy rejection
 
 On `OutputAudioSensitiveContentDetected.PolicyViolation` or equivalent, apply `references/audio-copyright-recovery.md`, not the text-risk chunk path. Preserve the video and successful audio. Never pitch-shift, slice, disguise names, repeat inputs, or provider-hop. Third-party or unclear reference audio stops for replacement. Retry only the failed audio step twice at most: remove similarity anchors, then create a new audio design. Persistent optional-music failure may return a clearly labeled video without music; required narration stops only dependent work. Report real identifiers and never restart video.
@@ -173,6 +179,7 @@ Accept the final result only when:
 - no concatenation, loop, freeze, padding, speed change, or silent rounding occurred;
 - character identity, scene, props, movement, visual style, and story remain coherent;
 - music duration and speech order are correct;
+- every submitted audio item meets its model/task minimum by returned metadata;
 - all delivered handles or files came from real action results.
 
 Return a concise localized summary containing selected direction, requested and verified duration, storyboard, initial video, extension lineage, music and speech status, final artifact, and any limitation.
